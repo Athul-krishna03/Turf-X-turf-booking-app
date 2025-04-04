@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit'
 import  express ,{Application,Request,Response,NextFunction} from 'express'
+import { AuthRoutes } from '../routes/auth/auth.route';
 
 import { config } from '../../shared/config';
 

@@ -5,3 +5,11 @@ export interface LoginUserDTO{
     password:string;
     role:TRole
 }
+
+export interface UserDTO {
+    name:string,
+    email:string,
+    phone:string,
+    password:string,
+    role: "user"
+}

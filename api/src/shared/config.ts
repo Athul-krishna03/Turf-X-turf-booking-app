@@ -10,5 +10,8 @@ export const config = {
     server:{
         PORT:process.env.PORT || 5000
     },
+    database:{
+        URI:"mongodb://localhost:27017/Turf-X"
+    },
     loggerStatus: process.env.LOGGER_STATUS || "dev",
 }
