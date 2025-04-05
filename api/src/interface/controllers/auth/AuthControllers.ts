@@ -27,6 +27,8 @@ export class AuthController implements IAuthController {
 
   //register user
   async register(req: Request, res: Response): Promise<void> {
+    console.log("entered");
+    
     try {
       const { role } = req.body as UserDTO;
       const schema = userSignupSchemas[role];

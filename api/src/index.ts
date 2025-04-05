@@ -1,4 +1,6 @@
-
+//DI imports
+import "reflect-metadata";
+import "./frameworks/di/resolver"
 
 import {Server} from "./frameworks/http/server";
 import {config} from "./shared/config";
