@@ -27,11 +27,13 @@ export class AuthController implements IAuthController {
 
   //register user
   async register(req: Request, res: Response): Promise<void> {
-    console.log("entered");
+    console.log("entered",req.body);
     
     try {
       const { role } = req.body as UserDTO;
+      console.log(role)
       const schema = userSignupSchemas[role];
+      console.log(schema)
       if (!schema) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,

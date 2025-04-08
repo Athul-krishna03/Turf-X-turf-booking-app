@@ -47,8 +47,13 @@ export class ClientRegisterStrategy implements IRegisterStrategy{
                 clientId,
                 role:"user",
             })
+
+            return newUser;
         } catch (error) {
-            
+            throw new CustomError(
+                ERROR_MESSAGES.SERVER_ERROR,
+                HTTP_STATUS.INTERNAL_SERVER_ERROR
+            )
         }
     }
 }
