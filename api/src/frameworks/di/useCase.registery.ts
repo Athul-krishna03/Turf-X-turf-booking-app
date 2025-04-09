@@ -5,32 +5,45 @@ import { container } from "tsyringe";
 import { IBcrypt } from "../security/bcrypt.interface";
 import { PasswordBcrypt } from "../security/password.bcrypt";
 
-//strategy import 
-import { ClientRegisterStrategy } from "../../usecase/register-stratergies/client-register.strategy";
+//strategy import
+import { ClientRegisterStrategy } from "../../usecase/auth/register-stratergies/client-register.strategy";
 
 //useCase Imports
 
 import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/IRegister-usecase.interface";
 import { RegisterUserUsecase } from "../../usecase/register-user-usecase";
+import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/ILoginUserUseCase";
+import { LoginUserUseCase } from "../../usecase/LoginUserUseCase";
+import { ClientLoginStrategy } from "../../usecase/auth/login-strategies/clientLoginStrategy";
+import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/IGenerateTokenUseCase";
+import { GenerateTokenUseCase } from "../../usecase/GenerateTokenUseCase";
 
 
+export class UseCaseRegistery {
+  static registerUseCases(): void {
+    //register bcrypts
+    container.register<IBcrypt>("IPasswordBcrypt", {
+      useClass: PasswordBcrypt,
+    });
 
-export class UseCaseRegistery{
-    static registerUseCases():void{
+    //usecase Registers
+    container.register<IRegisterUserUseCase>("IRegisterUserUseCase", {
+      useClass: RegisterUserUsecase,
+    });
+    container.register<ILoginUserUseCase>("ILoginUserUseCase",{
+      useClass:LoginUserUseCase
+    })
+    container.register<IGenerateTokenUseCase>("IGenerateTokenUseCase",{
+      useClass:GenerateTokenUseCase
+    })
 
-        //register bcrypts 
-        container.register<IBcrypt>("IPasswordBcrypt",{
-            useClass:PasswordBcrypt
-        })
-
-        //usecase Registers
-        container.register<IRegisterUserUseCase>("IRegisterUserUseCase",{
-            useClass:RegisterUserUsecase
-        })
-
-        //Register Strategy
-        container.register("ClientRegisterStrategy",{
-            useClass:ClientRegisterStrategy
-        })
-    }
-};
+    //Register Strategy
+    container.register("ClientRegisterStrategy", {
+      useClass: ClientRegisterStrategy,
+    });
+    container.register("ClientLoginStrategy",{
+      useClass:ClientLoginStrategy
+    })
+    
+  }
+}

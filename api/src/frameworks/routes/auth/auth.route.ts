@@ -10,6 +10,10 @@ export  class AuthRoutes extends BaseRoute{
     protected initializeRoutes(): void {
         this.router.post("/signup",(req:Request,res:Response)=>{
             authController.register(req,res)
+        }),
+
+        this.router.post('/login',(req:Request,res:Response)=>{
+            authController.login(req,res)
         })
     }
 }

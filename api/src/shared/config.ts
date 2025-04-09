@@ -8,10 +8,19 @@ export const config = {
            process.env.CORS_ALLOWED_ORIGIN || "http://localhost:5173"
     },
     server:{
-        PORT:process.env.PORT || 5000
+        PORT:process.env.PORT || 5000,
+        NODE_ENV:process.env.NODE_ENV || "development"
     },
     database:{
-        URI:"mongodb://localhost:27017/Turf-X"
+        URI:"mongodb+srv://athulkrishna01112003:AKGkAIn1XskaMMI0@cluster0.idzbn.mongodb.net/Turf-X"
+    },
+    jwt:{
+        ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "access-secret-key",
+		REFRESH_SECRET_KEY: process.env.JWT_REFRESH_KEY || "refresh-secret-key",
+		ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
+REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+        RESET_SECRET_KEY:process.env.JWT_RESET_KEY || "reset-secret-key",
+        RESET_EXPIRES_IN:process.env.JWT_RESET_EXPIRES_IN || "5m"
     },
     loggerStatus: process.env.LOGGER_STATUS || "dev",
     bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10),
