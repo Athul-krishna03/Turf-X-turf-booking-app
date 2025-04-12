@@ -9,4 +9,11 @@ export interface SignupFormValues {
     confirmPassword: string;
     agreeToTerms: boolean;
   }
+  export interface RegisterData {
+    name: string;
+    email: string;
+    phone:string;
+    password: string;
+    role:string;
+  }
   

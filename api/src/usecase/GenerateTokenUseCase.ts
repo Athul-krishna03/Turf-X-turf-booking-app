@@ -23,7 +23,7 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase{
             token:refreshToken,
             userType:role as TRole,
             user:id,
-            expiresAt:Date.now()* 7 * 24 * 60 * 60 * 100
+            expiresAt:Date.now() + 7 * 24 * 60 * 60 * 1000
         })
 
         return {accessToken,refreshToken}

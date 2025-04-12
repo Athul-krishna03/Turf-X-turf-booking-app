@@ -1,21 +1,126 @@
 
-import React from "react";
+import React, { useState } from "react";
 import SignupForm from "../components/auth/SignupForm"; // Your existing component
-import { SignupFormValues } from '../types/Type'
+import { RegisterData, SignupFormValues } from '../types/Type'
+import { useNavigate } from "react-router-dom";
+import { useRegister,useSendOtp, useVerifyOtp} from "../hooks/auth/useAuth";
+import { useToast } from "../hooks/useToast";
+import OTPModal from "../components/modals/OTPmodal";
 
-const SoccerClubSignupPage :React.FC=() => {
-  const handleSubmit = (
+
+const SignUp :React.FC=() => {
+  const [isOTPModalOpen,setIsOTPModalOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [formData, setFormData] = useState<RegisterData | null>(null);
+  const navigate = useNavigate();
+  
+
+  const registerUser = useRegister();
+  const sendOtp = useSendOtp();
+  const verifyOtp = useVerifyOtp()
+  const {toast} = useToast();
+  const handleSubmit = async (
     values: SignupFormValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    console.log("Form submitted with values:", values);
-    // Handle form submission logic here
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 1000);
+    try {
+      setSubmitting(true);
+      setEmail(values.email);
+      const registerData:RegisterData={
+        name:values.fullName || "",
+        email:values.email,
+        phone:values.phoneNumber || "",
+        password:values.password,
+        role:"user",
+      };
+
+      setFormData(registerData);
+
+      const response = await sendOtp.mutateAsync(values.email);
+      if(response.status === 201){
+        setIsOTPModalOpen(true);
+        toast({
+          title: "OTP Sent",
+          description: "Check your email for the OTP.",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send OTP.",
+        variant: "destructive",
+      })
+    } finally{
+      setSubmitting(false)
+    }
+  };
+  const resendOtp = async ()=>{
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Email is missing.please Try singing up again",
+        variant: "destructive",
+      });
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const response = await sendOtp.mutateAsync(email);
+      if (response.status === 201) {
+        setIsOTPModalOpen(true);
+        toast({
+          title: "OTP Sent",
+          description: "Check your email for the OTP.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to Resend OTP",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleVerifyOtp = async (otp: string) => {
+    if (!formData) {
+      toast({
+        title: "Error",
+        description: "Missing registration data. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const optResponse = await verifyOtp.mutateAsync({ email, otp });
+
+      if (optResponse) {
+        console.log("verify OTP");
+        await registerUser.mutateAsync(formData);
+        toast({
+          title: "Success",
+          description: "Account created successfully! 🎉",
+        });
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("OTP verification failed:", error);
+      toast({
+        title: "Invalid OTP",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
+  <>
     <div className="flex h-screen w-screen overflow-hidden bg-black">
       {/* Left Panel - Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 bg-gray-900 overflow-y-auto">
@@ -103,7 +208,18 @@ const SoccerClubSignupPage :React.FC=() => {
         </div>
       </div>
     </div>
+    <OTPModal
+      isOpen={isOTPModalOpen}
+      onClose={()=>setIsOTPModalOpen(false)}
+      onResend={resendOtp}
+      onVerify={handleVerifyOtp}
+      isLoading={isLoading}
+      title="Verify your Email"
+      subtitle={`We've sent a 6-digit code to ${email}. Enter it below to verify your account.`}
+    
+    />
+  </>
   );
 };
 
-export default SoccerClubSignupPage;
+export default SignUp;

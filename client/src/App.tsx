@@ -1,12 +1,16 @@
-import {BrowserRouter,Route,Router} from "react-router-dom"
+import {BrowserRouter,Route,Routes} from "react-router-dom"
 import { Button } from "./components/ui/button"
-import ElegantSignupPage  from "./pages/signup"
+import SignUp  from "./pages/signup"
 
 export default function App(){
   return (
 
     <>
-    <ElegantSignupPage/>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/signup" element={<SignUp/>}/>
+    </Routes>
+    </BrowserRouter>
     </>
   )
 }

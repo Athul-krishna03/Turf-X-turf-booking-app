@@ -22,6 +22,10 @@ REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
         RESET_SECRET_KEY:process.env.JWT_RESET_KEY || "reset-secret-key",
         RESET_EXPIRES_IN:process.env.JWT_RESET_EXPIRES_IN || "5m"
     },
+    nodemailer:{
+        EMAIL_USER:process.env.NODEMAILER_EMAIL,
+        EMAIL_PASS:process.env.NODEMAILER_PASS
+    },
     loggerStatus: process.env.LOGGER_STATUS || "dev",
     bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10),
 }

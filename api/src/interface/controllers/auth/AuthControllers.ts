@@ -20,6 +20,8 @@ import { IRegisterUserUseCase } from "../../../entities/useCaseInterfaces/auth/I
 import { ILoginUserUseCase } from "../../../entities/useCaseInterfaces/auth/ILoginUserUseCase";
 import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/IGenerateTokenUseCase";
 import { setAuthCookies } from "../../../shared/utils/cookieHelper";
+import { IUserExistenceService } from "../../../entities/services/Iuser-existence-service.interface";
+import { IGenerateOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IGenerateOtpUseCase";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -29,7 +31,11 @@ export class AuthController implements IAuthController {
     @inject("ILoginUserUseCase")
     private LoginUserUseCase:ILoginUserUseCase,
     @inject("IGenerateTokenUseCase")
-    private GenerateTokenUseCase:IGenerateTokenUseCase
+    private GenerateTokenUseCase:IGenerateTokenUseCase,
+    @inject("IUserExistenceService")
+    private userExistenceService:IUserExistenceService,
+    @inject('IGenerateOtpUseCase')
+    private generateOtpUseCase:IGenerateOtpUseCase
   ) {}
 
   //register user
@@ -109,5 +115,30 @@ export class AuthController implements IAuthController {
       handleErrorResponse(res,error)
     }
     
+  }
+
+  //send Otp Email
+  async sendOtpEmail(req:Request,res:Response):Promise<void>{
+    
+    const {email} = req.body;
+    try {
+      const existingEmail =  await this.userExistenceService.emailExists(email);
+      if(existingEmail){
+        res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({message:ERROR_MESSAGES.EMAIL_EXISTS})
+      return;
+      }
+
+      await this.generateOtpUseCase.execute(email);
+
+      res
+      .status(HTTP_STATUS.CREATED)
+      .json({message:SUCCESS_MESSAGES.OTP_SEND_SUCCESS})
+
+      
+    } catch (error) {
+      handleErrorResponse(res,error)
+    }
   }
 }

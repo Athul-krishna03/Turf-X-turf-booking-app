@@ -17,6 +17,8 @@ import { LoginUserUseCase } from "../../usecase/LoginUserUseCase";
 import { ClientLoginStrategy } from "../../usecase/auth/login-strategies/clientLoginStrategy";
 import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/IGenerateTokenUseCase";
 import { GenerateTokenUseCase } from "../../usecase/GenerateTokenUseCase";
+import { IGenerateOtpUseCase } from "../../entities/useCaseInterfaces/auth/IGenerateOtpUseCase";
+import { GenerateOtpUseCase } from "../../usecase/auth/register-stratergies/GenerateOtpUseCase";
 
 
 export class UseCaseRegistery {
@@ -36,7 +38,10 @@ export class UseCaseRegistery {
     container.register<IGenerateTokenUseCase>("IGenerateTokenUseCase",{
       useClass:GenerateTokenUseCase
     })
-
+    
+    container.register<IGenerateOtpUseCase>("IGenerateOtpUseCase",{
+      useClass:GenerateOtpUseCase
+    })
     //Register Strategy
     container.register("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,

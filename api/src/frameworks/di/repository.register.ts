@@ -7,6 +7,12 @@ import { IRefreshTokenRepository } from "../../entities/repositoryInterface/auth
 import { RefreshTokenRepository } from "../../interface/repositories/auth/refreshTokenRepository";
 import { ITokenService } from "../../entities/services/ITokenServices";
 import { JWTService } from "../../interface/services/JwtTokenService";
+import { IUserExistenceService } from "../../entities/services/Iuser-existence-service.interface";
+import { UserExistenceService } from "../../interface/services/UserExistenceServices";
+import { IOtpService } from "../../entities/services/IOtpServices";
+import { OtpService } from "../../interface/services/OtpService";
+import { INodemailerService } from "../../entities/services/INodeMailerService";
+import { NodemailerService } from "../../interface/services/NodeMailerServices";
 
 
 
@@ -22,6 +28,16 @@ export class RepositoryRegistry{
 
         container.register<ITokenService>("ITokenService",{
             useClass:JWTService
+        })
+        container.register<IUserExistenceService>("IUserExistenceService",{
+            useClass:UserExistenceService
+        })
+        container.register<IOtpService>("IOtpService",{
+            useClass:OtpService
+        })
+
+        container.register<INodemailerService>("INodemailerService",{
+            useClass:NodemailerService
         })
     }
 }
