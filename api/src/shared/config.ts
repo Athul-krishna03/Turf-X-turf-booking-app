@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import path from 'path';
-dotenv.config({path:path.resolve(__dirname,"../../.env")});
+dotenv.config({path:path.resolve(__dirname,"../../.env")})
 
 export const config = {
     cors:{
@@ -25,6 +25,9 @@ REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
     nodemailer:{
         EMAIL_USER:process.env.NODEMAILER_EMAIL,
         EMAIL_PASS:process.env.NODEMAILER_PASS
+    },
+    redis:{
+        redisURL:process.env.REDIS_URL
     },
     loggerStatus: process.env.LOGGER_STATUS || "dev",
     bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10),

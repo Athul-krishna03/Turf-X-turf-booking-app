@@ -19,5 +19,9 @@ export  class AuthRoutes extends BaseRoute{
         this.router.post('/send-otp',(req:Request,res:Response)=>{
             authController.sendOtpEmail(req,res)
         })
+
+        this.router.post('/verify-otp',(req:Request,res:Response)=>{
+            authController.verifyOtp(req,res)
+        })
     }
 }

@@ -13,6 +13,8 @@ import { IOtpService } from "../../entities/services/IOtpServices";
 import { OtpService } from "../../interface/services/OtpService";
 import { INodemailerService } from "../../entities/services/INodeMailerService";
 import { NodemailerService } from "../../interface/services/NodeMailerServices";
+import { IRedisClient } from "../../entities/services/IRedisClient";
+import { RedisClient } from "../redis/redisClient.";
 
 
 
@@ -38,6 +40,10 @@ export class RepositoryRegistry{
 
         container.register<INodemailerService>("INodemailerService",{
             useClass:NodemailerService
+        })
+
+        container.register<IRedisClient>("IRedisClient",{
+            useClass:RedisClient
         })
     }
 }

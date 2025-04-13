@@ -22,11 +22,11 @@ export class GenerateOtpUseCase implements IGenerateOtpUseCase{
         
         console.log(hashedOtp)
         
-        // await this.otpService.storeOtp(email,hashedOtp);
+        await this.otpService.storeOtp(email,hashedOtp);
 
-        // const storedOtp = await this.otpService.getOtp(email);
+        const storedOtp = await this.otpService.getOtp(email);
             
-        // console.log(storedOtp);
+        console.log(storedOtp);
 
         await this.mailService.sendOtpEmail(email,otp)
         } catch (error) {

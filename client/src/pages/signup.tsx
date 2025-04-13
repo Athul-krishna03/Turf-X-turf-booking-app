@@ -97,6 +97,7 @@ const SignUp :React.FC=() => {
     try {
       setIsLoading(true);
       const optResponse = await verifyOtp.mutateAsync({ email, otp });
+      console.log("otp response",optResponse)
 
       if (optResponse) {
         console.log("verify OTP");

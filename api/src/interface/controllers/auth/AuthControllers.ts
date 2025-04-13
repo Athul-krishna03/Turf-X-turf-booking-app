@@ -22,6 +22,8 @@ import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/
 import { setAuthCookies } from "../../../shared/utils/cookieHelper";
 import { IUserExistenceService } from "../../../entities/services/Iuser-existence-service.interface";
 import { IGenerateOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IGenerateOtpUseCase";
+import { otpMailValidationSchema } from "../validations/otp-mail.validation.schema";
+import { IVerifyOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IVerifyOtpUseCase";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -35,10 +37,12 @@ export class AuthController implements IAuthController {
     @inject("IUserExistenceService")
     private userExistenceService:IUserExistenceService,
     @inject('IGenerateOtpUseCase')
-    private generateOtpUseCase:IGenerateOtpUseCase
+    private generateOtpUseCase:IGenerateOtpUseCase,
+    @inject('IVerifyOtpUseCase')
+    private verifyOtpUseCase:IVerifyOtpUseCase
   ) {}
 
-  //register user
+  //register use
   async register(req: Request, res: Response): Promise<void> {
     console.log("entered",req.body);
     
@@ -137,6 +141,20 @@ export class AuthController implements IAuthController {
       .json({message:SUCCESS_MESSAGES.OTP_SEND_SUCCESS})
 
       
+    } catch (error) {
+      handleErrorResponse(res,error)
+    }
+  }
+
+  async verifyOtp(req:Request,res:Response):Promise<void>{
+    try {
+      const {email,otp} = req.body;
+      const validateData = otpMailValidationSchema.parse({email,otp})
+      await this.verifyOtpUseCase.execute(validateData);
+      res.status(HTTP_STATUS.OK).json({
+        success:true,
+        message:SUCCESS_MESSAGES.VERIFICATION_SUCCESS
+      })
     } catch (error) {
       handleErrorResponse(res,error)
     }
