@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Input } from '../ui/input'
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
-import { Car, User, Mail, Lock, Eye, EyeOff, Phone } from "lucide-react";
+import {  User, Mail, Lock, Eye, EyeOff, Phone } from "lucide-react";
 import { signupSchema } from "../../utils/validations/signupValidator";
 import { SignupFormValues } from "../../types/Type";
 
@@ -22,14 +22,6 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <div className="flex flex-col items-center mb-8">
-        <Car className="h-10 w-10 text-green-400 mb-4" />
-        <h1 className="text-2xl font-bold">Create an account</h1>
-        <p className="text-gray-400 mt-1">
-          Join our exclusive car auction platform
-        </p>
-      </div>
-
       <Formik<SignupFormValues>
         initialValues={{
           fullName: "",
@@ -46,7 +38,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
         }}
       >
         {({ values, setFieldValue, isSubmitting }) => (
-          <Form className="space-y-6">
+          <Form className="space-y-6 bg-black">
             {/* Full Name */}
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
@@ -57,7 +49,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                   id="fullName"
                   name="fullName"
                   placeholder="John Doe"
-                  className="pl-10 bg-gray-900 border-gray-800"
+                  className="pl-10 bg-gray-900 border-gray-800 text-gray-400"
                 />
               </div>
               <ErrorMessage
@@ -78,7 +70,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                   name="email"
                   type="email"
                   placeholder="name@example.com"
-                  className="pl-10 bg-gray-900 border-gray-800"
+                  className="pl-10 bg-gray-900 border-gray-800 text-gray-400"
                 />
               </div>
               <ErrorMessage
@@ -98,7 +90,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                   name="phoneNumber"
                   type="tel"
                   placeholder="1234567890"
-                  className="pl-10 bg-gray-900 border-gray-800"
+                  className="pl-10 bg-gray-900 border-gray-800 text-gray-400"
                 />
               </div>
               <ErrorMessage
@@ -119,7 +111,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••"
-                  className="pl-10 bg-gray-900 border-gray-800"
+                  className="pl-10 bg-gray-900 border-gray-800 text-gray-400"
                 />
                 <button
                   type="button"
@@ -151,7 +143,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••"
-                  className="pl-10 bg-gray-900 border-gray-800"
+                  className="pl-10 bg-gray-900 border-gray-800 text-gray-400"
                 />
                 <button
                   type="button"

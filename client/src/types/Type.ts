@@ -17,3 +17,8 @@ export interface SignupFormValues {
     role:string;
   }
   
+  export interface LoginData {
+    email:string,
+    password:string
+    role:"user"|"admin" | "TurfOwner"
+  }

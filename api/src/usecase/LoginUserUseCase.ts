@@ -15,11 +15,17 @@ export class LoginUserUseCase implements ILoginUserUseCase{
         private clientLogin:ILoginStrategy
     ){
         this.strategies={
-            user:clientLogin
+            user:this.clientLogin,
+            admin:this.clientLogin,
+            TurfOwner:this.clientLogin
         }
     }
     async execute(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
+        console.log(user.role);
+        
         const strategy = this.strategies[user.role];
+        console.log("strategy",strategy);
+        
         if(!strategy){
             throw new CustomError(
                 ERROR_MESSAGES.INVALID_ROLE,

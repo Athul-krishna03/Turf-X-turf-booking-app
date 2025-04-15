@@ -1,5 +1,5 @@
 import { api } from "../../api/auth.axios";
-import { RegisterData } from "../../types/Type";
+import { RegisterData ,LoginData} from "../../types/Type";
 
 
 
@@ -29,3 +29,13 @@ export const verifyOtp = async (email:string,otp:string)=>{
         throw error.response?.data || "Failed in verify-otp"
     }
 }
+
+export const loginUser = async (data: LoginData) => {
+    try {
+      const response = await api.post("/login", { ...data });
+      console.log("login data response", response);
+      return response;
+    } catch (error: any) {
+      throw error.response?.data || "Failed to Login User";
+    }
+  };

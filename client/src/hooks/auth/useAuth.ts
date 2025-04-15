@@ -1,6 +1,6 @@
 import {useMutation} from  '@tanstack/react-query'
-import { registeUser,sendOtp,verifyOtp} from '../../services/auth/authServices'
-import { RegisterData } from '../../types/Type'
+import { registeUser,sendOtp,verifyOtp,loginUser} from '../../services/auth/authServices'
+import { RegisterData ,LoginData} from '../../types/Type'
 
 
 
@@ -29,3 +29,12 @@ export const useVerifyOtp = () => {
       },
     });
   };
+
+  export const useLogin = ()=>{
+    return useMutation({
+      mutationFn:(data:LoginData)=>loginUser(data),
+      onError:(error:Error)=>{
+        console.log("Error on login user",error)
+      }
+    })
+  }

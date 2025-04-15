@@ -47,10 +47,17 @@ export class AuthController implements IAuthController {
     console.log("entered",req.body);
     
     try {
+
+      
       const { role } = req.body as UserDTO;
+
+      if (role !== 'user' && role !== 'TurfOwner') {
+        res.status(400).json({ message: "Invalid role" });
+        return
+      }
       console.log(role)
-      const schema = userSignupSchemas[role];
-      console.log(schema)
+      const schema = userSignupSchemas[role as keyof typeof userSignupSchemas];
+      console.log("schema in register",schema)
       if (!schema) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
@@ -94,7 +101,7 @@ export class AuthController implements IAuthController {
       const refreshTokenName = `${user.role}_refresh_token`;
 
       setAuthCookies(
-        res,
+      res,
       tokens.accessToken,
       tokens.refreshToken,
       accessTokenName,

@@ -16,19 +16,22 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
   ) {}
 
   async register(user: UserDTO): Promise<IUserEntity | void> {
+    console.log("client register");
+    
     const existingClient = await this.clientRepository.findByEmail(user.email);
 
     if (existingClient) {
       throw new CustomError(ERROR_MESSAGES.EMAIL_EXISTS, HTTP_STATUS.CONFLICT);
     }
 
-    const { name, email, phone, password } = user as UserDTO;
+    const { name, email, phone, password ,role } = user as UserDTO;
+    console.log("inside client registery strategy",role)
 
     let hashedPassword = null;
     if (password) {
       hashedPassword = await this.passwordBcrypt.hash(password);
     }
-    const clientId = generateUniqueUid("user");
+    const clientId = generateUniqueUid(role);
 
     try {
       const newUser = await this.clientRepository.save({
@@ -37,7 +40,7 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
         password: hashedPassword ?? "",
         phone,
         clientId,
-        role: "user",
+        role: role,
       });
 
       return newUser;

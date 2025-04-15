@@ -14,10 +14,13 @@ export class RegisterUserUsecase implements IRegisterUserUseCase {
   ) {
     this.strategies = {
       user: this.clientRegister,
+      TurfOwner:this.clientRegister
     };
   }
   async execute(user: UserDTO): Promise<void> {
+    console.log("inside strategy",user.role)
     const strategy = this.strategies[user.role];
+    console.log(strategy,"stragey")
     if (!strategy) {
       throw new CustomError(ERROR_MESSAGES.INVALID_ROLE, HTTP_STATUS.FORBIDDEN);
     }

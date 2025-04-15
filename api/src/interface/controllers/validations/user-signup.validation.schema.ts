@@ -10,11 +10,20 @@ const userSignupSchema = z.object({
   email: strongEmailRegex,
   phone: phoneNumberSchema,
   password: passwordSchema,
-  role: z.literal("user"),
+  role:z.enum([ "user", "TurfOwner"]),
 });
 
+const turfOwnerSchema = z.object({
+  name: nameSchema,
+  email: strongEmailRegex,
+  phone: phoneNumberSchema,
+  password: passwordSchema,
+  role:z.enum([ "user", "TurfOwner"]),
+})
 export const userSignupSchemas = {
   user: userSignupSchema,
+  TurfOwner: turfOwnerSchema 
+  
 };
 
 //login schema for both "user","admin" and "Turf owner"
