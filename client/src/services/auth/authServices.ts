@@ -1,5 +1,5 @@
 import { api } from "../../api/auth.axios";
-import { RegisterData ,LoginData} from "../../types/Type";
+import { RegisterData ,LoginData, AuthResponse} from "../../types/Type";
 
 
 
@@ -39,3 +39,22 @@ export const loginUser = async (data: LoginData) => {
       throw error.response?.data || "Failed to Login User";
     }
   };
+
+  export const googleAuth = async({
+    credential,
+    client_id,
+    role
+
+  }:{
+    credential:any;
+    client_id:any;
+    role:string;
+  }):Promise<AuthResponse> => {
+    const response = await api.post<AuthResponse>('/google-auth',{
+        credential,
+        client_id,
+        role
+    });
+
+    return response.data
+  }

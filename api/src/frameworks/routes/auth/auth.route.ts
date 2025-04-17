@@ -23,5 +23,9 @@ export  class AuthRoutes extends BaseRoute{
         this.router.post('/verify-otp',(req:Request,res:Response)=>{
             authController.verifyOtp(req,res)
         })
+
+        this.router.post('/google-auth',(req:Request,res:Response)=>{
+            authController.googleAuth(req,res)
+        })
     }
 }

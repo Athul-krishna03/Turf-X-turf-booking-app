@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import { IRefreshTokenModel } from "../schemas/refresh-token-schema";
-
+   
 
 
 export const RefreshTokenSchema = new Schema<IRefreshTokenModel>({

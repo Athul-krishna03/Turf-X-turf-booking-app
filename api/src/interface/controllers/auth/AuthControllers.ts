@@ -24,6 +24,8 @@ import { IUserExistenceService } from "../../../entities/services/Iuser-existenc
 import { IGenerateOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IGenerateOtpUseCase";
 import { otpMailValidationSchema } from "../validations/otp-mail.validation.schema";
 import { IVerifyOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IVerifyOtpUseCase";
+import { IGoogleAuthUseCase } from "../../../entities/useCaseInterfaces/auth/IGoogleAuthUseCase";
+import { error } from "console";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -39,7 +41,9 @@ export class AuthController implements IAuthController {
     @inject('IGenerateOtpUseCase')
     private generateOtpUseCase:IGenerateOtpUseCase,
     @inject('IVerifyOtpUseCase')
-    private verifyOtpUseCase:IVerifyOtpUseCase
+    private verifyOtpUseCase:IVerifyOtpUseCase,
+    @inject('IGoogleAuthUseCase')
+    private googleAuthUseCase:IGoogleAuthUseCase
   ) {}
 
   //register use
@@ -153,6 +157,8 @@ export class AuthController implements IAuthController {
     }
   }
 
+
+  //verify otp
   async verifyOtp(req:Request,res:Response):Promise<void>{
     try {
       const {email,otp} = req.body;
@@ -163,6 +169,55 @@ export class AuthController implements IAuthController {
         message:SUCCESS_MESSAGES.VERIFICATION_SUCCESS
       })
     } catch (error) {
+      handleErrorResponse(res,error)
+    }
+  }
+
+
+  //google Auth
+  async googleAuth(req:Request,res:Response):Promise<void>{
+    try{
+      const {credential,client_id,role}=req.body;
+
+      console.log("heloo google",req.body)
+      const user = await this.googleAuthUseCase.execute(credential,client_id,role);
+      console.log("user data",user)
+
+      if(!user.id || !user.email || !user.role){
+        throw new Error("User ID,email,or role is missing");
+      }
+
+      const tokens = await this.GenerateTokenUseCase.execute(
+        user.id,
+        user.email,
+        user.role
+      );
+
+      const access_token_name = `${user.role}_access_token`;
+      const refresh_token_name = `${user.role}_refresh_token`;
+
+      setAuthCookies(
+        res,
+        tokens.accessToken,
+        tokens.refreshToken,
+        access_token_name,
+        refresh_token_name
+      )
+
+      res.status(HTTP_STATUS.OK).json({
+        success:true,
+        message:SUCCESS_MESSAGES.LOGIN_SUCCESS,
+        user: {
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          phone:user.phone,
+          profileImage:user.profileImage,
+          bio:user.bio,
+          joinedAt:user.joinedAt
+        }
+      })
+    }catch{
       handleErrorResponse(res,error)
     }
   }

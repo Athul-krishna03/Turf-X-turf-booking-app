@@ -3,6 +3,8 @@ import { Search, Menu, Home, Calendar, Star, Settings, User, MessageSquare, Bell
 
 export default function TurfXDashboard() {
   const [activeTab, setActiveTab] = useState('home');
+  const userData= localStorage.getItem("persist:session");
+  
   
   const popularTurfs = [
     {
@@ -12,7 +14,7 @@ export default function TurfXDashboard() {
       distance: "1.3 km",
       rating: 4.8,
       reviews: 245,
-      image: "/api/placeholder/280/160"
+      image: "/turf.jpg"
     },
     {
       id: 2,
@@ -21,7 +23,7 @@ export default function TurfXDashboard() {
       distance: "2.5 km",
       rating: 4.7,
       reviews: 178,
-      image: "/api/placeholder/280/160"
+      image: "/turf.jpg"
     },
     {
       id: 3,
@@ -30,7 +32,7 @@ export default function TurfXDashboard() {
       distance: "3.2 km",
       rating: 4.9,
       reviews: 320,
-      image: "/api/placeholder/280/160"
+      image: "/turf.jpg"
     },
     {
       id: 4,
@@ -39,7 +41,7 @@ export default function TurfXDashboard() {
       distance: "4.8 km",
       rating: 4.6,
       reviews: 156,
-      image: "/api/placeholder/280/160"
+      image: "/turf.jpg"
     }
   ];
 
@@ -48,19 +50,19 @@ export default function TurfXDashboard() {
       id: 1,
       name: "Football",
       color: "bg-amber-100",
-      image: "/api/placeholder/120/120"
+      image: "\vecteezy_ai-generated-soccer-match-on-the-field_42054042.jpg"
     },
     {
       id: 2,
       name: "Badminton",
       color: "bg-pink-100",
-      image: "/api/placeholder/120/120"
+      image: "/turf.jpg"
     },
     {
       id: 3,
       name: "Cricket",
       color: "bg-green-100",
-      image: "/api/placeholder/120/120"
+      image: "/turf.jpg"
     }
   ];
 
@@ -159,9 +161,9 @@ export default function TurfXDashboard() {
           {/* Hero Section */}
           <div className="relative h-80">
             <img 
-              src="/api/placeholder/1920/500" 
+              src="\turf.jpg" 
               alt="Football turf at night" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover text-white"
             />
             <div className="absolute inset-0 bg-black bg-opacity-50"></div>
             <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16">
@@ -224,10 +226,10 @@ export default function TurfXDashboard() {
           </section>
           
           {/* Sports Categories */}
-          <section className="px-6 md:px-16 py-8">
+          <section className="px-6 md:px-16 py-8 ">
             <h2 className="text-xl font-semibold mb-6">Choose Your Sport</h2>
             
-            <div className="flex space-x-4 overflow-x-auto pb-4">
+            <div className="flex space-x-4 overflow-x-auto pb-4 flex justify-between">
               {sportsCategories.map((sport) => (
                 <div key={sport.id} className={`${sport.color} text-black rounded-xl overflow-hidden w-32 h-40 flex flex-col relative group cursor-pointer`}>
                   <img 
@@ -252,7 +254,7 @@ export default function TurfXDashboard() {
                   <h3 className="text-lg font-medium mb-4">Your Booking Status</h3>
                   <div className="bg-gray-800 rounded-lg p-4">
                     <div className="flex items-start space-x-4">
-                      <img src="/api/placeholder/80/80" alt="Venue" className="w-20 h-20 rounded-lg" />
+                      <img src="/turf.jpg" alt="Venue" className="w-20 h-20 rounded-lg" />
                       <div className="flex-1">
                         <h4 className="font-medium">Greenway Arena</h4>
                         <div className="flex items-center text-xs text-gray-400 mt-1">
@@ -293,7 +295,7 @@ export default function TurfXDashboard() {
           </section>
           
           {/* Footer */}
-          <footer className="bg-gray-900 px-6 md:px-16 py-8">
+          <footer className="bg-gray-800 px-6 md:px-16 py-8">
             <div className="flex flex-col md:flex-row justify-between">
               <div className="mb-6 md:mb-0">
                 <div className="flex items-center">

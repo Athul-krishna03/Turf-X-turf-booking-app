@@ -21,6 +21,8 @@ import { IGenerateOtpUseCase } from "../../entities/useCaseInterfaces/auth/IGene
 import { GenerateOtpUseCase } from "../../usecase/auth/register-stratergies/GenerateOtpUseCase";
 import { IVerifyOtpUseCase } from "../../entities/useCaseInterfaces/auth/IVerifyOtpUseCase";
 import { VerifyOtpUseCase } from "../../usecase/auth/register-stratergies/VerifyOtp.useCase";
+import { GoogleAuthUseCase } from "../../usecase/auth/GoogleAuthUseCase";
+import { IGoogleAuthUseCase } from "../../entities/useCaseInterfaces/auth/IGoogleAuthUseCase";
 
 
 export class UseCaseRegistery {
@@ -47,6 +49,10 @@ export class UseCaseRegistery {
 
     container.register<IVerifyOtpUseCase>("IVerifyOtpUseCase",{
       useClass:VerifyOtpUseCase
+    })
+
+    container.register<IGoogleAuthUseCase>("IGoogleAuthUseCase",{
+      useClass:GoogleAuthUseCase
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {
