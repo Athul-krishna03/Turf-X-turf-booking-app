@@ -15,14 +15,14 @@ const adminSlice = createSlice({
     name:"admin",
     initialState,
     reducers:{
-        AdminLogin:(state,action:PayloadAction<Admin>)=>{
+        adminLogin:(state,action:PayloadAction<Admin>)=>{
             state.admin = action.payload
         },
-        AdminLogout:(state)=>{
+        adminLogout:(state)=>{
             state.admin = null
         }
     }
 })
 
-export const {AdminLogin,AdminLogout} = adminSlice.actions
+export const {adminLogin,adminLogout} = adminSlice.actions
 export default adminSlice.reducer;

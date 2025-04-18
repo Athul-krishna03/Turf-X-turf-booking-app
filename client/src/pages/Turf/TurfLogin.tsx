@@ -2,28 +2,28 @@ import FormikLoginForm from "../../components/auth/LoginForm";
 import { LoginData as FormValues } from "../../types/Type";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { adminLogin } from "../../store/slices/admin.slice";
+// import { adminLogin } from "../../store/slices/admin.slice";
 import { useLogin } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
 
-const AdminLoginPage = () => {
+const TurfLoginPage = () => {
   const { toast } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loginAdmin = useLogin();
+  const loginTurf= useLogin();
 
   const handleSubmit = async (values: FormValues) => {
     try {
       console.log(values);
-      const response = await loginAdmin.mutateAsync(values);
-      console.log("adminLogin", response);
+      const response = await loginTurf.mutateAsync(values);
+      console.log("TURFLogin", response);
       if (response.status === 200) {
-        console.log("Admin Logged in");
-        dispatch(adminLogin(response.data.admin));
-        navigate("/admin/dashboard");
+        console.log("Turf Logged in");
+        // dispatch(adminLogin(response.data.admin));
+        navigate("/turf/dashboard");
         toast({
           title: "Success!",
-          description: "Admin login successful!",
+          description: "login successful!",
           duration: 3000,
         });
       }
@@ -52,7 +52,7 @@ const AdminLoginPage = () => {
         <div className="mt-8">
           <div className="bg-green-500 h-1 w-16 mx-auto mb-8"></div>
           
-          <FormikLoginForm onSubmit={handleSubmit} userType='admin' />
+          <FormikLoginForm onSubmit={handleSubmit} userType='turf' />
           
           <div className="mt-6">
             <div className="relative">
@@ -74,4 +74,4 @@ const AdminLoginPage = () => {
   );
 };
 
-export default AdminLoginPage;
+export default TurfLoginPage;

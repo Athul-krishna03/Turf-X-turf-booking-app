@@ -15,6 +15,8 @@ import { INodemailerService } from "../../entities/services/INodeMailerService";
 import { NodemailerService } from "../../interface/services/NodeMailerServices";
 import { IRedisClient } from "../../entities/services/IRedisClient";
 import { RedisClient } from "../redis/redisClient.";
+import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRepository";
+import { TurfRepository } from "../../interface/repositories/Turf/turf.repository";
 
 
 
@@ -23,7 +25,9 @@ export class RepositoryRegistry{
         container.register<IClientRepository>("IClientRepository",{
             useClass:ClientRepository
         });
-
+        container.register<ITurfRepository>("ITurfRepository",{
+            useClass:TurfRepository
+        })
         container.register<IRefreshTokenRepository>("IRefreshTokenRepository",{
             useClass:RefreshTokenRepository
         })

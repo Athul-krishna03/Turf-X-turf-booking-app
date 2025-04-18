@@ -14,6 +14,10 @@ export interface UserDTO {
     role: TRole
 }
 
+export interface TurfRegisterDTO extends UserDTO {
+    courtSize: string;
+    aminities: string[];
+}
 export interface ClientProfileResponse{
     name:string;
     phone:number;

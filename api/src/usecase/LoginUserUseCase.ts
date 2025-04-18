@@ -12,12 +12,13 @@ export class LoginUserUseCase implements ILoginUserUseCase{
     private strategies:Record<string,ILoginStrategy>;
     constructor(
         @inject("ClientLoginStrategy")
-        private clientLogin:ILoginStrategy
+        private clientLogin:ILoginStrategy,
+        private turfLogin:ILoginStrategy
     ){
         this.strategies={
             user:this.clientLogin,
             admin:this.clientLogin,
-            TurfOwner:this.clientLogin
+            TurfOwner:this.turfLogin
         }
     }
     async execute(user: LoginUserDTO): Promise<Partial<IUserEntity>> {

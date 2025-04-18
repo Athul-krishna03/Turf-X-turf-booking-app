@@ -13,13 +13,16 @@ const userSignupSchema = z.object({
   role:z.enum([ "user", "TurfOwner"]),
 });
 
-const turfOwnerSchema = z.object({
-  name: nameSchema,
+export const turfOwnerSchema = z.object({
+  name: nameSchema, // Owner name or turf name depending on usage
   email: strongEmailRegex,
   phone: phoneNumberSchema,
   password: passwordSchema,
-  role:z.enum([ "user", "TurfOwner"]),
-})
+  role: z.literal("TurfOwner"),
+  courtSize: z.string(),
+  aminities: z.array(z.string()).min(1, "At least one amenity is required"),
+  turfPhotos: z.array(z.string().url()).optional()
+});
 export const userSignupSchemas = {
   user: userSignupSchema,
   TurfOwner: turfOwnerSchema 

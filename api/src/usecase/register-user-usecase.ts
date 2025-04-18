@@ -10,11 +10,13 @@ export class RegisterUserUsecase implements IRegisterUserUseCase {
   private strategies: Record<string, IRegisterStrategy>;
   constructor(
     @inject("ClientRegisterStrategy")
-    private clientRegister: IRegisterStrategy
+    private clientRegister: IRegisterStrategy,
+    @inject("TurfRegisterStrategy")
+    private turfRegister: IRegisterStrategy
   ) {
     this.strategies = {
       user: this.clientRegister,
-      TurfOwner:this.clientRegister
+      TurfOwner:this.turfRegister
     };
   }
   async execute(user: UserDTO): Promise<void> {

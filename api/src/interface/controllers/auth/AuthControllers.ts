@@ -76,6 +76,7 @@ export class AuthController implements IAuthController {
         message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS,
       });
     } catch (error) {
+      console.log(error)
       handleErrorResponse(res, error);
     }
   }

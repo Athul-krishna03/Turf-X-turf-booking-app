@@ -10,25 +10,31 @@ import { CredentialResponse } from "@react-oauth/google";
 export interface FormikLoginFormProps {
   onSubmit: (values: FormValues) => void;
   onGoogleLogin?: (credentialResponse:CredentialResponse) => void;
-  isAdmin?: boolean;
+  userType?: "user" | "admin" | "turf";
 }
 
-const FormikLoginForm: React.FC<FormikLoginFormProps> = ({ onSubmit, onGoogleLogin, isAdmin = false }) => {
+const FormikLoginForm: React.FC<FormikLoginFormProps> = ({ onSubmit, onGoogleLogin, userType = "user"}) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const initialValues: FormValues = {
     email: "",
     password: "",
-    role: isAdmin ? "admin" : "user"
+    role: userType === "admin" ? "admin" : userType === "turf" ? "TurfOwner" : "user"
   };
 
   return (
     <div className="max-w-md w-full">
       <h1 className="text-3xl font-bold text-center mb-2 text-white">
-        {isAdmin ? "Admin Login" : "Sign in your account"}
+      {userType === "admin" ? "Admin Login" :
+      userType === "turf" ? "Turf Owner Login" :
+      "Sign in to your account"}
       </h1>
       <p className="text-center mb-8 text-[#8E9196]">
-        {isAdmin ? "Admin Dashboard Access" : "Welcome back to our exclusive car auction platform"}
+      {userType === "admin"
+        ? "Admin Dashboard Access"
+        : userType === "turf"
+        ? "Turf Management Panel Access"
+        : "Welcome back to our exclusive car auction platform"}
       </p>
       
       <Formik
@@ -114,39 +120,38 @@ const FormikLoginForm: React.FC<FormikLoginFormProps> = ({ onSubmit, onGoogleLog
               type="submit" 
               className="w-full font-medium rounded py-3 px-4 transition-all duration-300 bg-[#3BE188] text-black hover:opacity-90 hover:scale-[1.01] active:scale-[0.99]"
             >
-              {isAdmin ? "Admin Sign In" : "Sign In"}
+            {userType === "admin"
+        ? "Admin Sign In"
+        : userType === "turf"
+        ? "Turf Management Sign In"
+        : "SignIn"}
             </button>
           </Form>
         )}
       </Formik>
-      {!isAdmin && (
-        <>
-          <div className="relative flex items-center justify-center my-6">
-            <div className="absolute h-px w-full bg-[#2A2A2A]"></div>
-            <span className="relative px-4 text-sm bg-[#121212] text-[#8E9196]">
-              OR CONTINUE WITH
-            </span>
-          </div>
-          
-          <div>
-            <GoogleAuthButton handleGoogleSuccess={onGoogleLogin ?? (()=>{})}/>
-          </div>
-        </>
+      {userType === "user" && (
+      <>
+        <div className="relative flex items-center justify-center my-6">
+          <div className="absolute h-px w-full bg-[#2A2A2A]"></div>
+          <span className="relative px-4 text-sm bg-[#121212] text-[#8E9196]">
+            OR CONTINUE WITH
+          </span>
+        </div>
+        
+        <div>
+          <GoogleAuthButton handleGoogleSuccess={onGoogleLogin ?? (() => {})} />
+        </div>
+      </>
       )}
+      {userType === "user" && (
+      <p className="text-center mt-8 text-sm text-[#8E9196]">
+        Don't have an account?{" "}
+        <Link to="/signup" className="text-[#3BE188] hover:underline">
+          Create an account
+        </Link>
+      </p>
+)}
 
-      {!isAdmin && (
-        <>
-          <p className="text-center mt-8 text-sm text-[#8E9196]">
-            Don't have an account?{" "}
-            <Link 
-              to="/signup" 
-              className="text-[#3BE188] hover:underline"
-            >
-              Create an account
-            </Link>
-          </p>
-        </>
-      )}
     </div>
   );
 };

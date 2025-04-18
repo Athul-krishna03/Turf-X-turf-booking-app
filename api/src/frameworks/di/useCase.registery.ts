@@ -23,6 +23,7 @@ import { IVerifyOtpUseCase } from "../../entities/useCaseInterfaces/auth/IVerify
 import { VerifyOtpUseCase } from "../../usecase/auth/register-stratergies/VerifyOtp.useCase";
 import { GoogleAuthUseCase } from "../../usecase/auth/GoogleAuthUseCase";
 import { IGoogleAuthUseCase } from "../../entities/useCaseInterfaces/auth/IGoogleAuthUseCase";
+import { TurfRegisterStrategy } from "../../usecase/auth/register-stratergies/Turf-register.strategy";
 
 
 export class UseCaseRegistery {
@@ -60,6 +61,9 @@ export class UseCaseRegistery {
     });
     container.register("ClientLoginStrategy",{
       useClass:ClientLoginStrategy
+    });
+    container.register("TurfRegisterStrategy",{
+      useClass:TurfRegisterStrategy
     })
     
   }

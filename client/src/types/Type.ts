@@ -9,6 +9,20 @@ export interface SignupFormValues {
     confirmPassword: string;
     agreeToTerms: boolean;
   }
+
+  export interface TurfFormValues {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+    courtSize: string;
+    isBlocked: boolean;
+    aminities: string[];
+    turfPhotos: File[];
+    turfPhotoUrls: string[];
+  }
+  
   export interface RegisterData {
     name: string;
     email: string;
