@@ -19,7 +19,8 @@ const AdminLoginPage = () => {
       console.log("adminLogin", response);
       if (response.status === 200) {
         console.log("Admin Logged in");
-        dispatch(adminLogin(response.data.admin));
+
+        dispatch(adminLogin(response.data.user));
         navigate("/admin/dashboard");
         toast({
           title: "Success!",

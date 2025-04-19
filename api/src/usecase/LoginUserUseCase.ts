@@ -13,6 +13,7 @@ export class LoginUserUseCase implements ILoginUserUseCase{
     constructor(
         @inject("ClientLoginStrategy")
         private clientLogin:ILoginStrategy,
+        @inject("TurfLoginStrategy")
         private turfLogin:ILoginStrategy
     ){
         this.strategies={

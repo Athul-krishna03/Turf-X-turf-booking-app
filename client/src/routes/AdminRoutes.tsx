@@ -3,6 +3,7 @@ import { ProtectedRoutes } from "./protected/AuthRoutes";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 
 export function AdminRoutes(){
+    console.log("admin routes")
     return(
         <Routes>
             <Route

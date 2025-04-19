@@ -10,6 +10,19 @@ export class TurfRepository implements ITurfRepository{
         return await TurfModel.create(data)
     }
     async findByEmail(email: string): Promise<ITurfEntity | null> {
-        return await TurfModel.findOne({email}).lean()
+        const client = await TurfModel.findOne({email}).lean();
+        console.log("turf client inside findby email",client)
+        if(!client) return null;
+
+        return{
+            ...client,
+            role:"TurfOwner",
+            id:client._id.toString()
+        } as ITurfEntity
+    }
+
+    async find(filter: any, skip: number, limit: number): Promise<{ turfs: ITurfEntity[] | []; total: number; }> {
+        const turfs = await TurfModel.find({...filter}).skip(skip).limit(limit);
+        return {turfs,total:turfs.length}
     }
 }

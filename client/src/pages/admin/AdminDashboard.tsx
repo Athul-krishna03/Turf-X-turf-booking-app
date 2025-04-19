@@ -45,13 +45,11 @@ const customerData = [
   { name: "Jun", customers: 70 },
 ];
 
+
 const AdminDashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -117,98 +115,6 @@ const AdminDashboard = () => {
           </a>
         </div>
       </div>
-
-      {/* Mobile Menu Button */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-20 bg-black text-white p-4 flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center">
-          <span className="text-green-500 mr-2">•</span> Admin Portal
-        </h2>
-        <button 
-          onClick={toggleMobileMenu} 
-          className="p-2 rounded-md text-gray-300 hover:bg-gray-800"
-        >
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
-
-      {/* Sidebar - Mobile */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-10 bg-black bg-opacity-95 text-white pt-16">
-          <nav className="p-4">
-            <a 
-              href="#" 
-              className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "dashboard" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-              onClick={() => {
-                setActiveMenu("dashboard");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <Home className="h-5 w-5 mr-3" />
-              Dashboard
-            </a>
-            <a 
-              href="#" 
-              className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "customers" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-              onClick={() => {
-                setActiveMenu("customers");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <Users className="h-5 w-5 mr-3" />
-              Customers
-            </a>
-            <a 
-              href="#" 
-              className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "turfs" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-              onClick={() => {
-                setActiveMenu("turfs");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <PieChart className="h-5 w-5 mr-3" />
-              Turfs
-            </a>
-            <a 
-              href="#" 
-              className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "bookings" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-              onClick={() => {
-                setActiveMenu("bookings");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <CalendarDays className="h-5 w-5 mr-3" />
-              Bookings
-            </a>
-            <a 
-              href="#" 
-              className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "analytics" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-              onClick={() => {
-                setActiveMenu("analytics");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <BarChart3 className="h-5 w-5 mr-3" />
-              Analytics
-            </a>
-            <div className="border-t border-gray-700 mt-4 pt-4">
-              <a 
-                href="#" 
-                className="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800"
-              >
-                <Settings className="h-5 w-5 mr-3" />
-                Settings
-              </a>
-              <a 
-                href="#" 
-                className="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800"
-              >
-                <LogOut className="h-5 w-5 mr-3" />
-                Logout
-              </a>
-            </div>
-          </nav>
-        </div>
-      )}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">

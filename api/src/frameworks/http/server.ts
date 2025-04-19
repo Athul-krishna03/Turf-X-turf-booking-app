@@ -7,6 +7,7 @@ import  express ,{Application,Request,Response,NextFunction} from 'express'
 import { AuthRoutes } from '../routes/auth/auth.route';
 
 import { config } from '../../shared/config';
+import { PrivateRoutes } from '../routes/privateRoute.ts/privateRoute';
 
 export class Server{
     private _app:Application;
@@ -18,6 +19,7 @@ export class Server{
     }
     private configureRoutes():void{
         this._app.use('/api/v_1/auth',new AuthRoutes().router);
+        this._app.use('/api/v_1/pvt',new PrivateRoutes().router);
     }
 
 
