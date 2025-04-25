@@ -10,8 +10,7 @@ import { useToast } from "../../hooks/useToast";
 import OTPModal from "../../components/modals/OTPmodal";
 import { useNavigate } from "react-router-dom";
 import TurfRegisterForm from "../../components/auth/TurfSignup";
-const CLOUDINARY_CLOUD_NAME = "dlvudhlgl";
-const CLOUDINARY_UPLOAD_PRESET = "turf_images";
+
 const TurfRegistrationForm: React.FC = () => {
   const [isOTPModalOpen, setIsOTPModalOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>(null);
@@ -124,6 +123,8 @@ const TurfRegistrationForm: React.FC = () => {
   };
 
   const uploadToCloudinary = async (file: File): Promise<string> => {
+    const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);

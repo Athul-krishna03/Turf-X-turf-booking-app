@@ -14,9 +14,11 @@ import { OtpService } from "../../interface/services/OtpService";
 import { INodemailerService } from "../../entities/services/INodeMailerService";
 import { NodemailerService } from "../../interface/services/NodeMailerServices";
 import { IRedisClient } from "../../entities/services/IRedisClient";
-import { RedisClient } from "../redis/redisClient.";
+import { RedisClient } from "../redis/redisClient";
 import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRepository";
 import { TurfRepository } from "../../interface/repositories/Turf/turf.repository";
+import { IRedisTokenRepository } from "../../entities/repositoryInterface/redis/IRedisTokenRepository";
+import { RedisTokenRepository } from "../../interface/repositories/redis/RedisTokenRepository";
 
 
 
@@ -48,6 +50,11 @@ export class RepositoryRegistry{
 
         container.register<IRedisClient>("IRedisClient",{
             useClass:RedisClient
+        })
+
+
+        container.register<IRedisTokenRepository>("IRedisTokenRepository",{
+            useClass:RedisTokenRepository
         })
     }
 }

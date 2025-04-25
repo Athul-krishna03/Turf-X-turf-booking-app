@@ -1,6 +1,7 @@
 import {useMutation} from  '@tanstack/react-query'
 import { registeUser,sendOtp,verifyOtp,loginUser, googleAuth} from '../../services/auth/authServices'
 import { RegisterData ,LoginData, AuthResponse} from '../../types/Type'
+import { logoutUser } from '../../services/user/userServices';
 
 
 
@@ -13,6 +14,14 @@ export const useRegister = ()=>{
     });
 };
 
+export const useLogout = ()=>{
+  return useMutation({
+    mutationFn:logoutUser,
+    onError:(error:Error)=>{
+      console.log("Error on Logout user",error)
+    }
+  })
+}
 export const useSendOtp = ()=>{
     return useMutation({
         mutationFn:(email:string)=> sendOtp(email),

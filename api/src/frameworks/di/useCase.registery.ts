@@ -27,8 +27,21 @@ import { IGoogleAuthUseCase } from "../../entities/useCaseInterfaces/auth/IGoogl
 import { IGetAllUsersUseCase } from "../../entities/useCaseInterfaces/admin/IGetAllUserUseCase";
 import { GetAllUsersUseCase } from "../../usecase/admin/GetAllUserUseCase";
 import { IGetAllTurfUseCase } from "../../entities/useCaseInterfaces/admin/IGetAllTurfsUseCase";
-import {  GetAllTurfsUseCase } from "../../usecase/admin/GetAllTurfsUseCase";
-
+import { GetAllTurfsUseCase } from "../../usecase/admin/GetAllTurfsUseCase";
+import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/IUpdateUserStatusUseCase";
+import { UpdateUserStatusUseCase } from "../../usecase/admin/UpdateUserStatusUseCase";
+import { IUpdateTurfStatusUseCase } from "../../entities/useCaseInterfaces/admin/IUpdateTurfStatusUseCase";
+import { UpdateTurfStatusUseCase } from "../../usecase/admin/UpdateTurfStatusUseCase";
+import { IGetAllTurfRequestsUseCase } from "../../entities/useCaseInterfaces/admin/IGetAllTurfRequestsUsecase";
+import { GetAllTurfRequestsUseCase } from "../../usecase/admin/GetAllTurfRequestsUseCase";
+import { IUpdateTurfRequestUseCase } from "../../entities/useCaseInterfaces/admin/IUpdateTurfRequestUseCase";
+import { UpdateTurfRequestUseCase } from "../../usecase/admin/UpdateTurfRequestUseCase";
+import { IBlackListTokenUseCase } from "../../entities/repositoryInterface/auth/IBlackListTokenUseCase";
+import { BlackListTokenUseCase } from "../../usecase/auth/BlackListTokenUseCase";
+import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/IRefreshTokenUseCase";
+import { RefreshTokenUseCase } from "../../usecase/auth/RefreshTokenUseCase";
+import { IUpdateProfileUseCase } from "../../entities/useCaseInterfaces/user/IUpdateProfileUseCase";
+import { UpdateProfileUseCase } from "../../usecase/user/UpdateProfileUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -41,45 +54,73 @@ export class UseCaseRegistery {
     container.register<IRegisterUserUseCase>("IRegisterUserUseCase", {
       useClass: RegisterUserUsecase,
     });
-    container.register<ILoginUserUseCase>("ILoginUserUseCase",{
-      useClass:LoginUserUseCase
-    })
-    container.register<IGenerateTokenUseCase>("IGenerateTokenUseCase",{
-      useClass:GenerateTokenUseCase
-    })
-    
-    container.register<IGenerateOtpUseCase>("IGenerateOtpUseCase",{
-      useClass:GenerateOtpUseCase
-    })
+    container.register<ILoginUserUseCase>("ILoginUserUseCase", {
+      useClass: LoginUserUseCase,
+    });
+    container.register<IGenerateTokenUseCase>("IGenerateTokenUseCase", {
+      useClass: GenerateTokenUseCase,
+    });
 
-    container.register<IVerifyOtpUseCase>("IVerifyOtpUseCase",{
-      useClass:VerifyOtpUseCase
-    })
+    container.register<IGenerateOtpUseCase>("IGenerateOtpUseCase", {
+      useClass: GenerateOtpUseCase,
+    });
 
-    container.register<IGoogleAuthUseCase>("IGoogleAuthUseCase",{
-      useClass:GoogleAuthUseCase
-    })
+    container.register<IVerifyOtpUseCase>("IVerifyOtpUseCase", {
+      useClass: VerifyOtpUseCase,
+    });
 
-    container.register<IGetAllUsersUseCase>("IGetAllUsersUseCase",{
-      useClass:GetAllUsersUseCase
-    })
+    container.register<IGoogleAuthUseCase>("IGoogleAuthUseCase", {
+      useClass: GoogleAuthUseCase,
+    });
 
-    container.register<IGetAllTurfUseCase>("IGetAllTurfUseCase",{
-      useClass:GetAllTurfsUseCase
-    })
+    container.register<IGetAllUsersUseCase>("IGetAllUsersUseCase", {
+      useClass: GetAllUsersUseCase,
+    });
+
+    container.register<IGetAllTurfUseCase>("IGetAllTurfUseCase", {
+      useClass: GetAllTurfsUseCase,
+    });
+
+    container.register<IUpdateUserStatusUseCase>("IUpdateUserStatusUseCase", {
+      useClass: UpdateUserStatusUseCase,
+    });
+
+    container.register<IUpdateTurfStatusUseCase>("IUpdateTurfStatusUseCase", {
+      useClass: UpdateTurfStatusUseCase,
+    });
+    container.register<IGetAllTurfRequestsUseCase>(
+      "IGetAllTurfRequestsUseCase",
+      {
+        useClass: GetAllTurfRequestsUseCase,
+      }
+    );
+
+    container.register<IUpdateTurfRequestUseCase>("IUpdateTurfRequestUseCase", {
+      useClass: UpdateTurfRequestUseCase,
+    });
+
+    container.register<IBlackListTokenUseCase>("IBlackListTokenUseCase", {
+      useClass: BlackListTokenUseCase,
+    });
+
+    container.register<IRefreshTokenUseCase>("IRefreshTokenUseCase", {
+      useClass: RefreshTokenUseCase,
+    });
+    container.register<IUpdateProfileUseCase>("IUpdateProfileUsecase", {
+      useClass: UpdateProfileUseCase,
+    });
     //Register Strategy
     container.register("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
     });
-    container.register("ClientLoginStrategy",{
-      useClass:ClientLoginStrategy
+    container.register("ClientLoginStrategy", {
+      useClass: ClientLoginStrategy,
     });
-    container.register("TurfLoginStrategy",{
-      useClass:TurfLoginStrategy
-    })
-    container.register("TurfRegisterStrategy",{
-      useClass:TurfRegisterStrategy
-    })
-    
+    container.register("TurfLoginStrategy", {
+      useClass: TurfLoginStrategy,
+    });
+    container.register("TurfRegisterStrategy", {
+      useClass: TurfRegisterStrategy,
+    });
   }
 }

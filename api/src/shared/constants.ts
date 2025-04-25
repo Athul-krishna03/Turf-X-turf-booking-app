@@ -19,6 +19,8 @@ export const HTTP_STATUS = {
 } as const;
 
 export const ERROR_MESSAGES = {
+   PENDING_REQUEST:"Your request is on Pending",
+   REJECTED_REQUEST:"Your request is rejected check your mail for reason",
 	WRONG_ID: "Wrong ID",
 	TOKEN_EXPIRED: "Token Expired",
 	EMAIL_NOT_FOUND: "Email Not Found",

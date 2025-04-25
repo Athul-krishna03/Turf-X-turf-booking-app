@@ -1,8 +1,8 @@
 import FormikLoginForm from "../../components/auth/LoginForm";
 import { LoginData as FormValues } from "../../types/Type";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-// import { adminLogin } from "../../store/slices/admin.slice";
+import { turfLogin } from "../../store/slices/turf.slice";
 import { useLogin } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
 
@@ -19,7 +19,7 @@ const TurfLoginPage = () => {
       console.log("TURFLogin", response);
       if (response.status === 200) {
         console.log("Turf Logged in");
-        // dispatch(adminLogin(response.data.admin));
+        dispatch(turfLogin(response.data.user));
         navigate("/turf/dashboard");
         toast({
           title: "Success!",
@@ -39,37 +39,32 @@ const TurfLoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="w-full max-w-md p-8 space-y-8 bg-gray-900 rounded-lg shadow-xl border border-green-500">
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 rounded-full bg-green-500 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-        </div>
-        
-        <div className="mt-8">
-          <div className="bg-green-500 h-1 w-16 mx-auto mb-8"></div>
+    <div className="flex flex-col md:flex-row h-screen w-full">
+      {/* Left Panel - Login Form */}
+      <div className="w-full md:w-1/2 bg-black text-white p-6 md:p-12 flex flex-col justify-center">
+        <div className="max-w-md mx-auto w-full">
           
           <FormikLoginForm onSubmit={handleSubmit} userType='turf' />
           
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-900 text-gray-400">Administrative access only</span>
-              </div>
-            </div>
           </div>
-        </div>
-        
-        <div className="text-center mt-6">
-          <p className="text-xs text-gray-500">© {new Date().getFullYear()} Company Name. All rights reserved.</p>
-        </div>
+          <p className="text-center mt-8 text-sm text-[#8E9196]">
+            Don't have an account?{" "}
+            <Link to="/turf/signup" className="text-[#3BE188] hover:underline">
+            Create an account
+            </Link>
+      </p>
       </div>
+
+      {/* Right Panel - Image */}
+      <div
+        className="hidden md:block md:w-1/2 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/turf.jpg')",
+        }}
+      ></div>   
+
+
+      
     </div>
   );
 };

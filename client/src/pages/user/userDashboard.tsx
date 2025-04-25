@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { Search, Menu, Home, Calendar, Star, Settings, User, MessageSquare, Bell, MapPin, ChevronRight, Clock, Heart } from 'lucide-react';
+import { Sidebar } from '../../components/layout/Sidebar';
+import { Header } from '../../components/layout/Header';
+import { Star, MapPin, ChevronRight, Clock, Heart } from 'lucide-react';
 
 export default function TurfXDashboard() {
-  const [activeTab, setActiveTab] = useState('home');
-  const userData= localStorage.getItem("persist:session");
-  
-  
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
   const popularTurfs = [
     {
       id: 1,
@@ -68,93 +72,10 @@ export default function TurfXDashboard() {
 
   return (
     <div className="flex h-screen bg-black text-white">
-      {/* Sidebar */}
-      <div className="w-16 md:w-64 bg-gray-900 flex flex-col">
-        {/* Logo */}
-        <div className="p-4 flex items-center">
-          <img src="/api/placeholder/32/32" alt="Turf-X Logo" className="h-8 w-8" />
-          <span className="hidden md:block ml-3 font-bold text-green-500">Turf-X</span>
-        </div>
-        
-        {/* Navigation */}
-        <nav className="flex-1 mt-6">
-          <ul>
-            {[
-              { id: 'home', icon: <Home size={20} />, label: 'Home' },
-              { id: 'calendar', icon: <Calendar size={20} />, label: 'Bookings' },
-              { id: 'favorites', icon: <Star size={20} />, label: 'Favorites' },
-              { id: 'messages', icon: <MessageSquare size={20} />, label: 'Messages' },
-              { id: 'settings', icon: <Settings size={20} />, label: 'Settings' }
-            ].map((item) => (
-              <li key={item.id} className="mb-2">
-                <button 
-                  onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center w-full py-3 px-4 ${
-                    activeTab === item.id 
-                      ? 'bg-green-600 text-white' 
-                      : 'text-gray-400 hover:bg-gray-800'
-                  } rounded-l-md transition-colors ${
-                    activeTab === item.id ? 'border-l-4 border-green-400' : ''
-                  }`}
-                >
-                  <div className="flex items-center justify-center w-8">
-                    {item.icon}
-                  </div>
-                  <span className="hidden md:block ml-3">{item.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        
-        {/* User Profile */}
-        <div className="p-4 border-t border-gray-800 mt-auto">
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
-              <User size={16} className="text-gray-300" />
-            </div>
-            <div className="hidden md:block ml-3">
-              <div className="text-sm font-medium">Ajay Singh</div>
-              <div className="text-xs text-gray-400">Premium Member</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Sidebar isExpanded={isSidebarExpanded} onToggle={toggleSidebar} />
       
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-gray-900 p-4 flex items-center justify-between">
-          <div className="flex items-center w-1/2">
-            <button className="md:hidden mr-4 text-gray-400">
-              <Menu size={24} />
-            </button>
-            <div className="relative w-full max-w-md">
-              <input 
-                type="text" 
-                placeholder="Search venues..." 
-                className="w-full bg-gray-800 text-white rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-1 focus:ring-green-500"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
-              Find Turf
-            </a>
-            <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
-              My Bookings
-            </a>
-            <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full"></span>
-            </button>
-            <button className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center">
-              <User size={16} className="text-gray-300" />
-            </button>
-          </div>
-        </header>
+        <Header onMenuClick={toggleSidebar} />
         
         {/* Main Content Scrollable Area */}
         <main className="flex-1 overflow-y-auto bg-black">

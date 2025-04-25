@@ -14,4 +14,8 @@ export class RefreshTokenRepository implements IRefreshTokenRepository{
             expiresAt:data.expiresAt
         })
     }
+
+    async revokeRefreshToken(token:string):Promise<void>{
+        await RefreshTokenModel.deleteOne({token})
+    }
 }

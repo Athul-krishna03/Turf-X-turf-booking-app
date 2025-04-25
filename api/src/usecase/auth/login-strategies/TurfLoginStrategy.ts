@@ -34,6 +34,18 @@ export class TurfLoginStrategy implements ILoginStrategy{
                 HTTP_STATUS.UNAUTHORIZED
             );
         }
+        if(client.status == "Pending"){
+            throw new CustomError(
+                ERROR_MESSAGES.PENDING_REQUEST,
+                HTTP_STATUS.UNAUTHORIZED
+            )
+        }
+        if(client.status == "rejected"){
+            throw new CustomError(
+                ERROR_MESSAGES.REJECTED_REQUEST,
+                HTTP_STATUS.UNAUTHORIZED
+            )
+        }
         if(user.password){
             const isPasswordMatch = await this.passwordBcrypt.compare(
                 user.password,

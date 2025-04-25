@@ -11,6 +11,12 @@ import {
   Menu,
   X
 } from "lucide-react";
+import UserManagement from "../../components/admin/UserManagement";
+import TurfManagement from "../../components/admin/TurfManagement";
+import TurfRequestManagement from "../../components/admin/TurfRequestManagement";
+import { adminLogout } from "../../store/slices/admin.slice";
+import { useDispatch } from "react-redux";
+import { useadminLogout } from "../../hooks/admin/useAdminLogout";
 
 // Sample data for charts
 const revenueData = [
@@ -48,8 +54,19 @@ const customerData = [
 
 const AdminDashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
-
-
+  const dispatch = useDispatch()
+  const logoutAdmin = useadminLogout()
+  const handleLogout=async ()=>{
+      try {
+        const response = await logoutAdmin.mutateAsync();
+        console.log("Logout response:", response);
+        dispatch(adminLogout());
+        } catch (error) {
+          console.error("Logout error:", error);
+           dispatch(adminLogout());
+      
+        }
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -89,10 +106,10 @@ const AdminDashboard = () => {
             <a 
               href="#" 
               className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "bookings" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-              onClick={() => setActiveMenu("bookings")}
+              onClick={() => setActiveMenu("request")}
             >
               <CalendarDays className="h-5 w-5 mr-3" />
-              Bookings
+              Turf Requests
             </a>
             <a 
               href="#" 
@@ -109,7 +126,7 @@ const AdminDashboard = () => {
             <Settings className="h-5 w-5 mr-3" />
             Settings
           </a>
-          <a href="#" className="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800">
+          <a href="#" className="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800" onClick={handleLogout}>
             <LogOut className="h-5 w-5 mr-3" />
             Logout
           </a>
@@ -125,7 +142,7 @@ const AdminDashboard = () => {
               {activeMenu === "dashboard" && "Dashboard Overview"}
               {activeMenu === "customers" && "Customer Management"}
               {activeMenu === "turfs" && "Turf Management"}
-              {activeMenu === "bookings" && "Booking Management"}
+              {activeMenu === "request" && "Request Management"}
               {activeMenu === "analytics" && "Analytics & Reports"}
             </h1>
           </div>
@@ -256,24 +273,15 @@ const AdminDashboard = () => {
           )}
 
           {activeMenu === "customers" && (
-            <div className="bg-white rounded-lg shadow p-5">
-              <h2 className="text-xl font-semibold mb-4">Customer Management</h2>
-              <p>Customer listing and management interface would appear here.</p>
-            </div>
+           <UserManagement/>
           )}
 
           {activeMenu === "turfs" && (
-            <div className="bg-white rounded-lg shadow p-5">
-              <h2 className="text-xl font-semibold mb-4">Turf Management</h2>
-              <p>Turf listing and management interface would appear here.</p>
-            </div>
+            <TurfManagement/>
           )}
 
-          {activeMenu === "bookings" && (
-            <div className="bg-white rounded-lg shadow p-5">
-              <h2 className="text-xl font-semibold mb-4">Booking Management</h2>
-              <p>Booking calendar and management interface would appear here.</p>
-            </div>
+          {activeMenu === "request" && (
+            <TurfRequestManagement/>
           )}
 
           {activeMenu === "analytics" && (

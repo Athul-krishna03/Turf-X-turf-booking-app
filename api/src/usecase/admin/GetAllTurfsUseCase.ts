@@ -11,7 +11,7 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
         private turfRepository:ITurfRepository
     ){}
     async execute(pageNumber: number, pageSize: number, searchTerm: string): Promise<PagenateTurfs> {
-        let filter:any={};
+        let filter:any= {status:"approved"};
         if(searchTerm){
             filter.$or=[
                 {name:{$regex:searchTerm,$options:"i"}},

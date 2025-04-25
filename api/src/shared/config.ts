@@ -18,7 +18,7 @@ export const config = {
         ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "access-secret-key",
 		REFRESH_SECRET_KEY: process.env.JWT_REFRESH_KEY || "refresh-secret-key",
 		ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
-REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
+        REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
         RESET_SECRET_KEY:process.env.JWT_RESET_KEY || "reset-secret-key",
         RESET_EXPIRES_IN:process.env.JWT_RESET_EXPIRES_IN || "5m"
     },

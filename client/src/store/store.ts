@@ -2,8 +2,8 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import  userReducer  from "./slices/user.slice";
-import adminReducer from "./slices/admin.slice"
-
+import adminReducer from "./slices/admin.slice";
+import turfReducer  from "./slices/turf.slice"
 const rootPersistConfig={
     key:"session",
     storage,
@@ -11,7 +11,8 @@ const rootPersistConfig={
 
 const rootReducer = combineReducers({
     user:userReducer,
-    admin:adminReducer
+    admin:adminReducer,
+    turf:turfReducer
 })
 
 const persistedReducer = persistReducer(rootPersistConfig,rootReducer);

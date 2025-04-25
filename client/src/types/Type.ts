@@ -11,6 +11,7 @@ export interface SignupFormValues {
   }
 
   export interface TurfFormValues {
+    status: string;
     name: string;
     email: string;
     phone: string;
@@ -22,7 +23,20 @@ export interface SignupFormValues {
     turfPhotos: File[];
     turfPhotoUrls: string[];
   }
-  
+  export interface ITurf{
+    _id:string,
+    turfId:string,
+    name:string,
+    email:string,
+    phone:string,
+    isBlocked:boolean,
+    courtSize?: string;
+    turfPhotoUrls?: string[];
+    status:string,
+    createdAt:Date,
+  }
+
+
   export interface RegisterData {
     name: string;
     email: string;
@@ -39,7 +53,7 @@ export interface SignupFormValues {
     phone:string,
     profileImage:string,
     bio:string,
-    isSeller:boolean,
+    position:string,
     walletBalance:number,
     joinedAt:Date
 }
@@ -48,7 +62,15 @@ export interface SignupFormValues {
     password:string
     role:"user"|"admin"|"TurfOwner"
   }
-
+  export interface IClient {
+    _id:string,
+    clientId:string,
+    name:string,
+    email:string,
+    phone:string,
+    isBlocked:boolean,
+    joinedAt:Date
+  }
   export interface AuthResponse{
     success:boolean;
     message:string;

@@ -9,5 +9,8 @@ export interface IClientRepository{
         filter:any,
         skip:number,
         limit:number
-    ):Promise<{users:IClientEntity[] | [];total:number}>
+    ):Promise<{users:IClientEntity[] | [];total:number}>;
+    findByIdAndUpdateStatus(id:string):Promise<void>
+    findById(id:string):Promise<IClientEntity | null>
+    updateProfileById(clientId:string,data:Partial<IClientEntity>):Promise<ClientProfileResponse>;
 }

@@ -40,6 +40,8 @@ export class JWTService implements ITokenService{
     }
 
     verifyAccessToken(token: string): string | jwt.JwtPayload | null {
+        console.log("inside service",token);
+        
         try {
             return jwt.verify(token,this.accessSecret) as JwtPayload
         } catch (error) {
@@ -49,6 +51,8 @@ export class JWTService implements ITokenService{
     }
     verifyRefreshToken(token: string): JwtPayload | null {
         try {
+            console.log("inside refresh token verify");
+            
             return jwt.verify(token,this.refreshSecret) as JwtPayload;
         } catch (error) {
             console.error("Refresh token verification failed:",error);

@@ -21,7 +21,6 @@ export class TurfRegisterStrategy implements IRegisterStrategy{
     ){}
 
     async register(user: UserDTO): Promise<IUserEntity | void> {
-        console.log("turf login");
         const existTurf = await this.turfRepository.findByEmail(user.email);
         console.log("existing",existTurf);
         
@@ -37,7 +36,8 @@ export class TurfRegisterStrategy implements IRegisterStrategy{
             password,
             role,
             courtSize,
-            aminities
+            aminities,
+            turfPhotos
         } = user as TurfRegisterDTO;
         
         let hashedPassword = null;
@@ -57,6 +57,7 @@ export class TurfRegisterStrategy implements IRegisterStrategy{
                 role,
                 isBlocked: false,
                 courtSize,
+                turfPhotos,
                 aminities,
             });
             console.log("turf data",newTurf);

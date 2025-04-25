@@ -19,13 +19,16 @@ import { handleErrorResponse } from "../../../shared/utils/errorHandler";
 import { IRegisterUserUseCase } from "../../../entities/useCaseInterfaces/auth/IRegister-usecase.interface";
 import { ILoginUserUseCase } from "../../../entities/useCaseInterfaces/auth/ILoginUserUseCase";
 import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/IGenerateTokenUseCase";
-import { setAuthCookies } from "../../../shared/utils/cookieHelper";
+import { clearAuthCookies, setAuthCookies, updateCookieWithAccessToken } from "../../../shared/utils/cookieHelper";
 import { IUserExistenceService } from "../../../entities/services/Iuser-existence-service.interface";
 import { IGenerateOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IGenerateOtpUseCase";
 import { otpMailValidationSchema } from "../validations/otp-mail.validation.schema";
 import { IVerifyOtpUseCase } from "../../../entities/useCaseInterfaces/auth/IVerifyOtpUseCase";
 import { IGoogleAuthUseCase } from "../../../entities/useCaseInterfaces/auth/IGoogleAuthUseCase";
 import { error } from "console";
+import { CustomRequest } from "../../middlewares/authMiddleware";
+import { IBlackListTokenUseCase } from "../../../entities/repositoryInterface/auth/IBlackListTokenUseCase";
+import { IRefreshTokenUseCase } from "../../../entities/useCaseInterfaces/auth/IRefreshTokenUseCase";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -43,7 +46,11 @@ export class AuthController implements IAuthController {
     @inject('IVerifyOtpUseCase')
     private verifyOtpUseCase:IVerifyOtpUseCase,
     @inject('IGoogleAuthUseCase')
-    private googleAuthUseCase:IGoogleAuthUseCase
+    private googleAuthUseCase:IGoogleAuthUseCase,
+    @inject("IBlackListTokenUseCase")
+    private blacklistTokenUseCase:IBlackListTokenUseCase,
+    @inject("IRefreshTokenUseCase")
+    private refreshTokenUseCase:IRefreshTokenUseCase
   ) {}
 
   //register use
@@ -104,7 +111,6 @@ export class AuthController implements IAuthController {
 
       const accessTokenName = `${user.role}_access_token`;
       const refreshTokenName = `${user.role}_refresh_token`;
-
       setAuthCookies(
       res,
       tokens.accessToken,
@@ -112,7 +118,6 @@ export class AuthController implements IAuthController {
       accessTokenName,
       refreshTokenName
       )
-      console.log(user);
       res.status(HTTP_STATUS.OK).json({
         success:true,
         message:SUCCESS_MESSAGES.LOGIN_SUCCESS,
@@ -121,6 +126,7 @@ export class AuthController implements IAuthController {
           email: user.email,
           role: user.role,
           phone:user.phone,
+          position:user.position,
           profileImage:user.profileImage,
           bio:user.bio,
           joinedAt:user.joinedAt
@@ -222,4 +228,49 @@ export class AuthController implements IAuthController {
       handleErrorResponse(res,error)
     }
   }
+  // Logout user
+
+  async logout(req:Request,res:Response):Promise<void>{
+    try {
+      const user = (req as CustomRequest).user;
+      await this.blacklistTokenUseCase.execute(
+        (req as CustomRequest).user.access_token
+      );
+
+      console.log("logout user", user);
+      const accessTokenName = `${user.role}_access_token`;
+      const refreshTokenName = `${user.role}_refresh_token`;
+
+      clearAuthCookies(res, accessTokenName, refreshTokenName);
+      res
+        .status(HTTP_STATUS.OK)
+        .json({ success: true, message: SUCCESS_MESSAGES.LOGOUT_SUCCESS });
+    } catch (error) {
+      handleErrorResponse(res, error);
+    }
+  }
+   refreshToken(req:Request,res:Response):void{
+    try {
+      const refreshToken = (req as CustomRequest).user.refresh_token;
+      const newTokens = this.refreshTokenUseCase.execute(refreshToken);
+      console.log("newtoken",newTokens);
+      
+      const accessTokenName = `${newTokens.role}_access_token`;
+      updateCookieWithAccessToken(
+        res,
+        newTokens.accessToken,
+        accessTokenName
+      );
+      res.status(HTTP_STATUS.OK).json({success:true,message:SUCCESS_MESSAGES.OPERATION_SUCCESS});
+    } catch (error) {
+      clearAuthCookies(
+        res,
+        `${(req as CustomRequest).user.role}_access_token`,
+        `${(req as CustomRequest).user.role}_refresh_token`
+      );
+      res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ message: ERROR_MESSAGES.INVALID_TOKEN });
+    }
+   }
 }

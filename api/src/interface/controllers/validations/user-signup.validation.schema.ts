@@ -21,7 +21,7 @@ export const turfOwnerSchema = z.object({
   role: z.literal("TurfOwner"),
   courtSize: z.string(),
   aminities: z.array(z.string()).min(1, "At least one amenity is required"),
-  turfPhotos: z.array(z.string().url()).optional()
+  turfPhotos: z.array(z.string()).optional()
 });
 export const userSignupSchemas = {
   user: userSignupSchema,

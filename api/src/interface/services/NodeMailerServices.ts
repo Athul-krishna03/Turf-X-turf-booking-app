@@ -49,4 +49,15 @@ export class NodemailerService implements INodemailerService {
             }
             await this.transporter.sendMail(mailOptions);
     }
+
+    async sendEmail(email: string, subject: string,content:string): Promise<void> {
+
+        const mailOptions = {
+            from:`Auo Auction <${config.nodemailer.EMAIL_USER}>`,
+            to:email,
+            subject:subject,
+            html:`${RESET_PASSWORD_MAIL_CONTENT(content)}`
+        }
+        await this.transporter.sendMail(mailOptions);
+}
 }

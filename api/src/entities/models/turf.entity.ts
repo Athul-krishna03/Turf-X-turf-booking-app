@@ -10,6 +10,7 @@ export interface ITurfEntity{
     createdAt?: Date;
     role:string;
     isBlocked: Boolean;
+    status:string;
     aminities?:string[];
     turfPhotos?:string[];
     courtSize:string

@@ -7,6 +7,8 @@ import { UserRoutes } from "./routes/ClientRoutes"
 import { AdminRoutes } from "./routes/AdminRoutes"
 import TurfRegistrationForm from "./pages/Turf/TurfRegistration"
 import TurfLoginPage from "./pages/Turf/TurfLogin"
+import TurfDashboard from "./pages/Turf/TurfDashboard"
+import { TurfRoutes } from "./routes/TurfRoutes"
 
 
 export default function App(){
@@ -22,9 +24,10 @@ export default function App(){
       <Route path="/*" element={<UserRoutes/>}/>
       
       {/* Turf Routes */}
-      <Route path="/turf/signup" element={<TurfRegistrationForm/>}/>
+      <Route path="/turf/signup" element={<GuestRoutes element={<TurfRegistrationForm/>} />}/>
     
-      <Route path="/turf/login" element={<TurfLoginPage/>}/>
+      <Route path="/turf/login" element={<GuestRoutes element={<TurfLoginPage/>}/>}/>
+      <Route path="/turf/dashboard" element={<TurfDashboard/>}/>
 
       {/* Admin Routes */}
       <Route path="/admin/login" element={<GuestRoutes element={<AdminLogin/>}/>}/>
