@@ -66,4 +66,13 @@ export class ClientRepository implements IClientRepository{
 
         return updateProfile as unknown as ClientProfileResponse
     }
+    async findByIdAndUpdatePassWord(id: string, password: string): Promise<void> {
+        const updatePass = await ClientModel.findByIdAndUpdate({_id:id},{$set:{password:password}},{new:true});
+
+        if(!updatePass){
+            throw new Error("Profile not found to update pass")
+        }
+
+        return 
+    }
 }

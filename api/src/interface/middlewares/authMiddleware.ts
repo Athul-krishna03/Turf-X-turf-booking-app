@@ -49,7 +49,7 @@ export const verifyAuth = async(
 )=>{
 try {
     const token = extractToken(req);
-    console.log("hello",token)
+    console.log("extract token ",token)
     if(!token){
         console.log("There is no token");
         res.status(HTTP_STATUS.UNAUTHORIZED).json({message:ERROR_MESSAGES.UNAUTHORIZED_ACCESS})

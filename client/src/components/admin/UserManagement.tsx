@@ -8,7 +8,8 @@ import { getAllUsers } from "../../services/admin/adminService";
 import { IClient } from "../../types/Type";
 import { Pagination1 } from "./Pagination";
 import { useUpdateUserStatus } from "../../hooks/admin/useUpdateUserStatus";
-
+import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 export default function UserManagement() {
   
@@ -52,9 +53,29 @@ export default function UserManagement() {
       </span>
     );
   }
-  const handleBlockStatus=(userId:string)=>{
-    updateUserStatus(userId)
-  }
+  const handleBlockStatus = (userId: string, isBlocked: boolean) => {
+    Swal.fire({
+      title: isBlocked ? "Unblock this user?" : "Block this user?",
+      text: `Are you sure you want to ${isBlocked ? "unblock" : "block"} this user?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isBlocked ? "#10B981" : "#d33",
+      cancelButtonColor: "#6B7280",
+      confirmButtonText: isBlocked ? "Yes, unblock" : "Yes, block"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        updateUserStatus(userId, {
+          onSuccess: () => {
+            toast.success(`User has been ${isBlocked ? "unblocked" : "blocked"} successfully`);
+          },
+          onError: () => {
+            toast.error(`Failed to ${isBlocked ? "unblock" : "block"} the user`);
+          }
+        });
+      }
+    });
+  };
+  
   
   return (
     <div className="bg-white rounded-lg shadow">
@@ -94,7 +115,7 @@ export default function UserManagement() {
                 <TableCell className="text-right">
                   <div className="flex justify-end space-x-2">
                     {user.isBlocked  ? (
-                      <Button variant="destructive" size="sm" onClick={()=>handleBlockStatus(user._id)}>
+                      <Button variant="destructive" size="sm" onClick={()=>handleBlockStatus(user._id,user.isBlocked)}>
                         Block
                       </Button>
                     ) : (
@@ -102,7 +123,7 @@ export default function UserManagement() {
                         variant="outline" 
                         size="sm" 
                         className="text-green-600 border-green-600"
-                        onClick={()=>handleBlockStatus(user._id)}
+                        onClick={()=>handleBlockStatus(user._id,user.isBlocked)}
                       >
                         Unblock
                       </Button>

@@ -19,7 +19,7 @@ const FormikLoginForm: React.FC<FormikLoginFormProps> = ({ onSubmit, onGoogleLog
   const initialValues: FormValues = {
     email: "",
     password: "",
-    role: userType === "admin" ? "admin" : userType === "turf" ? "TurfOwner" : "user"
+    role: userType === "admin" ? "admin" : userType === "turf" ? "turf" : "user"
   };
 
   return (

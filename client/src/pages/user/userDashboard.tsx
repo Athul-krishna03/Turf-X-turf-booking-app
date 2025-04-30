@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
 import { Star, MapPin, ChevronRight, Clock, Heart } from 'lucide-react';
+import { getAllTurfsData } from '../../services/user/userServices';
+import { useGetAllTurfsQuery } from '../../hooks/admin/useGetAllTurfs';
+import { ITurf } from '../../types/Type';
 
 export default function TurfXDashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -9,46 +12,21 @@ export default function TurfXDashboard() {
   const toggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded);
   };
+  const limit = 10;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch,setdebouncedSearch] = useState(searchQuery);
+  const [currentPage,setCurrentPage] = useState(1);
+  const {data} = useGetAllTurfsQuery(
+    getAllTurfsData,
+    currentPage,
+    limit,
+    debouncedSearch
+  )
 
-  const popularTurfs = [
-    {
-      id: 1,
-      name: "GREENWAY ARENA",
-      location: "Koramangala",
-      distance: "1.3 km",
-      rating: 4.8,
-      reviews: 245,
-      image: "/turf.jpg"
-    },
-    {
-      id: 2,
-      name: "STAMFORD TURF",
-      location: "Indiranagar",
-      distance: "2.5 km",
-      rating: 4.7,
-      reviews: 178,
-      image: "/turf.jpg"
-    },
-    {
-      id: 3,
-      name: "SKYFIELD SPORTS",
-      location: "HSR Layout",
-      distance: "3.2 km",
-      rating: 4.9,
-      reviews: 320,
-      image: "/turf.jpg"
-    },
-    {
-      id: 4,
-      name: "MEADOW GROUNDS",
-      location: "Whitefield",
-      distance: "4.8 km",
-      rating: 4.6,
-      reviews: 156,
-      image: "/turf.jpg"
-    }
-  ];
-
+  const turfs=(data?.turfs?? []) as ITurf[];
+  const popularTurfs = turfs
+  console.log(turfs);
+  
   const sportsCategories = [
     {
       id: 1,
@@ -107,17 +85,17 @@ export default function TurfXDashboard() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {popularTurfs.map((turf) => (
-                <div key={turf.id} className="bg-gray-900 rounded-lg overflow-hidden group">
+                <div key={turf._id} className="bg-gray-900 rounded-lg overflow-hidden group">
                   <div className="relative">
                     <img 
-                      src={turf.image} 
+                      src={turf?.turfPhotos[0]} 
                       alt={turf.name} 
                       className="w-full h-40 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black to-transparent">
                       <div className="flex items-center">
                         <MapPin size={14} className="text-green-500 mr-1" />
-                        <span className="text-xs">{turf.distance}</span>
+                        {/* <span className="text-xs">{turf.distance}</span> */}
                       </div>
                     </div>
                     <button className="absolute top-2 right-2 p-1 rounded-full bg-black bg-opacity-50 text-white hover:text-green-500">
@@ -128,14 +106,14 @@ export default function TurfXDashboard() {
                   <div className="p-3">
                     <h3 className="font-medium text-sm">{turf.name}</h3>
                     <div className="flex items-center text-xs text-gray-400 mt-1">
-                      <span>{turf.location}</span>
+                      <span>{turf?.location.city}</span>
                     </div>
                     <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center">
+                      {/* <div className="flex items-center">
                         <Star size={14} className="text-yellow-400 mr-1" />
                         <span className="text-xs">{turf.rating}</span>
                         <span className="text-xs text-gray-400 ml-1">({turf.reviews})</span>
-                      </div>
+                      </div> */}
                       <button className="text-xs px-2 py-1 bg-green-600 hover:bg-green-500 rounded text-white transition-colors">
                         Book Now
                       </button>

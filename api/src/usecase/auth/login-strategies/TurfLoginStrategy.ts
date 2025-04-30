@@ -19,9 +19,6 @@ export class TurfLoginStrategy implements ILoginStrategy{
         console.log("inside login strategy");
         
         const client = await this.turfRepository.findByEmail(user.email);
-        console.log(client);
-        
-        
         if(!client){
             throw new CustomError(
                 ERROR_MESSAGES.EMAIL_NOT_FOUND,

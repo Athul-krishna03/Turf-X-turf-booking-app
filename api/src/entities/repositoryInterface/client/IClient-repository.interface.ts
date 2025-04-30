@@ -11,6 +11,7 @@ export interface IClientRepository{
         limit:number
     ):Promise<{users:IClientEntity[] | [];total:number}>;
     findByIdAndUpdateStatus(id:string):Promise<void>
+    findByIdAndUpdatePassWord(id:string,password:string):Promise<void>
     findById(id:string):Promise<IClientEntity | null>
     updateProfileById(clientId:string,data:Partial<IClientEntity>):Promise<ClientProfileResponse>;
 }

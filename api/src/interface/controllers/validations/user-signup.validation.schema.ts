@@ -10,7 +10,7 @@ const userSignupSchema = z.object({
   email: strongEmailRegex,
   phone: phoneNumberSchema,
   password: passwordSchema,
-  role:z.enum([ "user", "TurfOwner"]),
+  role:z.enum([ "user", "turf"]),
 });
 
 export const turfOwnerSchema = z.object({
@@ -18,14 +18,14 @@ export const turfOwnerSchema = z.object({
   email: strongEmailRegex,
   phone: phoneNumberSchema,
   password: passwordSchema,
-  role: z.literal("TurfOwner"),
+  role: z.literal("turf"),
   courtSize: z.string(),
   aminities: z.array(z.string()).min(1, "At least one amenity is required"),
   turfPhotos: z.array(z.string()).optional()
 });
 export const userSignupSchemas = {
   user: userSignupSchema,
-  TurfOwner: turfOwnerSchema 
+  turf: turfOwnerSchema 
   
 };
 
@@ -33,5 +33,5 @@ export const userSignupSchemas = {
 export const loginSchema = z.object({
   email: strongEmailRegex,
   password: z.string().min(1, "password Required"),
-  role: z.enum(["admin", "user", "TurfOwner"]),
+  role: z.enum(["admin", "user", "turf"]),
 });

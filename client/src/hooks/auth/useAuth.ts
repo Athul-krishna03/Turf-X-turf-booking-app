@@ -2,6 +2,7 @@ import {useMutation} from  '@tanstack/react-query'
 import { registeUser,sendOtp,verifyOtp,loginUser, googleAuth} from '../../services/auth/authServices'
 import { RegisterData ,LoginData, AuthResponse} from '../../types/Type'
 import { logoutUser } from '../../services/user/userServices';
+import { logoutTurf } from '../../services/turf/turfServices';
 
 
 
@@ -55,4 +56,14 @@ export const useVerifyOtp = () => {
       {credential:any,client_id:any;role:string}>({
         mutationFn:googleAuth
       })
+  }
+
+
+  export const useTurfLogout = ()=>{
+    return useMutation({
+      mutationFn:logoutTurf,
+      onError:(error:Error)=>{
+        console.log("Error on Logout user",error)
+      }
+    })
   }

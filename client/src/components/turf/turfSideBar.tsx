@@ -14,13 +14,19 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { turfLogout } from "../../store/slices/turf.slice";
 import { toast } from "../../hooks/useToast";
+import { useTurfLogout } from "../../hooks/auth/useAuth";
+
 
 
 
 const TurfSideBar = () => {
+    const Logout = useTurfLogout()
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    const handleLogout=()=>{
+    const handleLogout=async ()=>{
+      const response = await Logout.mutateAsync()
+      console.log(response);
+      
       dispatch(turfLogout());
       toast({
           title: "Success!",
@@ -40,9 +46,9 @@ const TurfSideBar = () => {
         <LayoutDashboard size={18} />
         Dashboard
       </Button>
-      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
+      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600" onClick={()=>navigate("/turf/slotManagement")}>
         <CalendarDays size={18} />
-        Bookings
+        Slot Management
       </Button>
       <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
         <Users size={18} />
@@ -53,14 +59,10 @@ const TurfSideBar = () => {
         Payments
       </Button>
       <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
-        <BarChart size={18} />
-        Analytics
-      </Button>
-      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
         <MessageSquare size={18} />
         Messages
       </Button>
-      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
+      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600" onClick={()=>navigate("/turf/settings")}>
         <Settings size={18} />
         Settings
       </Button>

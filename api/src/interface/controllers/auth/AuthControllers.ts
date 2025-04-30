@@ -29,6 +29,9 @@ import { error } from "console";
 import { CustomRequest } from "../../middlewares/authMiddleware";
 import { IBlackListTokenUseCase } from "../../../entities/repositoryInterface/auth/IBlackListTokenUseCase";
 import { IRefreshTokenUseCase } from "../../../entities/useCaseInterfaces/auth/IRefreshTokenUseCase";
+import { ILoginTurfUseCase } from "../../../entities/useCaseInterfaces/auth/ILoginTurfUseCase";
+import { IUserEntity } from "../../../entities/models/user.entity";
+import { ITurfEntity } from "../../../entities/models/turf.entity";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -62,7 +65,7 @@ export class AuthController implements IAuthController {
       
       const { role } = req.body as UserDTO;
 
-      if (role !== 'user' && role !== 'TurfOwner') {
+      if (role !== 'user' && role !== 'turf') {
         res.status(400).json({ message: "Invalid role" });
         return
       }
@@ -96,7 +99,7 @@ export class AuthController implements IAuthController {
     try {
       const data = req.body as LoginUserDTO;
       const validateData = loginSchema.parse(data);
-      const user = await this.LoginUserUseCase.execute(validateData);
+      const user =  await this.LoginUserUseCase.execute(validateData)
       console.log("user data",user)
       if(!user.id || !user.email || !user.role){
         throw new Error("User ID,Email,or Role is missing")
@@ -118,20 +121,45 @@ export class AuthController implements IAuthController {
       accessTokenName,
       refreshTokenName
       )
-      res.status(HTTP_STATUS.OK).json({
-        success:true,
-        message:SUCCESS_MESSAGES.LOGIN_SUCCESS,
-        user:{
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          phone:user.phone,
-          position:user.position,
-          profileImage:user.profileImage,
-          bio:user.bio,
-          joinedAt:user.joinedAt
-        }
-      })
+      console.log("auth login",user)
+      if (user.role === "user" || user.role === "admin") {
+        const userEntity = user as IUserEntity;
+      
+        res.status(HTTP_STATUS.OK).json({
+          success: true,
+          message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
+          user: {
+            name: userEntity.name,
+            email: userEntity.email,
+            role: userEntity.role,
+            phone: userEntity.phone,
+            position: userEntity.position,
+            profileImage: userEntity.profileImage,
+            bio: userEntity.bio,
+            joinedAt: userEntity.joinedAt
+          }
+        });
+      } else if (user.role === "turf") {
+        const turfEntity = user as ITurfEntity;
+      
+        res.status(HTTP_STATUS.OK).json({
+          success: true,
+          message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
+          user: {
+            name: turfEntity.name,
+            email: turfEntity.email,
+            role: turfEntity.role,
+            phone: turfEntity.phone,
+            status: turfEntity.status,
+            courtSize: turfEntity.courtSize,
+            location:turfEntity.location,
+            turfPhotos:turfEntity.turfPhotos,
+            aminities:turfEntity.aminities
+          }
+        });
+      }
+      
+      
     } catch (error) {
       console.log(error)
       handleErrorResponse(res,error)

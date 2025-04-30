@@ -40,7 +40,17 @@ export const TurfSchema = new Schema<ITurfModel>(
       type:String,
       default:"Pending"
     },
-    turfPhotos: [String]
+    turfPhotos: [String],
+    location: {
+      address: { type: String },
+      city: { type: String },
+      state: { type: String },
+      coordinates: {
+        lat: { type: Number },
+        lng: { type: Number }
+      }
+    }
+    
   },
   {
     timestamps: true, // adds createdAt and updatedAt automatically

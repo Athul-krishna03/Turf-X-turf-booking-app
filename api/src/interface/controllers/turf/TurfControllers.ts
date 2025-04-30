@@ -7,6 +7,11 @@ import { handleErrorResponse } from "../../../shared/utils/errorHandler";
 import { IUpdateTurfStatusUseCase } from "../../../entities/useCaseInterfaces/admin/IUpdateTurfStatusUseCase";
 import { IGetAllTurfRequestsUseCase } from "../../../entities/useCaseInterfaces/admin/IGetAllTurfRequestsUsecase";
 import { IUpdateTurfRequestUseCase } from "../../../entities/useCaseInterfaces/admin/IUpdateTurfRequestUseCase";
+import { IGenerateSlotUseCase } from "../../../entities/useCaseInterfaces/turf/IGenerateSlotUseCase";
+import { CustomRequest } from "../../middlewares/authMiddleware";
+import { ITurfEntity } from "../../../entities/models/turf.entity";
+import { IUpdateTurfProfileUseCase } from "../../../entities/useCaseInterfaces/turf/IUpdateTurfProfileUseCase";
+import { IUpdateTurfPassWordUseCase } from "../../../entities/useCaseInterfaces/turf/IUpdateTurfPasswordUseCase";
 
 @injectable()
 export class TurfControllers implements ITurfControllers{
@@ -18,7 +23,13 @@ export class TurfControllers implements ITurfControllers{
         @inject("IUpdateTurfStatusUseCase")
         private updateTurf:IUpdateTurfStatusUseCase,
         @inject("IUpdateTurfRequestUseCase")
-        private updateTurfRequest:IUpdateTurfRequestUseCase
+        private updateTurfRequest:IUpdateTurfRequestUseCase,
+        @inject("IGenerateSlotUseCase")
+        private generateSlot:IGenerateSlotUseCase,
+        @inject("IUpdateTurfProfileUseCase")
+        private updateUserProfile:IUpdateTurfProfileUseCase,
+        @inject("IUpdateTurfPassWordUseCase")
+        private updateTurfPassWordUseCase:IUpdateTurfPassWordUseCase
     ){}
     async getAllTurfs(req: Request, res: Response): Promise<void> {
         try {
@@ -100,6 +111,92 @@ export class TurfControllers implements ITurfControllers{
     
             } catch (error) {
                 handleErrorResponse(res,error)
+            }
+        }
+
+        //generate slots
+
+        async generateSlots(req: Request, res: Response): Promise<void> {
+            try {
+                console.log("genrate body",req.body);
+                
+                const {turfId,date,startTime,endTime,slotDuration}=req.body;
+                
+                const slots = await this.generateSlot.execute(
+                    turfId,
+                    date,
+                    startTime,
+                    endTime,
+                    slotDuration
+                )
+                res.status(201).json({ message: "Slots generated successfully", slots });
+
+            } catch (error) {
+                console.log(error);
+                handleErrorResponse(res,error)
+            }
+        }
+
+        //Edit the turf profile
+
+
+        async editTurf(req: Request, res: Response): Promise<void> {
+            try {
+                console.log("hii");
+                
+                const turfId = (req as CustomRequest).user.id;
+                console.log("turf id",turfId);
+                
+                const updateData:Partial<ITurfEntity>={};
+                const allowedField:(keyof ITurfEntity)[]=[
+                    "name",
+                    'email',
+                    "aminities",
+                    "location",
+                    'turfPhotos',
+                    'phone'
+
+                ]
+                allowedField.forEach((field)=>{
+                    if(req.body[field] !== undefined){
+                        updateData[field] = req.body[field]
+                    }
+                });
+                console.log("data in edit turf",req.body);
+                const updateTurf = await this.updateUserProfile.execute(
+                    turfId,
+                    updateData
+                )
+                console.log("update turf data",updateTurf);
+                
+                res.status(HTTP_STATUS.OK).json({
+                    success: true,
+                    message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    data: updateTurf,
+                });
+            } catch (error) {
+                handleErrorResponse(res,error)
+            }
+        }
+
+        async updateTurfPassword(req: Request, res: Response): Promise<void> {
+            try {
+            const userId = (req as CustomRequest).user.id;
+        
+            const {currPass , newPass} = req.body as {
+                currPass:string,
+                newPass:string
+            }
+            console.log("change pass body data",req.body);
+            console.log("curr",currPass,"new",newPass);
+            await this.updateTurfPassWordUseCase.execute(userId,currPass,newPass)
+            
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: SUCCESS_MESSAGES.UPDATE_SUCCESS
+            })
+            } catch (error) {
+            handleErrorResponse(res, error);
             }
         }
 }

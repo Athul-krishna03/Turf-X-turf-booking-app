@@ -19,7 +19,7 @@ export class LoginUserUseCase implements ILoginUserUseCase{
         this.strategies={
             user:this.clientLogin,
             admin:this.clientLogin,
-            TurfOwner:this.turfLogin
+            turf:this.turfLogin
         }
     }
     async execute(user: LoginUserDTO): Promise<Partial<IUserEntity>> {

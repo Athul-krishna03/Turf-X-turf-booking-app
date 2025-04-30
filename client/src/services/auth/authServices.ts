@@ -1,7 +1,10 @@
 import { api } from "../../api/auth.axios";
 import { RegisterData ,LoginData, AuthResponse} from "../../types/Type";
 
-
+export interface AxiosResponse {
+  success: boolean;
+  message: string;
+}
 
 export const registeUser = async(data:RegisterData)=>{
     try{

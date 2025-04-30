@@ -12,6 +12,7 @@ interface UserState{
 export interface updateProfilePayload{
     name:string,
     phone:string,
+    email:string,
     position?:string | undefined | object,
     profileImage?:string,
 }

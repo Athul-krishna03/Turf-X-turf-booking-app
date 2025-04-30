@@ -1,10 +1,10 @@
 export const ROLES = {
 	ADMIN:"admin",
 	USER:"user",
-   TURFOWNER:"TurfOwner"
+   TURFOWNER:"turf"
 } as const;
 
-export type TRole = "admin" | "user" | "TurfOwner";
+export type TRole = "admin" | "user" | "turf";
 
 
 export const HTTP_STATUS = {

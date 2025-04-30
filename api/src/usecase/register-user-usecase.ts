@@ -16,7 +16,7 @@ export class RegisterUserUsecase implements IRegisterUserUseCase {
   ) {
     this.strategies = {
       user: this.clientRegister,
-      TurfOwner:this.turfRegister
+      turf:this.turfRegister
     };
   }
   async execute(user: UserDTO): Promise<void> {

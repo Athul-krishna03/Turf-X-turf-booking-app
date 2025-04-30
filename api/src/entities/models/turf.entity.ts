@@ -13,6 +13,15 @@ export interface ITurfEntity{
     status:string;
     aminities?:string[];
     turfPhotos?:string[];
-    courtSize:string
+    courtSize:string;
+    location?: {
+        address: string;
+        city: string;
+        state?: string;
+        coordinates: {
+          lat: number;
+          lng: number;
+        };
+      };
 
 }

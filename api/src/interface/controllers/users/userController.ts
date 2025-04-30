@@ -8,6 +8,7 @@ import { IUpdateUserStatusUseCase } from "../../../entities/useCaseInterfaces/ad
 import { CustomRequest } from "../../middlewares/authMiddleware";
 import { IClientEntity } from "../../../entities/models/client.entity";
 import { IUpdateProfileUseCase } from "../../../entities/useCaseInterfaces/user/IUpdateProfileUseCase";
+import { IUpdateUserPassWordUseCase } from "../../../entities/useCaseInterfaces/user/IUpdateUserPassWordUseCase";
 
 @injectable()
 export class UserController implements IUserController {
@@ -17,7 +18,9 @@ export class UserController implements IUserController {
     @inject("IUpdateUserStatusUseCase")
     private updateUser: IUpdateUserStatusUseCase,
     @inject("IUpdateProfileUsecase")
-    private updateUserProfile: IUpdateProfileUseCase
+    private updateUserProfile: IUpdateProfileUseCase,
+    @inject("IUpdateUserPassWordUseCase")
+    private updateUserPassWordUseCase:IUpdateUserPassWordUseCase
   ) {}
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -66,6 +69,7 @@ export class UserController implements IUserController {
       const allowedField: (keyof IClientEntity)[] = [
         "name",
         "phone",
+        "email",
         "profileImage",
         "position",
       ];
@@ -84,6 +88,29 @@ export class UserController implements IUserController {
         message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
         data: updateUser,
       });
+    } catch (error) {
+      handleErrorResponse(res, error);
+    }
+  }
+
+  //Update user Password
+  async updateUserPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = (req as CustomRequest).user.id;
+
+      const {currPass , newPass} = req.body as {
+        currPass:string,
+        newPass:string
+      }
+      console.log("change pass body data",req.body);
+      
+      console.log("curr",currPass,"new",newPass);
+      await this.updateUserPassWordUseCase.execute(userId,currPass,newPass)
+      
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: SUCCESS_MESSAGES.UPDATE_SUCCESS
+      })
     } catch (error) {
       handleErrorResponse(res, error);
     }

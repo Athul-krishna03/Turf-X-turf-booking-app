@@ -19,6 +19,8 @@ import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRe
 import { TurfRepository } from "../../interface/repositories/Turf/turf.repository";
 import { IRedisTokenRepository } from "../../entities/repositoryInterface/redis/IRedisTokenRepository";
 import { RedisTokenRepository } from "../../interface/repositories/redis/RedisTokenRepository";
+import { ISlotRepository } from "../../entities/repositoryInterface/turf/ISlotRepository";
+import { SlotRepository } from "../../interface/repositories/Turf/slot.repository";
 
 
 
@@ -55,6 +57,10 @@ export class RepositoryRegistry{
 
         container.register<IRedisTokenRepository>("IRedisTokenRepository",{
             useClass:RedisTokenRepository
+        })
+
+        container.register<ISlotRepository>("ISlotRepository",{
+            useClass:SlotRepository
         })
     }
 }

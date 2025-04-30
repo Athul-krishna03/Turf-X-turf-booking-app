@@ -15,7 +15,20 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
     clientId: string,
     data: Partial<IClientEntity>
   ): Promise<ClientProfileResponse> {
+    
     const isExist = await this.clientRepo.findById(clientId);
+    const isEmailEXist = await this.clientRepo.findByEmail(data?.email)
+    console.log("mail exist ",isEmailEXist?.email,data.email);
+    
+    if(isEmailEXist && isEmailEXist.email != data.email){
+      console.log("entered");
+      
+      throw new CustomError(
+        "user with same email exist",
+        HTTP_STATUS.BAD_REQUEST
+      )
+      
+    }
     console.log("edit user exist",isExist);
     console.log("edit user data",data)
     if (!isExist) {

@@ -32,7 +32,7 @@ const TurfRegistrationForm: React.FC = () => {
       const uploadedUrls = await Promise.all(uploadPromises);
       const formDataWithUrls = {
         ...values,
-        role: "TurfOwner",
+        role: "turf",
         turfPhotos: uploadedUrls,
       };
       console.log(formDataWithUrls);

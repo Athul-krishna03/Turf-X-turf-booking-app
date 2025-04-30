@@ -42,6 +42,16 @@ import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/IRef
 import { RefreshTokenUseCase } from "../../usecase/auth/RefreshTokenUseCase";
 import { IUpdateProfileUseCase } from "../../entities/useCaseInterfaces/user/IUpdateProfileUseCase";
 import { UpdateProfileUseCase } from "../../usecase/user/UpdateProfileUseCase";
+import { IGenerateSlotUseCase } from "../../entities/useCaseInterfaces/turf/IGenerateSlotUseCase";
+import { GenerateSlotUseCase } from "../../usecase/turf/GenerateSlotsUseCase";
+import { IUpdateUserPassWordUseCase } from "../../entities/useCaseInterfaces/user/IUpdateUserPassWordUseCase";
+import { UpdateUserPassWordUseCase } from "../../usecase/user/UpdateUserPasswordUseCase";
+import { IUpdateTurfProfileUseCase } from "../../entities/useCaseInterfaces/turf/IUpdateTurfProfileUseCase";
+import { UpdateTurfProfileUseCase } from "../../usecase/turf/UpdateTurfProfileUseCase";
+import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/IRevokeRefreshTokenUseCase";
+import { RevokeRefreshTokenUseCase } from "../../usecase/auth/RevokeRefreshTokenUseCase";
+import { IUpdateTurfPassWordUseCase } from "../../entities/useCaseInterfaces/turf/IUpdateTurfPasswordUseCase";
+import { UpdateTurfPassWordUseCase } from "../../usecase/turf/UpdateTurfPasswordUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -109,6 +119,28 @@ export class UseCaseRegistery {
     container.register<IUpdateProfileUseCase>("IUpdateProfileUsecase", {
       useClass: UpdateProfileUseCase,
     });
+
+    container.register<IGenerateSlotUseCase>("IGenerateSlotUseCase",{
+      useClass:GenerateSlotUseCase
+    })
+
+    container.register<IUpdateUserPassWordUseCase>("IUpdateUserPassWordUseCase",{
+      useClass:UpdateUserPassWordUseCase
+    })
+    
+    container.register<IUpdateTurfPassWordUseCase>("IUpdateTurfPassWordUseCase",{
+      useClass:UpdateTurfPassWordUseCase
+    })
+
+    container.register<IUpdateTurfProfileUseCase>("IUpdateTurfProfileUseCase",{
+      useClass:UpdateTurfProfileUseCase
+    })
+    container.register<IRevokeRefreshTokenUseCase>(
+      "IRevokeRefreshTokenUseCase",
+      {
+        useClass:RevokeRefreshTokenUseCase,
+      }
+    );
     //Register Strategy
     container.register("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
