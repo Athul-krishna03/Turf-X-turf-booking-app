@@ -1,0 +1,158 @@
+import React, { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import axios from "axios";
+import { paymentService, slotUpdate } from "../../services/user/userServices";
+
+// Initialize Stripe with publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
+
+interface PaymentFormProps {
+  slotId: string;
+  price: number;
+  durarion:number;
+  onSuccess: () => void;
+}
+
+const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
+  slotId,
+  price,
+  durarion,
+  onSuccess,
+  clientSecret,
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [error, setError] = useState<string | null>(null);
+  const [processing, setProcessing] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!stripe || !elements) return;
+
+    setProcessing(true);
+    setError(null);
+
+    try {
+      // Submit the payment element form data
+      const submitResult = await elements.submit();
+      if (submitResult.error) {
+        setError(submitResult.error.message || "Failed to submit payment form");
+        setProcessing(false);
+        return;
+      }
+
+      // Confirm payment with PaymentElement
+      const result = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: window.location.href, // Redirect back to current page
+        },
+        redirect: "if_required", // Avoid redirect for card payments
+      });
+
+      if (result.error) {
+        setError(result.error.message || "Payment failed");
+        setProcessing(false);
+        return;
+      }
+
+      if (result.paymentIntent?.status === "succeeded") {
+        // Update slot as booked
+        await slotUpdate(slotId,price,durarion)
+        setProcessing(false);
+        onSuccess();
+      }
+    } catch (error) {
+      setError("An error occurred during payment");
+      setProcessing(false);
+      console.error("Payment error:", error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
+      <div className="mb-4">
+        <label className="block text-lg font-medium mb-2 text-white">
+          Pay {price.toLocaleString()} INR
+        </label>
+        <PaymentElement
+          options={{
+            layout: "tabs",
+            defaultValues: {
+              billingDetails: {
+                name: "Customer Name",
+              },
+            },
+          }}
+          className="p-2 border rounded bg-gray-800 text-white"
+        />
+      </div>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      <button
+        type="submit"
+        disabled={!stripe || processing}
+        className="w-full bg-gradient-to-r from-green-700 to-green-600 text-white py-2 rounded disabled:bg-gray-400 hover:from-green-800 hover:to-green-700 transition-all duration-300"
+      >
+        {processing ? "Processing..." : "Pay Now"}
+      </button>
+    </form>
+  );
+};
+
+export default function PaymentWrapper({ slotId, price,durarion, onSuccess }: PaymentFormProps) {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchClientSecret = async () => {
+      try {
+        const response = await paymentService(slotId, price);
+        setClientSecret(response.clientSecret);
+      } catch (error) {
+        console.error("Failed to fetch client secret", error);
+      }
+    };
+
+    fetchClientSecret();
+  }, [slotId, price]);
+
+  const options = clientSecret
+    ? {
+        clientSecret,
+        appearance: {
+          theme: "flat" as const,
+          labels: "floating" as const,
+        },
+        layout: "tabs",
+        fields: {
+          billingDetails: {
+            name: "never",
+            email: "never",
+            phone: "never",
+            address: {
+              country: "never",
+              postalCode: "never",
+              line1: "never",
+              line2: "never",
+              city: "never",
+              state: "never",
+            },
+          },
+        },
+      }
+    : undefined;
+
+  return (
+    clientSecret && (
+      <Elements stripe={stripePromise} options={options}>
+        <PaymentForm
+          slotId={slotId}
+          price={price}
+          durarion={durarion}
+          onSuccess={onSuccess}
+          clientSecret={clientSecret}/>
+      </Elements>
+    )
+  );
+}

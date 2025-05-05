@@ -55,6 +55,15 @@ export class TurfRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 turfController.updateTurfPassword(req,res);
             }
+        ),
+        this.router.get(
+            "/turf/slots",
+            verifyAuth,
+            authorizeRole(["turf"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                turfController.getSlots(req,res);
+            }
         )
     }
 

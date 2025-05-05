@@ -5,10 +5,14 @@ import { Star, MapPin, ChevronRight, Clock, Heart } from 'lucide-react';
 import { getAllTurfsData } from '../../services/user/userServices';
 import { useGetAllTurfsQuery } from '../../hooks/admin/useGetAllTurfs';
 import { ITurf } from '../../types/Type';
+import { useDispatch } from 'react-redux';
+import { setTurfs } from '../../store/slices/turfsDataslice';
+import { useNavigate } from 'react-router-dom';
 
 export default function TurfXDashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded);
   };
@@ -24,7 +28,9 @@ export default function TurfXDashboard() {
   )
 
   const turfs=(data?.turfs?? []) as ITurf[];
+  dispatch(setTurfs(turfs));
   const popularTurfs = turfs
+  
   console.log(turfs);
   
   const sportsCategories = [
@@ -114,7 +120,8 @@ export default function TurfXDashboard() {
                         <span className="text-xs">{turf.rating}</span>
                         <span className="text-xs text-gray-400 ml-1">({turf.reviews})</span>
                       </div> */}
-                      <button className="text-xs px-2 py-1 bg-green-600 hover:bg-green-500 rounded text-white transition-colors">
+                      <button className="text-xs px-2 py-1 bg-green-600 hover:bg-green-500 rounded text-white transition-colors"
+                      onClick={()=>navigate(`/user/turfDetialsPage/${turf.turfId}`)}>
                         Book Now
                       </button>
                     </div>

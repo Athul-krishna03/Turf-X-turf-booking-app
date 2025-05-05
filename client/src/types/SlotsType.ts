@@ -2,6 +2,7 @@ export interface Slot {
     _id?: string;
     startTime: string;
     endTime: string;
-    isBlocked: boolean;
+    price:string;
+    isBooked: boolean;
     date: string;
   }

@@ -15,7 +15,7 @@ import { ArrowLeft, Building, Edit, MapPin, Phone, Mail, KeyRound } from "lucide
 import { turfDetailsSchema } from "../../utils/validations/turfValidator"
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { updateTurfDetails } from "../../store/slices/turf.slice"
+import { updateTurfDetails, updateTurfProfilePayload } from "../../store/slices/turf.slice"
 import { AppDispatch } from "../../store/store"
 import { useTurfChangePassword } from "../../hooks/turf/useTurfDashboard"
 import ChangeTurfPassword from "../modals/change-password-turf"
@@ -41,15 +41,17 @@ export default function TurfDetails() {
     lng: turf.location.coordinates?.lng || 77.5946
   });
   
+  
+  const center: [number, number] = [coordinates.lat, coordinates.lng];
   // Form data state
   const [formData, setFormData] = useState({
-    turfName: turf.name || "",
+    name: turf.name || "",
     address: turf.location.address || "",
     city: turf.location.city || "",
     state: turf.location.state || "",
     phone: turf.phone || "",
     email: turf.email || "",
-    facilities: turf.aminities || ["Parking", "Changing Rooms", "Floodlights"],
+    aminities: turf.aminities || ["Parking", "Changing Rooms", "Floodlights"],
   })
 
   // Handle form input changes
@@ -142,7 +144,7 @@ export default function TurfDetails() {
       }
 
       // Prepare data for API
-      const updatedTurfData = {
+      const updatedTurfData:updateTurfProfilePayload = {
         ...formData,
         location:{
             address:formData.address,
@@ -209,6 +211,7 @@ export default function TurfDetails() {
     return null;
   };
 
+
   return (
     <div className="min-h-screen bg-gray-50">
     <div className="container mx-auto px-4 py-6">
@@ -253,7 +256,7 @@ export default function TurfDetails() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <Label htmlFor="turfName">Turf Name</Label>
-                          <Input id="turfName" name="turfName" value={formData.turfName} onChange={handleInputChange} />
+                          <Input id="turfName" name="turfName" value={formData.name} onChange={handleInputChange} />
                         </div>
 
                         <div className="space-y-2">
@@ -288,8 +291,8 @@ export default function TurfDetails() {
                         <div className="space-y-2 md:col-span-2">
                         <Label htmlFor="location">Location on Map (Click to select)</Label>
                         <div className="h-[400px] w-full mb-4">
-                          <MapContainer 
-                            center={[coordinates.lat, coordinates.lng]} 
+                          <MapContainer
+                            center={center}
                             zoom={13} 
                             style={{ height: '100%', width: '100%' }}
                           >
@@ -328,7 +331,7 @@ export default function TurfDetails() {
                             <div className="flex items-start">
                             <Building className="h-5 w-5 text-gray-400 mr-2 mt-0.5" />
                             <div>
-                                <p className="font-medium">{formData.turfName}</p>
+                                <p className="font-medium">{formData.name}</p>
                             </div>
                             </div>
 
@@ -473,17 +476,17 @@ export default function TurfDetails() {
                             <input
                                 type="checkbox"
                                 id={facility}
-                                checked={formData.facilities.includes(facility)}
+                                checked={formData.aminities.includes(facility)}
                                 onChange={(e) => {
                                 if (e.target.checked) {
                                     setFormData((prev) => ({
                                     ...prev,
-                                    facilities: [...prev.facilities, facility],
+                                    facilities: [...prev.aminities, facility],
                                 }))
                                 } else {
                                     setFormData((prev) => ({
                                     ...prev,
-                                    facilities: prev.facilities.filter((f: string) => f !== facility),
+                                    facilities: prev.aminities.filter((f: string) => f !== facility),
                                 }))
                                 }
                             }}
@@ -510,7 +513,7 @@ export default function TurfDetails() {
                 ) : (
                     <div className="space-y-6">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {formData.facilities.map((facility:any) => (
+                        {formData.aminities.map((facility:any) => (
                         <div key={facility} className="flex items-center">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

@@ -12,6 +12,7 @@ import { CustomRequest } from "../../middlewares/authMiddleware";
 import { ITurfEntity } from "../../../entities/models/turf.entity";
 import { IUpdateTurfProfileUseCase } from "../../../entities/useCaseInterfaces/turf/IUpdateTurfProfileUseCase";
 import { IUpdateTurfPassWordUseCase } from "../../../entities/useCaseInterfaces/turf/IUpdateTurfPasswordUseCase";
+import { IGetSlotUseCase } from "../../../entities/useCaseInterfaces/turf/IGetSlotUseCase";
 
 @injectable()
 export class TurfControllers implements ITurfControllers{
@@ -29,7 +30,9 @@ export class TurfControllers implements ITurfControllers{
         @inject("IUpdateTurfProfileUseCase")
         private updateUserProfile:IUpdateTurfProfileUseCase,
         @inject("IUpdateTurfPassWordUseCase")
-        private updateTurfPassWordUseCase:IUpdateTurfPassWordUseCase
+        private updateTurfPassWordUseCase:IUpdateTurfPassWordUseCase,
+        @inject("IGetSlotsUseCase")
+        private fetchSlots:IGetSlotUseCase
     ){}
     async getAllTurfs(req: Request, res: Response): Promise<void> {
         try {
@@ -120,14 +123,15 @@ export class TurfControllers implements ITurfControllers{
             try {
                 console.log("genrate body",req.body);
                 
-                const {turfId,date,startTime,endTime,slotDuration}=req.body;
+                const {turfId,date,startTime,endTime,slotDuration,price}=req.body;
                 
                 const slots = await this.generateSlot.execute(
                     turfId,
                     date,
                     startTime,
                     endTime,
-                    slotDuration
+                    slotDuration,
+                    price
                 )
                 res.status(201).json({ message: "Slots generated successfully", slots });
 
@@ -197,6 +201,39 @@ export class TurfControllers implements ITurfControllers{
             })
             } catch (error) {
             handleErrorResponse(res, error);
+            }
+        }
+
+        //GET SLOTS PER DATE
+
+        async getSlots(req: Request, res: Response): Promise<void> {
+            try {
+                console.log("slotsss");
+                
+                const { turfId, date } = req.query as { turfId: string; date: string };
+                console.log(turfId,date);
+                
+                const slots = await this.fetchSlots.execute(turfId, date);
+                console.log("slots",slots);
+                
+                res.status(200).json({
+                    success: true,
+                    data: slots,
+                }
+                );
+            } catch (error) {
+                console.error('Error fetching slots:', error);
+                res.status(500).json({ message: 'Internal server error' });
+            }
+        }
+
+        //GET SINGLE TURF DETIALS
+        async getTurfDetials(req: Request, res: Response): Promise<void> {
+            try {
+                // const {turfId} = req.query as {turfId:string};
+                // const turfData = await this.getTurf(turfId);
+            } catch (error) {
+                
             }
         }
 }

@@ -3,7 +3,8 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import  userReducer  from "./slices/user.slice";
 import adminReducer from "./slices/admin.slice";
-import turfReducer  from "./slices/turf.slice"
+import turfReducer  from "./slices/turf.slice";
+import turfsDataReducer from "./slices/turfsDataslice";
 const rootPersistConfig={
     key:"session",
     storage,
@@ -12,7 +13,8 @@ const rootPersistConfig={
 const rootReducer = combineReducers({
     user:userReducer,
     admin:adminReducer,
-    turf:turfReducer
+    turf:turfReducer,
+    turfs:turfsDataReducer
 })
 
 const persistedReducer = persistReducer(rootPersistConfig,rootReducer);

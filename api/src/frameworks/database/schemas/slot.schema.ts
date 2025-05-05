@@ -3,7 +3,8 @@ import { ISlotModel } from "../models/slot.model";
 
 export const SlotSchema = new Schema<ISlotModel>({
     turfId:{
-        type:Schema.Types.ObjectId,ref:"Turf"
+        type:String,
+        ref:"Turf"
     },
     date:{
         type:String,
@@ -20,6 +21,12 @@ export const SlotSchema = new Schema<ISlotModel>({
     isBooked:{
         type:Boolean,
         default:false
+    },
+    duration:{
+        type:Number,
+    },
+    price:{
+        type:Number,
     }
 })
 

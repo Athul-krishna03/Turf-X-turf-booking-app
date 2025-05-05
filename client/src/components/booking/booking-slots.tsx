@@ -1,43 +1,56 @@
-"use client"
+import { Slot } from "../../types/SlotsType";
+import { Button } from "../ui/button"
 
-import { format } from "date-fns"
-import { Button } from "../../components/ui/button"
-import { ChevronLeft } from "lucide-react"
+
 
 interface BookingSlotsProps {
-  date: Date
-  availableSlots: string[]
-  onSlotSelect: (slot: string) => void
-  onBack: () => void
+  date: Date;
+  availableSlots: Slot[];
+  onSlotSelect: (slot:Slot) => void;
+  onBack: () => void;
 }
 
 export default function BookingSlots({ date, availableSlots, onSlotSelect, onBack }: BookingSlotsProps) {
+  const isEmpty = availableSlots.length === 0;
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-medium">Available slots for {format(date, "EEEE, MMMM d")}</h3>
-        <Button variant="ghost" size="sm" onClick={onBack}>
-          <ChevronLeft size={16} className="mr-1" /> Back
-        </Button>
-      </div>
+      <h3 className="font-medium text-lg mb-3 text-gray-300">Select a time slot for {date.toDateString()}</h3>
 
-      {availableSlots.length === 0 ? (
-        <div className="text-center py-8 text-gray-400">
-          No slots available for this date. Please select another date.
+      {isEmpty ? (
+        <div className="text-center p-6 bg-gray-800/50 rounded-lg border border-gray-700">
+          <p className="mb-4 text-gray-400">No available slots for the selected date.</p>
+          <Button variant="ghost" onClick={onBack} className="hover:bg-gray-700 transition-colors">
+            ← Back to calendar
+          </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-2">
-          {availableSlots.map((slot) => (
-            <Button
-              key={slot}
-              variant="outline"
-              className="border-gray-700 hover:bg-gray-800"
-              onClick={() => onSlotSelect(slot)}
+        <>
+          <div className="grid grid-cols-3 gap-3">
+            {availableSlots.map((slot: Slot) => (
+              <Button 
+              key={slot.startTime}
+              onClick={() => !slot.isBooked && onSlotSelect(slot)}
+              disabled={slot.isBooked}
+              className={`py-6 border text-white transition-all duration-200
+                ${slot.isBooked 
+                  ? 'bg-red-900/30 border-red-700 cursor-not-allowed opacity-60' 
+                  : 'hover:bg-green-900/30 hover:border-green-700 border-gray-700'
+                }`}
             >
-              {slot}
+              {slot.startTime}
             </Button>
-          ))}
-        </div>
+            
+            ))}
+          </div>
+          <Button 
+            variant="ghost" 
+            className="mt-4 hover:bg-gray-800 transition-colors text-green-500" 
+            onClick={onBack}
+          >
+            ← Back to calendar
+          </Button>
+        </>
       )}
     </div>
   )

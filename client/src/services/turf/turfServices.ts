@@ -5,15 +5,16 @@ import { ChangePasswordData } from "../../hooks/user/userDashboard";
 export const logoutTurf = async () => {
     const response = await turfAxiosInstance.post("/_ts/turf/logout");
     return response.data;
-  };
-export  const generateSlots = async(turfId: string, date: string, startTime: string,endTime: string, slotDuration: number)=>{
+};
+export  const generateSlots = async(turfId: string, date: string, startTime: string, endTime: string, slotDuration: number, price: number)=>{
     const response = await turfAxiosInstance.post('/_ts/turf/generateSlots',
         {
             turfId,
             date,
             startTime,
             endTime,
-            slotDuration
+            slotDuration,
+            price
         }
     );
     return response.data
@@ -25,5 +26,10 @@ export const changeTurfPassword = async (data: ChangePasswordData) => {
     data
     );
     console.log("changeturfPassword response", response);
+    return response.data;
+};
+
+export const fetchSlots = async (turfId: string, date: string) => {
+    const response = await turfAxiosInstance.get(`/_ts/turf/slots?turfId=${turfId}&date=${date}`);
     return response.data;
 };

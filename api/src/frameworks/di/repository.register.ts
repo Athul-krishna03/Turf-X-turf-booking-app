@@ -21,7 +21,8 @@ import { IRedisTokenRepository } from "../../entities/repositoryInterface/redis/
 import { RedisTokenRepository } from "../../interface/repositories/redis/RedisTokenRepository";
 import { ISlotRepository } from "../../entities/repositoryInterface/turf/ISlotRepository";
 import { SlotRepository } from "../../interface/repositories/Turf/slot.repository";
-
+import { Server } from "../http/server";
+import { MongoConnect } from "../database/mongoDB/mongoConnect";
 
 
 export class RepositoryRegistry{
@@ -35,7 +36,6 @@ export class RepositoryRegistry{
         container.register<IRefreshTokenRepository>("IRefreshTokenRepository",{
             useClass:RefreshTokenRepository
         })
-
         container.register<ITokenService>("ITokenService",{
             useClass:JWTService
         })
@@ -45,22 +45,25 @@ export class RepositoryRegistry{
         container.register<IOtpService>("IOtpService",{
             useClass:OtpService
         })
-
         container.register<INodemailerService>("INodemailerService",{
             useClass:NodemailerService
         })
-
         container.register<IRedisClient>("IRedisClient",{
             useClass:RedisClient
         })
-
-
         container.register<IRedisTokenRepository>("IRedisTokenRepository",{
             useClass:RedisTokenRepository
         })
-
         container.register<ISlotRepository>("ISlotRepository",{
             useClass:SlotRepository
         })
+
+
+        container.register<Server>('Server', {
+            useClass: Server,
+        });
+        container.register<MongoConnect>('MongoConnect', {
+            useClass: MongoConnect,
+        });
     }
 }

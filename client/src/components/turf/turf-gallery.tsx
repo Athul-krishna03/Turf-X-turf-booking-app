@@ -1,73 +1,96 @@
-import { useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "../../components/ui/button"
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "../ui/button";
+import { cn } from "../../lib/utils";
 
 interface TurfGalleryProps {
-  photos: string[]
-  turfName: string
+  photos?: string[];
+  turfName?: string;
 }
 
-export default function TurfGallery({ photos, turfName }: TurfGalleryProps) {
-  const [currentIndex, setCurrentIndex] = useState(0)
+export default function TurfGallery({ photos = [], turfName = "Turf" }: TurfGalleryProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  // Use default images if no photos provided
+  const galleryPhotos = photos && photos.length > 0 
+    ? photos 
+    : [
+        "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?q=80&w=1000",
+        "https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=1000",
+      ];
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1))
-  }
+  const handlePrevious = () => {
+    setActiveIndex((prev) => (prev === 0 ? galleryPhotos.length - 1 : prev - 1));
+  };
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1))
-  }
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev === galleryPhotos.length - 1 ? 0 : prev + 1));
+  };
 
   return (
-    <div className="relative w-full h-[500px] overflow-hidden group rounded-xl">
-      {/* Slides */}
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
-        {photos.map((photo, idx) => (
-          <div key={idx} className="min-w-full h-[500px]">
-            <img
-              src={photo || "/placeholder.svg"}
-              alt={`${turfName} slide ${idx + 1}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Prev Button */}
-      <Button
-        size="icon"
-        variant="ghost"
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white"
-      >
-        <ChevronLeft size={24} />
-      </Button>
-
-      {/* Next Button */}
-      <Button
-        size="icon"
-        variant="ghost"
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white"
-      >
-        <ChevronRight size={24} />
-      </Button>
-
-      {/* Dots */}
-      <div className="absolute bottom-4 w-full flex justify-center gap-2">
-        {photos.map((_, index) => (
-          <div
+    <div className="relative w-full overflow-hidden rounded-xl">
+      <div className="aspect-video md:aspect-[21/9] overflow-hidden rounded-xl relative">
+        {galleryPhotos.map((photo, index) => (
+          <img
             key={index}
-            className={`w-3 h-3 rounded-full cursor-pointer ${
-              index === currentIndex ? "bg-white" : "bg-white/30"
-            }`}
-            onClick={() => setCurrentIndex(index)}
+            src={photo}
+            alt={`${turfName} photo ${index + 1}`}
+            className={cn(
+              "absolute inset-0 object-cover w-full h-full transition-opacity duration-500",
+              index === activeIndex ? "opacity-100" : "opacity-0"
+            )}
           />
         ))}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
+        
+        {/* Photo count indicator */}
+        <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
+          {activeIndex + 1} / {galleryPhotos.length}
+        </div>
       </div>
+
+      {/* Navigation buttons */}
+      {galleryPhotos.length > 1 && (
+        <>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full"
+            onClick={handlePrevious}
+          >
+            <ChevronLeft size={24} />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white rounded-full"
+            onClick={handleNext}
+          >
+            <ChevronRight size={24} />
+          </Button>
+        </>
+      )}
+      
+      {/* Thumbnail indicators */}
+      {galleryPhotos.length > 1 && (
+        <div className="flex justify-center gap-2 mt-3">
+          {galleryPhotos.map((_, index) => (
+            <button
+              key={index}
+              className={cn(
+                "w-2 h-2 rounded-full transition-all duration-300",
+                index === activeIndex 
+                  ? "bg-white w-4" 
+                  : "bg-white/40 hover:bg-white/60"
+              )}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Show image ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }

@@ -52,6 +52,11 @@ import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/aut
 import { RevokeRefreshTokenUseCase } from "../../usecase/auth/RevokeRefreshTokenUseCase";
 import { IUpdateTurfPassWordUseCase } from "../../entities/useCaseInterfaces/turf/IUpdateTurfPasswordUseCase";
 import { UpdateTurfPassWordUseCase } from "../../usecase/turf/UpdateTurfPasswordUseCase";
+import { IGetSlotUseCase } from "../../entities/useCaseInterfaces/turf/IGetSlotUseCase";
+import { GetSlotUseCase } from "../../usecase/turf/GetSlotsUseCase";
+import { CronController } from "../../interface/controllers/cronControllers";
+import { IDeleteExpiredSlotsUseCase } from "../../entities/useCaseInterfaces/IDeleteExpiredSlotsUseCase";
+import { DeleteExpiredSlotsUseCase } from "../../usecase/DeleteExpiredSlotsUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -141,6 +146,13 @@ export class UseCaseRegistery {
         useClass:RevokeRefreshTokenUseCase,
       }
     );
+
+    container.register<IGetSlotUseCase>("IGetSlotsUseCase",{
+      useClass:GetSlotUseCase
+    })
+    container.register<IDeleteExpiredSlotsUseCase>("IDeleteExpiredSlotsUseCase",{
+      useClass:DeleteExpiredSlotsUseCase
+    })
     //Register Strategy
     container.register("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -154,5 +166,8 @@ export class UseCaseRegistery {
     container.register("TurfRegisterStrategy", {
       useClass: TurfRegisterStrategy,
     });
+
+   
+    
   }
 }

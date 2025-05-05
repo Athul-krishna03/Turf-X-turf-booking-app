@@ -1,7 +1,8 @@
 import { Response ,Request , RequestHandler} from "express";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interface/middlewares/authMiddleware";
 import { BaseRoute } from "../baseRoute";
-import { authController, blockStatusMiddleware, turfController, userController } from "../../di/resolver";
+import { authController, blockStatusMiddleware, paymentController, slotController, turfController, userController } from "../../di/resolver";
+
 
 
 export class ClientRoutes extends BaseRoute{
@@ -59,6 +60,31 @@ export class ClientRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 turfController.getAllTurfs(req,res)
             }
+        ),
+        this.router.get(
+            "/user/slots",
+            verifyAuth,
+            authorizeRole(["user"]),
+            (req:Request,res:Response)=>{
+                turfController.getSlots(req,res);
+            }
+        ),
+        this.router.post(
+            "/user/payments/create-payment-intent",
+            verifyAuth,
+            authorizeRole(["user"]),
+            (req:Request,res:Response)=>{
+                paymentController.createPaymentIntent(req,res);
+            }
+        ),
+        this.router.patch(
+            "/user/slots/:slotId",
+            verifyAuth,
+            authorizeRole(["user"]),
+            (req:Request,res:Response)=>{
+                slotController.updateSlot(req,res)
+            }
         )
+        
     }
 }

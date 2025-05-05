@@ -1,5 +1,6 @@
-import { ISlotEntity } from "../../models/slot.entity";
+import { ISlot } from "../../../usecase/turf/GenerateSlotsUseCase";
+
 
 export interface IGenerateSlotUseCase{
-    execute(turfId:string,date:string,startTime:string,endTime:string,slotDuration:number):Promise<ISlotEntity[]>
+    execute(turfId:string,date:string,startTime:string,endTime:string,slotDuration:number,price:number):Promise<ISlot[]>
 }

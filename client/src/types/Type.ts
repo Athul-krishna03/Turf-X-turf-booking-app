@@ -35,6 +35,7 @@ export interface SignupFormValues {
     status:string,
     createdAt:Date,
     location: any;
+    aminities: string[];
     turfPhotos:string[];
   }
 

@@ -8,14 +8,32 @@ import { AuthRoutes } from '../routes/auth/auth.route';
 
 import { config } from '../../shared/config';
 import { PrivateRoutes } from '../routes/privateRoute.ts/privateRoute';
+import {  inject, injectable } from 'tsyringe';
+import { CronController } from '../../interface/controllers/cronControllers';
+import { IDeleteExpiredSlotsUseCase } from '../../entities/useCaseInterfaces/IDeleteExpiredSlotsUseCase';
 
+@injectable()
 export class Server{
     private _app:Application;
-    constructor(){
+    constructor(
+        @inject('CronController') private cronController:CronController,
+        @inject ("IDeleteExpiredSlotsUseCase") private DeleteExpiredSlotsUseCase:IDeleteExpiredSlotsUseCase
+    ){
         this._app=express();
         this.configureMiddlewares();
         this.configureRoutes();
         this.configureErrorHandling();
+
+        this._app.post('/slots/expired/delete', async (req:Request, res:Response) => {
+            try {
+            
+            await this.DeleteExpiredSlotsUseCase.execute()
+            res.status(200).json({ message: 'Expired slots deletion triggered successfully' });
+            } catch (error) {
+            console.error('[Test Endpoint] Error triggering slot deletion:', error);
+            res.status(500).json({ message: 'Failed to trigger slot deletion', error });
+            }
+        });
     }
     private configureRoutes():void{
         this._app.use('/api/v_1/auth',new AuthRoutes().router);
@@ -50,6 +68,8 @@ export class Server{
                 max:1000
             })
         )
+
+        
     }
 
     private configureErrorHandling():void{
@@ -67,6 +87,10 @@ export class Server{
     }
     public getApp():Application{
         return this._app
+    }
+
+    public startCornJob():void{
+        this.cronController.setupCronJob();
     }
 }  
 

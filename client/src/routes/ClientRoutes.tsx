@@ -17,7 +17,7 @@ export function UserRoutes(){
             element={<ProtectedRoutes allowedRoles={['user']} element={<Profile/>}/>}
             />
             <Route
-            path="/user/turfDetialsPage"
+            path="/user/turfDetialsPage/:turfId"
             element={<ProtectedRoutes allowedRoles={['user']} element={<TurfDetailsPage/>}/>}
             />
 

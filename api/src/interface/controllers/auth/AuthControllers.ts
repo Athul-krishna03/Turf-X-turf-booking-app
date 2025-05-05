@@ -146,6 +146,7 @@ export class AuthController implements IAuthController {
           success: true,
           message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
           user: {
+            turfId:turfEntity.turfId,
             name: turfEntity.name,
             email: turfEntity.email,
             role: turfEntity.role,
