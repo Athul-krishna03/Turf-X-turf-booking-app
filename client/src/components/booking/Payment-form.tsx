@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import axios from "axios";
-import { paymentService, slotUpdate } from "../../services/user/userServices";
+import {  paymentService, slotUpdate } from "../../services/user/userServices";
 
-// Initialize Stripe with publishable key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
 interface PaymentFormProps {
+  date:string
   slotId: string;
   price: number;
   durarion:number;
@@ -15,6 +14,7 @@ interface PaymentFormProps {
 }
 
 const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
+  date,
   slotId,
   price,
   durarion,
@@ -34,7 +34,7 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
     setError(null);
 
     try {
-      // Submit the payment element form data
+      
       const submitResult = await elements.submit();
       if (submitResult.error) {
         setError(submitResult.error.message || "Failed to submit payment form");
@@ -42,14 +42,13 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
         return;
       }
 
-      // Confirm payment with PaymentElement
       const result = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
-          return_url: window.location.href, // Redirect back to current page
+          return_url: window.location.href, 
         },
-        redirect: "if_required", // Avoid redirect for card payments
+        redirect: "if_required", 
       });
 
       if (result.error) {
@@ -59,8 +58,7 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
       }
 
       if (result.paymentIntent?.status === "succeeded") {
-        // Update slot as booked
-        await slotUpdate(slotId,price,durarion)
+        await slotUpdate(date,slotId,price,durarion,result.paymentIntent.id)
         setProcessing(false);
         onSuccess();
       }
@@ -101,7 +99,7 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
   );
 };
 
-export default function PaymentWrapper({ slotId, price,durarion, onSuccess }: PaymentFormProps) {
+export default function PaymentWrapper({date, slotId, price,durarion, onSuccess }: PaymentFormProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {
@@ -149,6 +147,7 @@ export default function PaymentWrapper({ slotId, price,durarion, onSuccess }: Pa
         <PaymentForm
           slotId={slotId}
           price={price}
+          date={date}
           durarion={durarion}
           onSuccess={onSuccess}
           clientSecret={clientSecret}/>

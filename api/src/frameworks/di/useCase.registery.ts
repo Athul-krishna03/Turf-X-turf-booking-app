@@ -57,6 +57,8 @@ import { GetSlotUseCase } from "../../usecase/turf/GetSlotsUseCase";
 import { CronController } from "../../interface/controllers/cronControllers";
 import { IDeleteExpiredSlotsUseCase } from "../../entities/useCaseInterfaces/IDeleteExpiredSlotsUseCase";
 import { DeleteExpiredSlotsUseCase } from "../../usecase/DeleteExpiredSlotsUseCase";
+import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
+import { BookingSlotUseCase } from "../../usecase/BookingSlotUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -153,6 +155,10 @@ export class UseCaseRegistery {
     container.register<IDeleteExpiredSlotsUseCase>("IDeleteExpiredSlotsUseCase",{
       useClass:DeleteExpiredSlotsUseCase
     })
+
+    container.register<IBookingSlotUseCase>("IBookingSlotUseCase",{
+      useClass:BookingSlotUseCase
+    })
     //Register Strategy
     container.register("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -166,8 +172,5 @@ export class UseCaseRegistery {
     container.register("TurfRegisterStrategy", {
       useClass: TurfRegisterStrategy,
     });
-
-   
-    
   }
 }

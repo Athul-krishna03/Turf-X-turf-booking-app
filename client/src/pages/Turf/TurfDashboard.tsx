@@ -1,28 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import {
-  BarChart,
-  CalendarDays,
-  Clock,
-  LayoutDashboard,
-  LogOut,
-  MessageSquare,
-  Settings,
-  Users,
-  Wallet,
-  AlertCircle,
-} from "lucide-react"
+import { CalendarDays,Clock} from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
 import { Button } from "../../components/ui/button"
 import { Progress } from "../../components/ui/progress"
 import { Avatar, AvatarFallback } from "../../components/ui/avatar"
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { turfLogout } from "../../store/slices/turf.slice"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { toast } from "../../hooks/useToast"
 import TurfSideBar from "../../components/turf/turfSideBar"
+
 const bookingData = [
   { name: "Mon", bookings: 4 },
   { name: "Tue", bookings: 7 },
@@ -41,20 +26,6 @@ const recentBookings = [
 ]
 
 export default function TurfDashboard() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate()
-  useEffect(() => {
-   
-  }, [])
-  const handleLogout=()=>{
-    dispatch(turfLogout());
-    toast({
-        title: "Success!",
-        description: "logout successful!",
-        duration: 3000,
-      });
-    navigate("/turf/login")
-  }
   return (
     <div className="flex h-screen bg-gray-50">
       <TurfSideBar/>

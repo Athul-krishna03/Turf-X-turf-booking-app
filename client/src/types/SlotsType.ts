@@ -1,5 +1,5 @@
 export interface Slot {
-    _id?: string;
+    _id: string;
     startTime: string;
     endTime: string;
     price:string;

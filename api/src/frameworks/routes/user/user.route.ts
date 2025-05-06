@@ -77,8 +77,8 @@ export class ClientRoutes extends BaseRoute{
                 paymentController.createPaymentIntent(req,res);
             }
         ),
-        this.router.patch(
-            "/user/slots/:slotId",
+        this.router.post(
+            "/user/slots",
             verifyAuth,
             authorizeRole(["user"]),
             (req:Request,res:Response)=>{

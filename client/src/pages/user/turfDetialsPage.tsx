@@ -34,7 +34,7 @@ const amenityIcons: Record<string, { icon: any; description: string }> = {
 
 export default function TurfDetailsPage() {
   const [availableSlots, setAvailableSlots] = useState<Slot[]>([]);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>();
   const [turfData, setTurfData] = useState<ITurf | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [duration, setDuration] = useState<number>(1);
@@ -212,7 +212,7 @@ export default function TurfDetailsPage() {
                     <Shield size={18} className="text-green-400" />
                     <span className="text-gray-300">Court Size: {turfData?.courtSize}</span>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  {/* <div className="flex flex-wrap gap-2">
                     {turfData?.sports?.map((sport: string, index: number) => (
                       <Badge
                         key={index}
@@ -222,7 +222,7 @@ export default function TurfDetailsPage() {
                         {sport}
                       </Badge>
                     ))}
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
 
@@ -309,6 +309,7 @@ export default function TurfDetailsPage() {
                           <h3 className="font-medium text-white">Select a date</h3>
                         </div>
                         <div className="bg-gray-800/50 p-1 rounded-lg">
+
                           <CalendarComponent
                             mode="single"
                             selected={date}

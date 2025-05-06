@@ -56,6 +56,7 @@ export default function TurfDetails() {
 
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+   
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
@@ -255,8 +256,8 @@ export default function TurfDetails() {
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <Label htmlFor="turfName">Turf Name</Label>
-                          <Input id="turfName" name="turfName" value={formData.name} onChange={handleInputChange} />
+                          <Label htmlFor="name">Turf Name</Label>
+                          <Input id="name" name="name" value={formData.name} onChange={handleInputChange} />
                         </div>
 
                         <div className="space-y-2">
@@ -265,6 +266,7 @@ export default function TurfDetails() {
                             id="email"
                             name="email"
                             type="email"
+                            readOnly
                             value={formData.email}
                             onChange={handleInputChange}
                         />

@@ -3,74 +3,46 @@ import { ISlotController } from "../../../entities/controllerInterfaces/slot/ISl
 import { inject, injectable } from "tsyringe";
 import { ISlotRepository } from "../../../entities/repositoryInterface/turf/ISlotRepository";
 import { addHours, format, parse } from "date-fns";
+import Stripe from "stripe";
+import { ISlotService } from "../../../entities/services/ISlotService";
+import { IBookingSlotUseCase } from "../../../entities/useCaseInterfaces/IBookingSlotUseCase";
+import { CustomRequest } from "../../middlewares/authMiddleware";
+
+
 
 @injectable()
 export class SlotController implements ISlotController {
   constructor(
-    @inject("ISlotRepository") private slotRepo: ISlotRepository
+    @inject("ISlotRepository") private slotRepo: ISlotRepository,
+    @inject("ISlotService") private slotService:ISlotService,
+    @inject("IBookingSlotUseCase") private bookingSlotUseCase:IBookingSlotUseCase
   ) {}
 
   async updateSlot(req: Request, res: Response): Promise<void> {
     try {
-      const { slotId } = req.params;
-      const { isBooked, price, duration } = req.body as { isBooked: boolean; price?: number; duration: number };
-      console.log("Updating slot:", { slotId, isBooked, duration});
+      const userId = (req as CustomRequest).user.id;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        apiVersion: "2025-04-30.basil",
+      });
+      const { isBooked, price, duration,slotId,paymentIntentId,date} = req.body as { isBooked: boolean;slotId:string, price: number; duration: number,paymentIntentId:string,date:string};
+      console.log("Updating slot:", { slotId, isBooked, duration,date});
 
-      // Fetch the initial slot to get turfId and startTime
-      const initialSlot = await this.slotRepo.findById(slotId);
-      console.log("Initial slot:", initialSlot);
-      if (!initialSlot) {
-        res.status(404).json({ error: "Slot not found" });
-        return;
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      if (paymentIntent.status !== "succeeded") {
+        res.status(400).json({ success: false, message: "Payment not completed" });
+        return
       }
-
-      if (duration < 1) {
-        res.status(400).json({ error: "Duration must be at least 1 hour" });
-        return;
+      const turfId = (await this.slotRepo.findById(slotId)).turfId
+      const slots = await this.slotService.validateAndGetSlots(slotId, duration);
+      const bookedSlots = await this.slotService.bookSlots(slots);
+      console.log("bookedSlots",bookedSlots);
+      const book = await this.bookingSlotUseCase.execute(userId,turfId,bookedSlots,duration,price,date);
+      if(!book){
+        res.status(400).json({ success: false, message: "Booking not completed" });
+        return
       }
-
-      // Handle multi-hour booking
-    const updatedSlots: any[] = [];
-    if (duration > 1) {
-        const { turfId, date, startTime } = initialSlot;
-        const startDateTime = parse(startTime, "HH:mm", new Date(date));
-        const slotsToUpdate: string[] = [slotId];
-
-        // Find consecutive slots
-        for (let i = 1; i < duration; i++) {
-            const nextTime = addHours(startDateTime, i);
-            const nextTimeStr = format(nextTime, "HH:mm");
-            const nextSlot = await this.slotRepo.findOne({ turfId, date, startTime: nextTimeStr });
-            console.log(`Checking slot ${nextTimeStr}:`, nextSlot);
-            if (!nextSlot || nextSlot.isBooked) {
-                res.status(400).json({ error: `Slot at ${nextTimeStr} is unavailable or already booked` });
-                return;
-        }
-        slotsToUpdate.push(nextSlot.id);
-        }
-
-        // Update all slots
-        for (const id of slotsToUpdate) {
-        const updatedSlot = await this.slotRepo.update(id, { isBooked });
-        console.log(`Updated slot ${id}:`, updatedSlot);
-        if (!updatedSlot) {
-            res.status(404).json({ error: `Failed to update slot ${id}` });
-            return;
-        }
-        updatedSlots.push(updatedSlot);
-        }
-    } else {
-        // Single slot update
-        const updatedSlot = await this.slotRepo.update(slotId, { isBooked });
-        console.log("Updated slot:", updatedSlot);
-        if (!updatedSlot) {
-        res.status(404).json({ error: "Slot not found" });
-        return;
-        }
-        updatedSlots.push(updatedSlot);
-    }
-
-    res.json(updatedSlots);
+      
+      res.json({ success: true, bookedSlots });
     } catch (error) {
         console.error("Slot update failed:", error);
         res.status(500).json({ error: "Failed to update slot" });

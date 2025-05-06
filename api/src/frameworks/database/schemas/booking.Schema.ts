@@ -1,34 +1,19 @@
 import { Schema } from "mongoose";
 import { IBookingModel } from "../models/booking.model";
 
-export const BookingSchema = new Schema<IBookingModel>({
-    userId:{
-        type:Schema.Types.ObjectId,ref:"Client"
-    },
-    turfId:{
-        type:Schema.Types.ObjectId,ref:"Turf"
-    },
-    date:{
-        type:String,required:true
-    },
-    startTime:{
-        type:String,
-        required:true
-    },
-    endTime:{
-        type:String,
-        required:true
-    },
-    totalHours:{
-        type:Number
-    },
+export const BookingSchema = new Schema<IBookingModel>(
+{
+    userId: { type: String, ref: "Client", required: true },
+    turfId: { type: String, ref: "Turf", required: true },
+    date: { type: String, required: true }, 
+    slotIds: { type: [Object], required: true }, 
+    duration: { type: Number, required: true },
+    price: { type: Number, required: true },
     status: {
-        type: String, 
-        enum: ['booked', 'cancelled'], 
-        default: 'booked' 
-    }
-
-
-
-})
-
+        type: String,
+        enum: ["Booked", "cancelled"],
+        default: "Booked",
+    },
+},
+{ timestamps: true }
+);

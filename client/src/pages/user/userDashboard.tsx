@@ -62,7 +62,7 @@ export default function TurfXDashboard() {
         <Header onMenuClick={toggleSidebar} />
         
         {/* Main Content Scrollable Area */}
-        <main className="flex-1 overflow-y-auto bg-black">
+        <main className="flex-1 overflow-y-auto ">
           {/* Hero Section */}
           <div className="relative h-80">
             <img 

@@ -45,7 +45,8 @@ const PaymentModal = ({
     <Dialog.Root open onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 border border-gray-700 rounded-lg p-6 w-full max-w-md text-white">
+        <Dialog.Content className="fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto text-white">
           <Dialog.Title className="text-xl font-semibold mb-4">
             Complete Your Booking
           </Dialog.Title>
@@ -94,6 +95,7 @@ const PaymentModal = ({
                   <PaymentWrapper
                     slotId={slot._id}
                     price={totalPrice}
+                    date={slot.date}
                     durarion={duration}
                     onSuccess={handlePaymentSuccess}
                   />
@@ -139,6 +141,7 @@ const PaymentModal = ({
               </Button>
             </>
           )}
+        </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

@@ -23,6 +23,10 @@ import { ISlotRepository } from "../../entities/repositoryInterface/turf/ISlotRe
 import { SlotRepository } from "../../interface/repositories/Turf/slot.repository";
 import { Server } from "../http/server";
 import { MongoConnect } from "../database/mongoDB/mongoConnect";
+import { ISlotService } from "../../entities/services/ISlotService";
+import { SlotService } from "../../interface/services/SlotServices";
+import { BookingRepository } from "../../interface/repositories/booking/booking.repository";
+import { IBookingRepository } from "../../entities/repositoryInterface/booking/IBookingRepository";
 
 
 export class RepositoryRegistry{
@@ -56,6 +60,14 @@ export class RepositoryRegistry{
         })
         container.register<ISlotRepository>("ISlotRepository",{
             useClass:SlotRepository
+        })
+
+        container.register<ISlotService>("ISlotService",{
+            useClass:SlotService
+        })
+
+        container.register<IBookingRepository>("IBookingRepository",{
+            useClass:BookingRepository
         })
 
 

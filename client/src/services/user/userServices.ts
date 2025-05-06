@@ -49,7 +49,25 @@ export const paymentService = async (slotId:string,price:number)=>{
     return response.data
 }
 
-export const slotUpdate = async (slotId: string, price: number,duration:number) => {
-    const response = await userAxiosInstance.patch(`/_us/user/slots/${slotId}`, { isBooked: true,price,duration})
+export const slotUpdate = async (date:string,slotId: string, price: number,duration:number,paymentIntentId:string) => {
+    const response = await userAxiosInstance.post(`/_us/user/slots`, { 
+        date,
+        isBooked: true,
+        slotId,
+        price,
+        duration,
+        paymentIntentId
+    })
     return response
 }
+
+// export const bookingRegister = async (slotId:string,price:number,duration:number,paymentIntentId:string)=>{
+//     const response = await userAxiosInstance.post(`/_us/user/registerSlot`,{
+//         slotId,
+//         price,
+//         duration,
+//         paymentIntentId
+//     })
+
+//     return response
+// }
