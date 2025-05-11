@@ -37,8 +37,8 @@ export default function TurfDetails() {
 
 
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number }>({
-    lat: turf.location.coordinates?.lat || 12.9716, // Default to Bangalore
-    lng: turf.location.coordinates?.lng || 77.5946
+    lat: turf?.location?.coordinates?.lat || 12.9716, // Default to Bangalore
+    lng: turf?.location?.coordinates?.lng || 77.5946
   });
   
   
@@ -46,9 +46,9 @@ export default function TurfDetails() {
   // Form data state
   const [formData, setFormData] = useState({
     name: turf.name || "",
-    address: turf.location.address || "",
-    city: turf.location.city || "",
-    state: turf.location.state || "",
+    address: turf?.location?.address || "",
+    city: turf?.location?.city || "",
+    state: turf?.location?.state || "",
     phone: turf.phone || "",
     email: turf.email || "",
     aminities: turf.aminities || ["Parking", "Changing Rooms", "Floodlights"],

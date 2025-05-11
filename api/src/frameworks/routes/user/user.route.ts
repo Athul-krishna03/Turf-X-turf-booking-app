@@ -1,7 +1,7 @@
 import { Response ,Request , RequestHandler} from "express";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interface/middlewares/authMiddleware";
 import { BaseRoute } from "../baseRoute";
-import { authController, blockStatusMiddleware, paymentController, slotController, turfController, userController } from "../../di/resolver";
+import { authController, blockStatusMiddleware, bookingController, paymentController, slotController, turfController, userController } from "../../di/resolver";
 
 
 
@@ -57,6 +57,7 @@ export class ClientRoutes extends BaseRoute{
             "/user/get-Turfs",
             verifyAuth,
             authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
             (req:Request,res:Response)=>{
                 turfController.getAllTurfs(req,res)
             }
@@ -65,6 +66,7 @@ export class ClientRoutes extends BaseRoute{
             "/user/slots",
             verifyAuth,
             authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
             (req:Request,res:Response)=>{
                 turfController.getSlots(req,res);
             }
@@ -73,6 +75,7 @@ export class ClientRoutes extends BaseRoute{
             "/user/payments/create-payment-intent",
             verifyAuth,
             authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
             (req:Request,res:Response)=>{
                 paymentController.createPaymentIntent(req,res);
             }
@@ -81,8 +84,18 @@ export class ClientRoutes extends BaseRoute{
             "/user/slots",
             verifyAuth,
             authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
             (req:Request,res:Response)=>{
                 slotController.updateSlot(req,res)
+            }
+        ),
+        this.router.get(
+            "/user/bookings",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                bookingController.getAllBooking(req,res);
             }
         )
         

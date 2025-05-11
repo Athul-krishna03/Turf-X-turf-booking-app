@@ -112,7 +112,9 @@ export default function TurfXDashboard() {
                   <div className="p-3">
                     <h3 className="font-medium text-sm">{turf.name}</h3>
                     <div className="flex items-center text-xs text-gray-400 mt-1">
-                      <span>{turf?.location.city}</span>
+                      {turf?.location.city &&
+                        <span>{turf?.location?.city}</span>
+                      }
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       {/* <div className="flex items-center">

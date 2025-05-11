@@ -10,6 +10,9 @@ export class TurfRepository implements ITurfRepository{
     async save(data: Partial<ITurfEntity>): Promise<ITurfEntity> {
         return await TurfModel.create(data)
     }
+    async getTurfByTurfId(turfId: string): Promise<ITurfEntity | null> {
+        return await TurfModel.findOne({ turfId });
+    }
     async findByEmail(email: string): Promise<ITurfEntity | null> {
         const client = await TurfModel.findOne({email}).lean();
         console.log("turf client inside findby email",client)

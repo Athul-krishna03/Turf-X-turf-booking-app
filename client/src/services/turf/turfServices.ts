@@ -33,3 +33,8 @@ export const fetchSlots = async (turfId: string, date: string) => {
     const response = await turfAxiosInstance.get(`/_ts/turf/slots?turfId=${turfId}&date=${date}`);
     return response.data;
 };
+
+export const updateSlotStatus = async(id:string)=>{
+    const response = await turfAxiosInstance.patch(`/_ts/turf/updateSlot?id=${id}`)
+    return response
+}

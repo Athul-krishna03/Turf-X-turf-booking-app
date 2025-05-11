@@ -1,5 +1,5 @@
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interface/middlewares/authMiddleware"
-import { authController, blockStatusMiddleware, turfController } from "../../di/resolver"
+import { authController, blockStatusMiddleware, slotController, turfController } from "../../di/resolver"
 import { BaseRoute } from "../baseRoute"
 import { Request,RequestHandler,Response } from "express"
 
@@ -64,7 +64,16 @@ export class TurfRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 turfController.getSlots(req,res);
             }
+        ),
+        this.router.patch(
+            "/turf/updateSlot",
+            verifyAuth,
+            authorizeRole(["turf"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                slotController.updateSlotStatus(req,res);
+            }
         )
     }
 
-}
+} 

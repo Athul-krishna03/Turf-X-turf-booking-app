@@ -30,7 +30,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
           Find Turf
         </a>
-        <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
+        <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors" onClick={()=>navigate("/user/bookings")}>
           My Bookings
         </a>
         <button className="relative p-2 text-gray-400 hover:text-white transition-colors">

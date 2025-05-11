@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import {  paymentService, slotUpdate } from "../../services/user/userServices";
+import { toast } from "sonner";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
@@ -11,15 +12,17 @@ interface PaymentFormProps {
   price: number;
   durarion:number;
   onSuccess: () => void;
+  onError?: () => void;
 }
 
-const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
+const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId:string}> = ({
   date,
   slotId,
   price,
   durarion,
   onSuccess,
   clientSecret,
+  slotLockId
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -58,13 +61,14 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
       }
 
       if (result.paymentIntent?.status === "succeeded") {
-        await slotUpdate(date,slotId,price,durarion,result.paymentIntent.id)
+        await slotUpdate(date,slotId,price,durarion,result.paymentIntent.id,slotLockId)
         setProcessing(false);
         onSuccess();
       }
-    } catch (error) {
-      setError("An error occurred during payment");
+    } catch (error:any) {
+      setError(error.message ||"An error occurred during payment");
       setProcessing(false);
+      toast.error(error.message);
       console.error("Payment error:", error);
     }
   };
@@ -99,21 +103,32 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string }> = ({
   );
 };
 
-export default function PaymentWrapper({date, slotId, price,durarion, onSuccess }: PaymentFormProps) {
+export default function PaymentWrapper({date, slotId, price,durarion, onSuccess,onError }: PaymentFormProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [slotLockId, setSlotLockId] = useState<string>("");
+
+  const hasFetched = useRef(false); 
 
   useEffect(() => {
     const fetchClientSecret = async () => {
+      if (hasFetched.current) return; 
+      hasFetched.current = true;
+
       try {
         const response = await paymentService(slotId, price);
-        setClientSecret(response.clientSecret);
+        console.log("payment service res",response);
+        setClientSecret(response.data.clientSecret);
+        setSlotLockId(response.data.lockId);
       } catch (error) {
+        toast.error( "slot unavailable");
+        if(onError) onError()
         console.error("Failed to fetch client secret", error);
       }
     };
 
     fetchClientSecret();
   }, [slotId, price]);
+
 
   const options = clientSecret
     ? {
@@ -150,7 +165,9 @@ export default function PaymentWrapper({date, slotId, price,durarion, onSuccess 
           date={date}
           durarion={durarion}
           onSuccess={onSuccess}
-          clientSecret={clientSecret}/>
+          clientSecret={clientSecret}
+          slotLockId={slotLockId}
+          />
       </Elements>
     )
   );

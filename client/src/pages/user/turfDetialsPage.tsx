@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   MapPin, Star, Clock, Users, Droplets, ShowerHead, Utensils, Wifi, Car, ChevronLeft,
-  Heart, Calendar, CheckCircle2, Phone, Mail,Shield
+  Heart, Calendar, CheckCircle2, Mail,Shield
 } from "lucide-react";
 import { Calendar as CalendarComponent } from "../../components/ui/calendar";
 import { Button } from "../../components/ui/button";

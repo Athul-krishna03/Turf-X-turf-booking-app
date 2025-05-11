@@ -27,6 +27,10 @@ import { ISlotService } from "../../entities/services/ISlotService";
 import { SlotService } from "../../interface/services/SlotServices";
 import { BookingRepository } from "../../interface/repositories/booking/booking.repository";
 import { IBookingRepository } from "../../entities/repositoryInterface/booking/IBookingRepository";
+import { IPaymentService } from "../../entities/services/IPaymentService";
+import { PaymentService } from "../../interface/services/PaymentService";
+import { IPaymentGateway } from "../../entities/services/IPaymentGateway";
+import { StripePaymentGateway } from "../../interface/services/StripePaymentService";
 
 
 export class RepositoryRegistry{
@@ -66,6 +70,13 @@ export class RepositoryRegistry{
             useClass:SlotService
         })
 
+        container.register<IPaymentService>("IPaymentService",{
+            useClass:PaymentService
+        })
+        
+        container.register<IPaymentGateway>("IPaymentGateway",{
+            useClass:StripePaymentGateway
+        })
         container.register<IBookingRepository>("IBookingRepository",{
             useClass:BookingRepository
         })

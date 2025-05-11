@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import { generateSlots } from '../../../services/turf/turfServices';
 
 interface SlotFormProps {
-  setSlots: React.Dispatch<React.SetStateAction<any[]>>;
   selectedDate: string;
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SlotForm: React.FC<SlotFormProps> = ({ setSlots, selectedDate, setSelectedDate }) => {
+const SlotForm: React.FC<SlotFormProps> = ({ selectedDate, setSelectedDate }) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [duration, setDuration] = useState<number>(60); // Default 60 minutes
+  const [duration, setDuration] = useState<number>(60);
   const [price, setPrice] = useState<number>(0);
 
-  const turf = useSelector((state: any) => state?.turf.turf);
+  const turf = useSelector((state: any) => state?.turf?.turf);
+  const queryClient = useQueryClient();
 
   const handleGenerateSlots = async () => {
     try {
-      const response = await generateSlots(
+      await generateSlots(
         turf.turfId,
         selectedDate,
         startTime,
@@ -26,8 +27,11 @@ const SlotForm: React.FC<SlotFormProps> = ({ setSlots, selectedDate, setSelected
         duration,
         price
       );
-      console.log(response);
-      setSlots(response.slots); // Set the slots to parent component
+
+      // ✅ Refetch slots after successful generation
+      queryClient.invalidateQueries({
+        queryKey: ['slots', turf.turfId, selectedDate],
+      });
     } catch (error) {
       console.error('Error generating slots:', error);
       alert('Failed to generate slots. Please try again.');

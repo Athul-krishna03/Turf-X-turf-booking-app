@@ -3,7 +3,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
 import { cn } from "../../lib/utils";
-import "./calender.css"; // create this CSS file for custom styling
+import "./calender.css"; 
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 

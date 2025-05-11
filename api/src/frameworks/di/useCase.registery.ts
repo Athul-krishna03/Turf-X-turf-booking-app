@@ -59,6 +59,10 @@ import { IDeleteExpiredSlotsUseCase } from "../../entities/useCaseInterfaces/IDe
 import { DeleteExpiredSlotsUseCase } from "../../usecase/DeleteExpiredSlotsUseCase";
 import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
 import { BookingSlotUseCase } from "../../usecase/BookingSlotUseCase";
+import { IGetUserBookingDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetUserBookingDetialsUseCase";
+import { GetUserBookingDetialsUseCase } from "../../usecase/getBookingDetialsUseCase";
+import { IUpdateSlotStatusUseCase } from "../../entities/useCaseInterfaces/IUpdateSlotStatusUseCase";
+import { UpdateSlotStatusUseCase } from "../../usecase/UpdateSlotStatusUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -158,6 +162,14 @@ export class UseCaseRegistery {
 
     container.register<IBookingSlotUseCase>("IBookingSlotUseCase",{
       useClass:BookingSlotUseCase
+    })
+
+    container.register<IGetUserBookingDetialsUseCase>("IGetUserBookingDetialsUseCase",{
+      useClass:GetUserBookingDetialsUseCase
+    })
+
+    container.register<IUpdateSlotStatusUseCase>("IUpdateSlotStatusUseCase",{
+      useClass:UpdateSlotStatusUseCase
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {

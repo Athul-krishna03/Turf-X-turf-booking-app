@@ -2,17 +2,17 @@ import { inject, injectable } from "tsyringe";
 import { IBookingEntity } from "../entities/models/booking.entity";
 import { IBookingRepository } from "../entities/repositoryInterface/booking/IBookingRepository";
 import { IBookingSlotUseCase } from "../entities/useCaseInterfaces/IBookingSlotUseCase";
+import { ISlotEntity } from "../entities/models/slot.entity";
 
 @injectable()
 export class BookingSlotUseCase implements IBookingSlotUseCase {
 constructor(
     @inject("IBookingRepository") private bookingRepo: IBookingRepository
 ) {}
-
 async execute(
     userId: string,
     turfId: string,
-    slotIds: Object[],
+    slotIds: ISlotEntity[],
     duration: number,
     price: number,
     date: string,

@@ -100,3 +100,17 @@ export interface Turf{
       role:"user" | "admin" | "turf"
     }
   }
+
+  export interface Booking {
+    id: string;
+    turfName: string;
+    turfImage?: string;
+    location: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    status: string;
+    [key: string]: any;
+  }
+  
+  

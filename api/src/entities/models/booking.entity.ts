@@ -1,12 +1,32 @@
+import { ISlotEntity } from "./slot.entity";
 
 export interface IBookingEntity {
     id: string;
     userId: string;
     turfId: string;
-    slotIds: Object[]; 
+    slotIds: ISlotEntity[]; 
     duration: number;
     price: number;
     date: string;
     status:string;
     createdAt: Date;
 }
+
+export interface BookingDTO {
+    id: string
+    turfId: string
+    turfName: string
+    turfImage: string[]
+    location:{
+        city:string | undefined,
+        state:string | undefined
+    }
+    date: string
+    startTime: string
+    duration: number
+    price: number
+    currency: string
+    status: string
+    sport: string
+}
+

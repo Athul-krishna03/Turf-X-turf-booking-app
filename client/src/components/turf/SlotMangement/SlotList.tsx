@@ -1,6 +1,7 @@
 // SlotList.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import { updateSlotStatus } from '../../../services/turf/turfServices';
 
 export interface Slot {
   _id?: string;
@@ -12,47 +13,43 @@ export interface Slot {
 
 interface SlotListProps {
   slots: Slot[];
-  setSlots: React.Dispatch<React.SetStateAction<Slot[]>>;
+  refetchSlots: () => void;
 }
 
-const SlotList: React.FC<SlotListProps> = ({ slots, setSlots }) => {
+const SlotList: React.FC<SlotListProps> = ({ slots, refetchSlots }) => {
   const [manualTime, setManualTime] = useState('');
 
   const toggleBlock = async (slot: Slot) => {
     try {
-      const response = await axios.patch(`/api/slots/${slot._id}/toggle-block`);
-      const updatedSlot = response.data.updatedSlot;
-
-      setSlots((prevSlots) =>
-        prevSlots.map((s) => (s._id === updatedSlot._id ? updatedSlot : s))
-      );
+      await updateSlotStatus(slot._id!);
+      await refetchSlots(); // trigger re-fetch
     } catch (error) {
       console.error('Error toggling block:', error);
       alert('Failed to update slot.');
     }
   };
 
-  const addManualSlot = async () => {
-    if (!manualTime) return alert('Please enter a time.');
+  // const addManualSlot = async () => {
+  //   if (!manualTime) return alert('Please enter a time.');
 
-    try {
-      const response = await axios.post('/api/slots/manual-add', {
-        time: manualTime,
-      });
+  //   try {
+  //     const response = await axios.post('/api/slots/manual-add', {
+  //       time: manualTime,
+  //     });
 
-      setSlots((prevSlots) => [...prevSlots, response.data.newSlot]);
-      setManualTime('');
-    } catch (error) {
-      console.error('Error adding slot manually:', error);
-      alert('Failed to add slot.');
-    }
-  };
+  //     setSlots((prevSlots) => [...prevSlots, response.data.newSlot]);
+  //     setManualTime('');
+  //   } catch (error) {
+  //     console.error('Error adding slot manually:', error);
+  //     alert('Failed to add slot.');
+  //   }
+  // };
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
   <h2 className="text-xl font-semibold text-[#31304D] mb-4">Manage Slots</h2>
 
-  <div className="flex flex-col md:flex-row gap-4 mb-6">
+  {/* <div className="flex flex-col md:flex-row gap-4 mb-6">
     <input
       type="time"
       value={manualTime}
@@ -66,7 +63,7 @@ const SlotList: React.FC<SlotListProps> = ({ slots, setSlots }) => {
     >
       Add Slot
     </button>
-  </div>
+  </div> */}
 
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {slots.map((slot) => (
@@ -86,21 +83,25 @@ const SlotList: React.FC<SlotListProps> = ({ slots, setSlots }) => {
                 slot.isBooked ? 'bg-red-500' : 'bg-green-500'
               }`}
             >
-              {slot.isBooked ? 'Blocked' : 'Available'}
+              {slot.isBooked ? 'Booked' : slot.isBooked ? 'Blocked' : 'Available'}
+
             </span>
           </div>
         </div>
 
-        <button
-          onClick={() => toggleBlock(slot)}
-          className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
-            slot.isBooked
-              ? 'bg-green-500 hover:bg-green-600'
-              : 'bg-red-500 hover:bg-red-600'
-          } text-white`}
-        >
-          {slot.isBooked ? 'Unblock' : 'Block'}
-        </button>
+        {!slot.isBooked && (
+          <button
+            onClick={() => toggleBlock(slot)}
+            className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
+              slot.isBooked
+                ? 'bg-green-500 hover:bg-green-600'
+                : 'bg-red-500 hover:bg-red-600'
+            } text-white`}
+          >
+            {slot.isBooked ? 'Unblock' : 'Block'}
+          </button>
+        )}
+
       </div>
     ))}
   </div>
@@ -110,3 +111,5 @@ const SlotList: React.FC<SlotListProps> = ({ slots, setSlots }) => {
 };
 
 export default SlotList;
+
+

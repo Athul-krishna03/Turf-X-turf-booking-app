@@ -14,7 +14,7 @@ export class SlotService implements ISlotService{
 
   async validateAndGetSlots(slotId: string, duration: number):Promise<ISlotEntity[]> {
     const initialSlot = await this.slotRepo.findById(slotId);
-    if (!initialSlot) throw new Error("Slot not found");
+    if (!initialSlot || initialSlot.isBooked) throw new Error("Slot not found");
 
     if (duration < 1) throw new Error("Duration must be at least 1 hour");
 
