@@ -12,7 +12,7 @@ export const config = {
         NODE_ENV:process.env.NODE_ENV || "development"
     },
     database:{
-        URI:"mongodb+srv://athulkrishna01112003:AKGkAIn1XskaMMI0@cluster0.idzbn.mongodb.net/Turf-X"
+        URI:process.env.MONGODB_URI!
     },
     jwt:{
         ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "access-secret-key",
