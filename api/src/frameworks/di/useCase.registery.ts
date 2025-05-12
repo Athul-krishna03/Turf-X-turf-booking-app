@@ -54,15 +54,16 @@ import { IUpdateTurfPassWordUseCase } from "../../entities/useCaseInterfaces/tur
 import { UpdateTurfPassWordUseCase } from "../../usecase/turf/UpdateTurfPasswordUseCase";
 import { IGetSlotUseCase } from "../../entities/useCaseInterfaces/turf/IGetSlotUseCase";
 import { GetSlotUseCase } from "../../usecase/turf/GetSlotsUseCase";
-import { CronController } from "../../interface/controllers/cronControllers";
 import { IDeleteExpiredSlotsUseCase } from "../../entities/useCaseInterfaces/IDeleteExpiredSlotsUseCase";
-import { DeleteExpiredSlotsUseCase } from "../../usecase/DeleteExpiredSlotsUseCase";
+import { DeleteExpiredSlotsUseCase } from "../../usecase/slot/DeleteExpiredSlotsUseCase";
 import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
-import { BookingSlotUseCase } from "../../usecase/BookingSlotUseCase";
+import { BookingSlotUseCase } from "../../usecase/slot/BookingSlotUseCase";
 import { IGetUserBookingDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetUserBookingDetialsUseCase";
 import { GetUserBookingDetialsUseCase } from "../../usecase/getBookingDetialsUseCase";
 import { IUpdateSlotStatusUseCase } from "../../entities/useCaseInterfaces/IUpdateSlotStatusUseCase";
-import { UpdateSlotStatusUseCase } from "../../usecase/UpdateSlotStatusUseCase";
+import { UpdateSlotStatusUseCase } from "../../usecase/slot/UpdateSlotStatusUseCase";
+import { IGetSlotDataUseCase } from "../../entities/useCaseInterfaces/slot/IGetSlotDataUseCase";
+import { GetSlotDataUseCase } from "../../usecase/slot/GetSlotUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -170,6 +171,10 @@ export class UseCaseRegistery {
 
     container.register<IUpdateSlotStatusUseCase>("IUpdateSlotStatusUseCase",{
       useClass:UpdateSlotStatusUseCase
+    })
+
+    container.register<IGetSlotDataUseCase>("IGetSlotDataUseCase",{
+      useClass:GetSlotDataUseCase
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {

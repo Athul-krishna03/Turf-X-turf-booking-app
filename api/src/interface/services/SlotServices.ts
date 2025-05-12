@@ -13,6 +13,8 @@ export class SlotService implements ISlotService{
 ) {}
 
   async validateAndGetSlots(slotId: string, duration: number):Promise<ISlotEntity[]> {
+    console.log("duration ",duration);
+    
     const initialSlot = await this.slotRepo.findById(slotId);
     if (!initialSlot || initialSlot.isBooked) throw new Error("Slot not found");
 

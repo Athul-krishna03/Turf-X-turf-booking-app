@@ -7,10 +7,7 @@ import { UserRoutes } from "./routes/ClientRoutes";
 import { AdminRoutes } from "./routes/AdminRoutes";
 import TurfRegistrationForm from "./pages/Turf/TurfRegistration";
 import TurfLoginPage from "./pages/Turf/TurfLogin";
-import TurfDashboard from "./pages/Turf/TurfDashboard";
 import { TurfRoutes } from "./routes/TurfRoutes";
-import SlotManager from "./components/turf/SlotMangement/SlotManagement";
-import TurfDetails from "./components/turf/turfDetials";
 
 export default function App() {
   return (

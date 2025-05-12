@@ -43,6 +43,7 @@ export class SlotRepository implements ISlotRepository{
 
     async findById(id: string): Promise<ISlotEntity> {
         const slot = await SlotModlel.findById({_id:id});
+        
         return slot as ISlotEntity
     }
     async update(id: string, updates: object): Promise<ISlotEntity> {

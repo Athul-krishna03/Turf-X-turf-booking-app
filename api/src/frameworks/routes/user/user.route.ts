@@ -97,6 +97,15 @@ export class ClientRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 bookingController.getAllBooking(req,res);
             }
+        ),
+        this.router.get(
+            "/user/getSlot",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                slotController.getSlot(req,res);
+            }
         )
         
     }

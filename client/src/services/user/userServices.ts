@@ -49,7 +49,15 @@ export const paymentService = async (slotId:string,price:number)=>{
     return response
 }
 
-export const slotUpdate = async (date: string, slotId: string, price: number, duration: number, paymentIntentId: string, slotLockId: string) => {
+export const slotUpdate = async (
+    date: string, 
+    slotId: string, 
+    price: number, 
+    duration: number, 
+    paymentIntentId: string, 
+    slotLockId: string,
+    paymentType:string
+) => {
     const response = await userAxiosInstance.post(`/_us/user/slots`, { 
         date,
         isBooked: true,
@@ -57,7 +65,8 @@ export const slotUpdate = async (date: string, slotId: string, price: number, du
         price,
         duration,
         slotLockId,
-        paymentIntentId
+        paymentIntentId,
+        paymentType
     })
     return response
 }
@@ -78,4 +87,11 @@ export const getAllBookings = async ()=>{
     console.log("booking data",response);
     
     return response.data.data
+}
+
+export const getSlotData = async (slotId:string)=>{
+    const response = await userAxiosInstance.get(`/_us/user/getSlot?slotId=${slotId}`)
+    console.log(response);
+    
+    return response.data.slotData
 }

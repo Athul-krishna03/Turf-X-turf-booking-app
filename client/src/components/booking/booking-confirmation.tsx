@@ -4,6 +4,8 @@ import { Clock, Calendar, CreditCard} from "lucide-react";
 import { Slot } from "../../types/SlotsType";
 import { Button } from "../ui/button";
 import { PaymentModal } from "./payment-modal";
+import { cn } from "../../lib/utils";
+import { useNavigate } from "react-router-dom";
 
 
 type BookingConfirmationProps = {
@@ -28,9 +30,16 @@ export default function BookingConfirmation({
 }: BookingConfirmationProps) {
   const totalPrice = Number(slot.price) * duration;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOption,setSelectedOption] = useState<"book" | "host">("book");
+  const navigate = useNavigate()
 
   const handleConfirmClick = () => {
-    setIsModalOpen(true);
+    if(selectedOption == "book"){
+        setIsModalOpen(true);
+    }else{
+      navigate(`/user/hostGame/${slot._id}`)
+    }
+    
   };
 
   const handlePaymentSuccess = () => {
@@ -103,6 +112,39 @@ export default function BookingConfirmation({
         </div>
       </div>
 
+      <div className="bg-gray-800/70 p-5 rounded-lg border border-gray-700 space-y-4">
+      <div className="flex space-x-14">
+        <button
+          type="button"
+          onClick={() => setSelectedOption("book")}
+          className={cn(
+            "px-4 py-2 rounded border transition-all",
+            selectedOption === "book"
+              ? "bg-green-500 text-white border-green-600"
+              : "bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600"
+          )}
+        >
+          Book the slot
+        </button>
+        <button
+          type="button"
+          onClick={() => setSelectedOption("host")}
+          className={cn(
+            "px-4 py-2 rounded border transition-all",
+            selectedOption === "host"
+              ? "bg-green-500 text-white border-green-600"
+              : "bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600"
+          )}
+        >
+        Host a Game
+        </button>
+      </div>
+
+      <p className="text-sm text-gray-400">
+        Selected: <strong>{selectedOption === "book" ? "Book the whole slot" : "Host a game"}</strong>
+      </p>
+    </div>
+
       <div className="flex gap-3 pt-2">
         <Button
           variant="outline"
@@ -128,6 +170,7 @@ export default function BookingConfirmation({
           totalPrice={totalPrice}
           onClose={() => setIsModalOpen(false)}
           onPaymentSuccess={handlePaymentSuccess}
+          paymentType="single"
         />
       )}
     </div>

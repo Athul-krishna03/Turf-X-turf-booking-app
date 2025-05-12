@@ -4,6 +4,7 @@ import TurfXDashboard from "../pages/user/userDashboard";
 import Profile from "../pages/user/Profile";
 import TurfDetailsPage from "../pages/user/turfDetialsPage";
 import BookingsPage from "../pages/user/bookingPage";
+import HostGamePage from "../pages/user/hostGame";
 
 
 export function UserRoutes(){
@@ -25,6 +26,11 @@ export function UserRoutes(){
             path="/user/bookings"
             element={<ProtectedRoutes allowedRoles={['user']} element={<BookingsPage/>}/>}
             />
+            <Route
+            path="/user/hostGame/:slotId"
+            element={<ProtectedRoutes allowedRoles={['user']} element={<HostGamePage/>}/>}
+            />
+
 
         </Routes>
     )

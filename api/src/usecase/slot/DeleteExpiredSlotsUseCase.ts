@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { ISlotRepository } from "../entities/repositoryInterface/turf/ISlotRepository";
-import { ISlotEntity } from "../entities/models/slot.entity";
+import { ISlotRepository } from "../../entities/repositoryInterface/turf/ISlotRepository";
+import { ISlotEntity } from "../../entities/models/slot.entity";
 import {parse,addHours,isBefore, addMinutes} from 'date-fns'
-import { IDeleteExpiredSlotsUseCase } from "../entities/useCaseInterfaces/IDeleteExpiredSlotsUseCase";
+import { IDeleteExpiredSlotsUseCase } from "../../entities/useCaseInterfaces/IDeleteExpiredSlotsUseCase";
 
 @injectable()
 export class DeleteExpiredSlotsUseCase implements IDeleteExpiredSlotsUseCase {
