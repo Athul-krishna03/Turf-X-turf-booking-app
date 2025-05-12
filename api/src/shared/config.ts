@@ -31,5 +31,5 @@ export const config = {
     },
     loggerStatus: process.env.LOGGER_STATUS || "dev",
     bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10),
-    stripe:process.env.STRIPE_SECRET_KEY || "sk_test_51RL3r9Fb6TgLnDsPaaVj2Mek9tixRy5v3RUDuMhfW1Qz51EPHq01RFkyIqV7nghoVsIIhNHQ40cKkImpvmYIy0AQ00b0t5RgNv"
+    stripe:process.env.STRIPE_SECRET_KEY
 }
