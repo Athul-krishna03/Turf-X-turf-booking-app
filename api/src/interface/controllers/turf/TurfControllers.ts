@@ -13,6 +13,7 @@ import { ITurfEntity } from "../../../entities/models/turf.entity";
 import { IUpdateTurfProfileUseCase } from "../../../entities/useCaseInterfaces/turf/IUpdateTurfProfileUseCase";
 import { IUpdateTurfPassWordUseCase } from "../../../entities/useCaseInterfaces/turf/IUpdateTurfPasswordUseCase";
 import { IGetSlotUseCase } from "../../../entities/useCaseInterfaces/turf/IGetSlotUseCase";
+import { IGetAllHostedGamesUseCase } from "../../../entities/useCaseInterfaces/turf/IGetAllHostedGamesUseCase";
 
 @injectable()
 export class TurfControllers implements ITurfControllers{
@@ -32,7 +33,9 @@ export class TurfControllers implements ITurfControllers{
         @inject("IUpdateTurfPassWordUseCase")
         private updateTurfPassWordUseCase:IUpdateTurfPassWordUseCase,
         @inject("IGetSlotsUseCase")
-        private fetchSlots:IGetSlotUseCase
+        private fetchSlots:IGetSlotUseCase,
+        @inject("IGetAllHostedGamesUseCase")
+        private getAllHostedGamesUseCase:IGetAllHostedGamesUseCase
     ){}
     async getAllTurfs(req: Request, res: Response): Promise<void> {
         try {
@@ -123,15 +126,17 @@ export class TurfControllers implements ITurfControllers{
             try {
                 console.log("genrate body",req.body);
                 
-                const {turfId,date,startTime,endTime,slotDuration,price}=req.body;
+                const {turfId,date,startTime,endTime,slotDuration,price,selectedDate,endDate}=req.body;
                 
                 const slots = await this.generateSlot.execute(
                     turfId,
                     date,
+                    selectedDate,
+                    endDate,
                     startTime,
                     endTime,
                     slotDuration,
-                    price
+                    price,
                 )
                 res.status(201).json({ message: "Slots generated successfully", slots });
 
@@ -227,13 +232,21 @@ export class TurfControllers implements ITurfControllers{
             }
         }
 
-        //GET SINGLE TURF DETIALS
-        async getTurfDetials(req: Request, res: Response): Promise<void> {
-            try {
-                // const {turfId} = req.query as {turfId:string};
-                // const turfData = await this.getTurf(turfId);
-            } catch (error) {
-                
+        async getAllHostedGames(req: Request, res: Response): Promise<void> {
+            const userId = (req as CustomRequest).user.id
+            const games=await this.getAllHostedGamesUseCase.execute(userId);
+            if(!games){
+                res.status(HTTP_STATUS.NOT_FOUND).json({
+                    success:false,
+                    message:"failed to fetch the data"
+                })
+                return 
             }
+
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                message:SUCCESS_MESSAGES.DATA_RETRIEVED,
+                games
+            })
         }
 }

@@ -27,8 +27,8 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
-          Find Turf
+        <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors" onClick={()=>navigate("/user/hostedGames")}>
+          Games
         </a>
         <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors" onClick={()=>navigate("/user/bookings")}>
           My Bookings

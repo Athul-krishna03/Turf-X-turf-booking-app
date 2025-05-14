@@ -14,6 +14,7 @@ const HostGamePage: React.FC = () => {
   const [paymentMode, setPaymentMode] = useState<"full" | "host">("full")
   const [playerCount, setPlayerCount] = useState<number>(2)
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sharedModal,setSharedModalOpen]= useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -32,6 +33,8 @@ const HostGamePage: React.FC = () => {
   const handleSumbit = async ()=>{
     if(paymentMode=="full"){
       setIsModalOpen(true)
+    }else{
+      setSharedModalOpen(true)
     }
   }
   const handlePaymentSuccess = () => {
@@ -145,7 +148,7 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
           <li>Players can join using an invite link until the slot is full.</li>
           <li>If the slot isn’t filled, the host is not charged.</li>
         </ul>
-      </div>
+      </div> 
 
       {/* Action Button */}
       <div className="text-center">
@@ -159,13 +162,28 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
               date={new Date(slot.date)}
               slot={slot}
               duration={slot?.duration/60}
-              currency={"inr"}
+              currency={"₹"}
               totalPrice={Number(slot.price)}
               onClose={() => setIsModalOpen(false)}
               onPaymentSuccess={handlePaymentSuccess}
               paymentType="full"
             />
     )}
+    {
+      sharedModal &&  (
+        <PaymentModal
+        date={new Date(slot.date)}
+        slot={slot}
+        duration={slot?.duration/60}
+        currency={"₹"}
+        totalPrice={perPlayerPrice}
+        onClose={() => setSharedModalOpen(false)}
+        onPaymentSuccess={handlePaymentSuccess}
+        paymentType="shared"
+        playerCount={playerCount}
+        />
+      )
+    }
     </div>
   )
 }

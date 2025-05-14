@@ -4,9 +4,13 @@ export const SharedBookingSchema = new Schema({
   userIds: { type: [String], ref: "Client", required: true },
   turfId: { type: String, ref: "Turf", required: true },
   date: { type: String, required: true },
-  slotIds: [{ type: Schema.Types.ObjectId, ref: "Slot", required: true }],
+  time:{type:String,required:true},
   duration: { type: Number, required: true },
   price: { type: Number, required: true },
+  playerCount:{
+    type:Number,
+    required: true
+  },
 
   walletContributions: {
     type: Map,

@@ -12,7 +12,7 @@ export interface ITurfEntity{
     isBlocked: Boolean;
     status:string;
     aminities?:string[];
-    turfPhotos?:string[];
+    turfPhotos:string[];
     courtSize:string;
     location?: {
         address: string;

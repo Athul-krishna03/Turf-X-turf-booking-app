@@ -20,6 +20,29 @@ export  const generateSlots = async(turfId: string, date: string, startTime: str
     return response.data
 }
 
+export const generateSlotsDateRange = async(
+    turfId:string,
+    selectedDate:string, // start date
+    endDate:string, // end date
+    startTime:string,
+    endTime:string,
+    slotDuration:number,
+    price:number,
+)=>{
+    const response = await turfAxiosInstance.post('/_ts/turf/generateSlots',
+        {
+            turfId,
+            selectedDate,
+            endDate,
+            startTime,
+            endTime,
+            slotDuration,
+            price
+        }
+    );
+    return response.data
+}
+
 export const changeTurfPassword = async (data: ChangePasswordData) => {
     const response = await turfAxiosInstance.patch(
     "/_ts/turf/change-password",

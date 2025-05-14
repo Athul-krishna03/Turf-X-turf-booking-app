@@ -15,7 +15,8 @@ export const PaymentModal = ({
   totalPrice,
   onClose,
   onPaymentSuccess,
-  paymentType
+  paymentType,
+  playerCount
 }: {
   date: Date;
   slot: Slot;
@@ -24,7 +25,8 @@ export const PaymentModal = ({
   totalPrice: number;
   onClose: () => void;
   onPaymentSuccess: () => void;
-  paymentType:"single" | "full" | "shared"
+  paymentType:"single" | "full" | "shared";
+  playerCount?:number
 }) => {
   const [paymentStatus, setPaymentStatus] = useState<"pending" | "success">("pending");
 
@@ -92,6 +94,7 @@ export const PaymentModal = ({
                     onSuccess={handlePaymentSuccess}
                     onError={onClose}
                     paymentType={paymentType}
+                    playerCount={playerCount}
                   />
                 </div>
               </div>

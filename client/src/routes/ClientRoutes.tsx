@@ -5,6 +5,7 @@ import Profile from "../pages/user/Profile";
 import TurfDetailsPage from "../pages/user/turfDetialsPage";
 import BookingsPage from "../pages/user/bookingPage";
 import HostGamePage from "../pages/user/hostGame";
+import HostedGamesPage from "../pages/user/hosted-game";
 
 
 export function UserRoutes(){
@@ -30,6 +31,9 @@ export function UserRoutes(){
             path="/user/hostGame/:slotId"
             element={<ProtectedRoutes allowedRoles={['user']} element={<HostGamePage/>}/>}
             />
+            <Route
+            path="/user/hostedGames"
+            element={<ProtectedRoutes allowedRoles={['user']} element={<HostedGamesPage/>}/>}/>
 
 
         </Routes>

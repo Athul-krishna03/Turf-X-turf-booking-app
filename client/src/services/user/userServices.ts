@@ -56,7 +56,8 @@ export const slotUpdate = async (
     duration: number, 
     paymentIntentId: string, 
     slotLockId: string,
-    paymentType:string
+    paymentType:string,
+    playerCount?:number
 ) => {
     const response = await userAxiosInstance.post(`/_us/user/slots`, { 
         date,
@@ -66,7 +67,8 @@ export const slotUpdate = async (
         duration,
         slotLockId,
         paymentIntentId,
-        paymentType
+        paymentType,
+        playerCount
     })
     return response
 }
@@ -94,4 +96,11 @@ export const getSlotData = async (slotId:string)=>{
     console.log(response);
     
     return response.data.slotData
+}
+
+export const fetchHostedGames = async () => {
+  const response = await userAxiosInstance.get("/_us/user/hosted-games")
+  console.log(response);
+  
+  return response.data.games
 }

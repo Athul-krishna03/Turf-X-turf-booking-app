@@ -6,7 +6,7 @@ export const BookingSchema = new Schema<IBookingModel>(
     userId: { type: String, ref: "Client", required: true },
     turfId: { type: String, ref: "Turf", required: true },
     date: { type: String, required: true }, 
-    slotIds: { type: [Object], required: true }, 
+    time: { type: String, required: true }, 
     duration: { type: Number, required: true },
     price: { type: Number, required: true },
     status: {

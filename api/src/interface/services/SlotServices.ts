@@ -11,7 +11,11 @@ export class SlotService implements ISlotService{
   constructor(
     @inject("ISlotRepository") private slotRepo: ISlotRepository
 ) {}
+  
 
+  async findBySlotId(slotId:string):Promise<ISlotEntity>{
+    return await this.slotRepo.findById(slotId);
+  }
   async validateAndGetSlots(slotId: string, duration: number):Promise<ISlotEntity[]> {
     console.log("duration ",duration);
     

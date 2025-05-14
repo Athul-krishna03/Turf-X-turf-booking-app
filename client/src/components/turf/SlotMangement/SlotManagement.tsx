@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchSlots } from '../../../services/turf/turfServices';
 import SlotForm from './SlotForm';
 import SlotList from './SlotList';
@@ -10,7 +10,6 @@ import TurfSideBar from '../turfSideBar';
 const SlotManager: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const turf = useSelector((state: any) => state?.turf?.turf);
-  const queryClient = useQueryClient();
 
   const { data: slots, isLoading, refetch } = useQuery({
     queryKey: ['slots', turf?.turfId, selectedDate],

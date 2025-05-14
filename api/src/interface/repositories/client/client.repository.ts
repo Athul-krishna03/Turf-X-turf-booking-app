@@ -3,7 +3,7 @@ import { IClientEntity } from "../../../entities/models/client.entity";
 import { ClientModel } from "../../../frameworks/database/models/client.model";
 import { IClientRepository } from "../../../entities/repositoryInterface/client/IClient-repository.interface";
 import { userSignupSchemas } from "../../controllers/validations/user-signup.validation.schema";
-import { ClientProfileResponse } from "../../../shared/dtos/user.dto";
+import { ClientProfileResponse } from "../../../shared/responseTypes/clientProfileResponse";
 
 
 

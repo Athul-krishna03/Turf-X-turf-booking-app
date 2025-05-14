@@ -64,6 +64,9 @@ import { IUpdateSlotStatusUseCase } from "../../entities/useCaseInterfaces/IUpda
 import { UpdateSlotStatusUseCase } from "../../usecase/slot/UpdateSlotStatusUseCase";
 import { IGetSlotDataUseCase } from "../../entities/useCaseInterfaces/slot/IGetSlotDataUseCase";
 import { GetSlotDataUseCase } from "../../usecase/slot/GetSlotUseCase";
+import { IGetAllHostedGamesUseCase } from "../../entities/useCaseInterfaces/turf/IGetAllHostedGamesUseCase";
+import { GetAllHostedGamesUseCase } from "../../usecase/turf/GetAllHostedGamesUseCase";
+
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -175,6 +178,10 @@ export class UseCaseRegistery {
 
     container.register<IGetSlotDataUseCase>("IGetSlotDataUseCase",{
       useClass:GetSlotDataUseCase
+    })
+    
+    container.register<IGetAllHostedGamesUseCase>("IGetAllHostedGamesUseCase",{
+      useClass:GetAllHostedGamesUseCase
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {

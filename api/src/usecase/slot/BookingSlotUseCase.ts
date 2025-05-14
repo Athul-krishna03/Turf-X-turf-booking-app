@@ -12,17 +12,18 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
   async execute(
     userId: string,
     turfId: string,
-    slotIds: ISlotEntity[],
+    time: string,
     duration: number,
     price: number,
     date: string,
-    paymentType:string
+    paymentType:string,
+    playerCount:number
   ): Promise<IBookingEntity> {
     try {
       const data = {
         userId,
         turfId,
-        slotIds,
+        time,
         duration,
         price,
         date,
@@ -33,24 +34,30 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
       if(paymentType == "single"){
         const saveData = await this.bookingRepo.save(data);
         return saveData as IBookingEntity;
-      }
-      if(paymentType == "shared"){
+      }else if(paymentType == "shared"){
         let userIds=[userId]
+        let walletContributions = new Map<string, number>();
+        walletContributions.set(userId, price);
+        price = price * playerCount;
         let data={
             turfId,
-            slotIds,
+            time,
             userIds,
             duration,
             price,
             date,
             paymentType,
-            status: "Booked",
+            walletContributions: Object.fromEntries(walletContributions),
+            status: "Pending",
+            playerCount
           }
         const saveData = await this.bookingRepo.saveSharedBooking(data)
         return saveData as IBookingEntity
+      }else{
+          const saveData = await this.bookingRepo.save(data);
+          return saveData as IBookingEntity;
       }
-      const saveData = await this.bookingRepo.save(data);
-      return saveData as IBookingEntity;
+      
     } catch (error) {
       console.error("BookingSlotUseCase failed:", error);
       throw new Error("Failed to save booking");

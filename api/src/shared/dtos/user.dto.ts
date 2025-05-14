@@ -7,33 +7,12 @@ export interface LoginUserDTO{
 }
 
 export interface UserDTO {
+    id?:string
     name:string,
     email:string,
     phone:string,
     password:string,
+    profileImage?: string;
     role: TRole
 }
 
-export interface TurfRegisterDTO extends UserDTO {
-    courtSize: string;
-    turfPhotos:string[];
-    aminities: string[];
-}
-export interface ClientProfileResponse{
-    name:string;
-    phone:number;
-    profileImage:string;
-    bio:string;
-    email:string;
-    joinedAt: Date;
-    role: string;
-}
-
-export interface TurfProfileResponse{
-    name:string;
-    email:string;
-    phone:number;
-    turfPhotos:string[];
-    aminities: string[];
-    location:object;
-}

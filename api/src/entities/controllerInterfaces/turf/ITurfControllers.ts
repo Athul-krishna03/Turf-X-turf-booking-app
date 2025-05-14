@@ -6,5 +6,5 @@ export interface ITurfControllers{
     generateSlots(req:Request,res:Response):Promise<void>
     editTurf(req:Request,res:Response):Promise<void>
     getSlots(req:Request,res:Response):Promise<void>;
-    getTurfDetials(req:Request,res:Response):Promise<void>;
+    getAllHostedGames(req:Request,res:Response):Promise<void>
 }

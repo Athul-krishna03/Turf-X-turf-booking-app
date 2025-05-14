@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IUpdateProfileUseCase } from "../../entities/useCaseInterfaces/user/IUpdateProfileUseCase";
 import { IClientRepository } from "../../entities/repositoryInterface/client/IClient-repository.interface";
 import { IClientEntity } from "../../entities/models/client.entity";
-import { ClientProfileResponse } from "../../shared/dtos/user.dto";
+import { ClientProfileResponse } from "../../shared/responseTypes/clientProfileResponse";
 import { CustomError } from "../../entities/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 

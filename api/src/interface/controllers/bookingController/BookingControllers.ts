@@ -33,4 +33,7 @@ export  class BookingController implements IBookingController{
             handleErrorResponse(res,error)
         }        
     }
+
+  
+    
 }

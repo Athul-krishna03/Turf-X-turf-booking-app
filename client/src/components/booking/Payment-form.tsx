@@ -13,6 +13,7 @@ interface PaymentFormProps {
   durarion:number;
   onSuccess: () => void;
   onError?: () => void;
+  playerCount?:number
   paymentType:"single" | "full" | "shared"
 }
 
@@ -24,7 +25,8 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId
   onSuccess,
   clientSecret,
   slotLockId,
-  paymentType
+  paymentType,
+  playerCount
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -63,7 +65,16 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId
       }
 
       if (result.paymentIntent?.status === "succeeded") {
-        await slotUpdate(date,slotId,price,durarion,result.paymentIntent.id,slotLockId,paymentType)
+        await slotUpdate(
+          date,
+          slotId,
+          price,
+          durarion,
+          result.paymentIntent.id,
+          slotLockId,
+          paymentType,
+          playerCount
+        )
         setProcessing(false);
         onSuccess();
       }
@@ -105,7 +116,7 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId
   );
 };
 
-export default function PaymentWrapper({date, slotId, price,durarion, onSuccess,onError,paymentType }: PaymentFormProps) {
+export default function PaymentWrapper({date, slotId, price,durarion, onSuccess,onError,paymentType,playerCount}: PaymentFormProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [slotLockId, setSlotLockId] = useState<string>("");
 
@@ -170,6 +181,7 @@ export default function PaymentWrapper({date, slotId, price,durarion, onSuccess,
           clientSecret={clientSecret}
           slotLockId={slotLockId}
           paymentType={paymentType || "single"}
+          playerCount={playerCount}
           />
       </Elements>
     )

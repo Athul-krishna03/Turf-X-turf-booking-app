@@ -35,7 +35,7 @@ export class GetUserBookingDetialsUseCase implements IGetUserBookingDetialsUseCa
             turfImage: turf?.turfPhotos || [],
             location: {city:turf?.location?.city , state:turf?.location?.state},
             date: booking.date,
-            startTime: booking.slotIds[0].startTime,
+            startTime: booking.time,
             duration: booking.duration,
             price: booking.price,
             currency: "₹",

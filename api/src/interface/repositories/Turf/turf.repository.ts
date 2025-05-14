@@ -2,7 +2,7 @@ import { injectable } from "tsyringe";
 import { ITurfRepository } from "../../../entities/repositoryInterface/turf/ITurfRepository";
 import { ITurfEntity } from "../../../entities/models/turf.entity";
 import { TurfModel } from "../../../frameworks/database/models/turf.model";
-import { TurfProfileResponse } from "../../../shared/dtos/user.dto";
+import { TurfProfileResponse } from "../../../shared/responseTypes/turfProfileResponse";
 
 
 @injectable()

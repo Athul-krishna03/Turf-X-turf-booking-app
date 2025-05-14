@@ -1,10 +1,10 @@
-import { ISlotEntity } from "./slot.entity";
+
 
 export interface IBookingEntity {
     id: string;
     userId: string;
     turfId: string;
-    slotIds: ISlotEntity[]; 
+    time:string;
     duration: number;
     price: number;
     date: string;

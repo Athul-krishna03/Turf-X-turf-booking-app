@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IUpdateTurfProfileUseCase } from "../../entities/useCaseInterfaces/turf/IUpdateTurfProfileUseCase";
 import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRepository";
 import { ITurfEntity } from "../../entities/models/turf.entity";
-import { TurfProfileResponse } from "../../shared/dtos/user.dto";
+import { TurfProfileResponse } from "../../shared/responseTypes/turfProfileResponse";
 import { CustomError } from "../../entities/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
