@@ -27,7 +27,7 @@ A full-featured turf booking platform built with the MERN stack and TypeScript. 
 | **Backend**            | Node.js, Express.js, MongoDB, Redis, Socket.io        |
 | **Authentication**     | JWT, Redis (token blacklisting)                       |
 | **Payments**           | Stripe                                                |
-| **Architecture**       | Clean Architecture, MVC, RESTful APIs                 |
+| **Architecture**       | Clean Architecture, RESTful APIs                 |
 | **Dev Tools**          | Git, Postman, VS Code, Nginx                          |
 
 ---
