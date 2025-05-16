@@ -29,7 +29,7 @@ const HostedGameDialog = ({
 }: HostedGameDialogProps) => {
     if (!game) return null;
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const price = game.amountPerPlayer * game.playerCount
+    const price = game.amountPerPlayer
     const navigate = useNavigate()
     const onJoin = ()=>{
         setIsModalOpen(true)
@@ -44,6 +44,9 @@ const HostedGameDialog = ({
             </span>
         </div>);
         navigate("/user/hostedGames")
+
+    console.log("game data",game);
+    
     };
 
     return (
@@ -142,7 +145,7 @@ const HostedGameDialog = ({
                         </Button>
                         <Button
                             className="bg-green-600 hover:bg-green-700 text-black"
-                            onClick={() => onJoin(game._id)}
+                            onClick={() => onJoin()}
                             disabled={
                                 game.status !== "Pending" ||
                                 game.playersJoined >= game.playerCount
@@ -155,14 +158,14 @@ const HostedGameDialog = ({
             </DialogContent>
             {isModalOpen && (
                 <PaymentModal
-                    date={game.date}
                     slot={game.time}
+                    date={game.date}
                     duration={game.duration}
                     currency={""}
                     totalPrice={price}
                     onClose={() => setIsModalOpen(false)}
                     onPaymentSuccess={handlePaymentSuccess}
-                    paymentType="shared"
+                    paymentType="Join"
                     />
                 )}
         </Dialog>

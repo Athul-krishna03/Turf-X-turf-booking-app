@@ -8,4 +8,5 @@ export interface IBookingRepository{
     getUserBookingDetials(userId:string):Promise<IBookingEntity[]>
     find(userId:string):Promise<IHostedGame[]>
     saveSharedBooking(data:Partial<ISharedBookingEntity>):Promise<ISharedBookingEntity | IBookingEntity>;
+    joinGame(data:object):Promise<ISharedBookingEntity | null>
 }    

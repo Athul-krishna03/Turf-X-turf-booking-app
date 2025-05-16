@@ -5,11 +5,14 @@ import { CustomRequest } from "../../middlewares/authMiddleware";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { handleErrorResponse } from "../../../shared/utils/errorHandler";
 import { IGetUserBookingDetialsUseCase } from "../../../entities/useCaseInterfaces/user/IGetUserBookingDetialsUseCase";
+import { IJoinGameUseCase } from "../../../entities/useCaseInterfaces/booking/IJoinGameUseCase";
+import { json } from "stream/consumers";
 
 @injectable()
 export  class BookingController implements IBookingController{
     constructor(
-        @inject("IGetUserBookingDetialsUseCase") private getUserBookingDetialsUseCase:IGetUserBookingDetialsUseCase
+        @inject("IGetUserBookingDetialsUseCase") private getUserBookingDetialsUseCase:IGetUserBookingDetialsUseCase,
+        @inject("IJoinGameUseCase") private joinGameUseCase:IJoinGameUseCase
     ){}
     async getAllBooking(req:Request,res:Response): Promise<void> {
         try {
@@ -34,6 +37,35 @@ export  class BookingController implements IBookingController{
         }        
     }
 
-  
+    async joinGame(req:Request,res:Response): Promise<void>{
+        const userId = (req as CustomRequest).user.id;
+        const {date,slotId,price} = req.body as {date:string,slotId:string,price:number};
+        const data={
+            userId,
+            date,
+            slotId,
+            price
+        }
+
+        const bookingData = await this.joinGameUseCase.execute(data)
+        console.log(bookingData);
+        
+        if(!bookingData){
+            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+                success:false,
+                message:"join the game failed",
+            })
+            return 
+        }
+
+        res.status(HTTP_STATUS.CREATED).json({
+            success:true,
+            message:"Successfully joined the game",
+            bookingData
+        })
+
+        return 
+    }
+
     
 }

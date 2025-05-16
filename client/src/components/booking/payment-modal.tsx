@@ -18,14 +18,14 @@ export const PaymentModal = ({
   paymentType,
   playerCount
 }: {
-  date: Date;
+  date: string;
   slot: Slot;
   duration: number;
   currency: string;
   totalPrice: number;
   onClose: () => void;
   onPaymentSuccess: () => void;
-  paymentType:"single" | "full" | "shared";
+  paymentType:"single" | "full" | "shared" | "Join";
   playerCount?:number
 }) => {
   const [paymentStatus, setPaymentStatus] = useState<"pending" | "success">("pending");
@@ -62,7 +62,7 @@ export const PaymentModal = ({
                     <Clock size={18} className="text-green-400" />
                     <div>
                       <p className="text-sm text-gray-400">Time Slot</p>
-                      <p className="font-medium">{slot.startTime}</p>
+                      <p className="font-medium">{slot?.startTime}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -74,7 +74,7 @@ export const PaymentModal = ({
                       <p className="font-medium">{duration} hour{duration > 1 ? "s" : ""}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3">
                     <CreditCard size={18} className="text-green-400" />
                     <div>
                       <p className="text-sm text-gray-400">Total Price</p>
@@ -87,9 +87,9 @@ export const PaymentModal = ({
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-gray-300">Payment Method</p>
                   <PaymentWrapper
-                    slotId={slot._id}
+                    slotId={slot._id || slot as unknown as string}
                     price={totalPrice}
-                    date={slot.date}
+                    date={date}
                     durarion={duration}
                     onSuccess={handlePaymentSuccess}
                     onError={onClose}
@@ -123,7 +123,7 @@ export const PaymentModal = ({
                 <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
                   <p className="text-sm text-gray-400">Booking Details</p>
                   <p className="font-medium">
-                    {format(date, "PPP")} at {slot.startTime} for {duration} hour{duration > 1 ? "s" : ""}
+                    {format(date, "PPP")} at {slot?.startTime} for {duration} hour{duration > 1 ? "s" : ""}
                   </p>
                   <p className="font-medium text-lg mt-2">
                     Paid: {currency} {totalPrice.toLocaleString()}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import {  paymentService, slotUpdate } from "../../services/user/userServices";
+import {  paymentService, sharedSlotJoin, sharedSlotPaymentService, slotUpdate } from "../../services/user/userServices";
 import { toast } from "sonner";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
@@ -14,7 +14,7 @@ interface PaymentFormProps {
   onSuccess: () => void;
   onError?: () => void;
   playerCount?:number
-  paymentType:"single" | "full" | "shared"
+  paymentType:"single" | "full" | "shared" | "Join"
 }
 
 const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId:string}> = ({
@@ -65,19 +65,27 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId
       }
 
       if (result.paymentIntent?.status === "succeeded") {
-        await slotUpdate(
-          date,
-          slotId,
-          price,
-          durarion,
-          result.paymentIntent.id,
-          slotLockId,
-          paymentType,
-          playerCount
-        )
-        setProcessing(false);
-        onSuccess();
-      }
+        if(paymentType !== "Join"){
+          await slotUpdate(
+            date,
+            slotId,
+            price,
+            durarion,
+            result.paymentIntent.id,
+            slotLockId,
+            paymentType,
+            playerCount
+          )
+          setProcessing(false);
+          onSuccess();
+        }else{
+          await sharedSlotJoin(
+            date,
+            slotId,
+            price
+          )
+        }
+    }
     } catch (error:any) {
       setError(error.message ||"An error occurred during payment");
       setProcessing(false);
@@ -128,10 +136,17 @@ export default function PaymentWrapper({date, slotId, price,durarion, onSuccess,
       hasFetched.current = true;
 
       try {
-        const response = await paymentService(slotId, price);
-        console.log("payment service res",response);
-        setClientSecret(response.data.clientSecret);
-        setSlotLockId(response.data.lockId);
+        if(paymentType != "Join"){
+          const response = await paymentService(slotId, price);
+          console.log("payment service res",response);
+          setClientSecret(response.data.clientSecret); 
+          setSlotLockId(response.data.lockId);
+        }else{
+          const response = await sharedSlotPaymentService(price)
+          setClientSecret(response.data.clientSecret);
+          console.log(response)
+        }
+        
       } catch (error) {
         toast.error( "slot unavailable");
         if(onError) onError()

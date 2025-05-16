@@ -25,6 +25,14 @@ export  class PaymentController implements IPaymentControllers{
     async createPaymentIntent(req: Request, res: Response): Promise<void> {
         try {
             const {slotId,price} = req.body as {slotId:string,price:number};
+            if(!slotId){
+                const paymentIntent = await this.paymentService.createPaymentIntent(
+                    price
+                )
+
+                res.json({ clientSecret: paymentIntent.clientSecret});
+                return
+            }
             const lockKey = `slot_lock:${slotId}`;
 
             const slot  = await this.slotRepo.findById(slotId);
@@ -33,16 +41,10 @@ export  class PaymentController implements IPaymentControllers{
                 res.status(404).json({error:"Slot not found"});
                 return;
             }
-            // const redisSearch = await this.redis.isLocked(lockKey);
-            // console.log("redisSearch",redisSearch);
-            
-            // if(redisSearch){
-            //     res.status(400).json({error:"Slot is unavilable"});
-            //     return
-            // }
+
             const lockId = await this.redis.acquireLock(lockKey,30000);
             console.log("lockid ",lockId);
-            
+
             if(!lockId){
                 res.status(400).json({error:"Slot is unavilable"})
                 return
@@ -55,7 +57,7 @@ export  class PaymentController implements IPaymentControllers{
             }
             try {
                 const paymentIntent = await this.paymentService.createPaymentIntent(
-                    slotId,price
+                    price,slotId,
                 )
 
                 res.json({ clientSecret: paymentIntent.clientSecret, lockId });

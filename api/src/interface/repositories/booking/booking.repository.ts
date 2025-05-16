@@ -58,4 +58,21 @@ export class BookingRepository implements IBookingRepository{
         const result = await SharedSlotBookingModel.create(data);
         return result as ISharedBookingEntity
     }
+
+    async joinGame(data: { date: string; slotId: string; userId: string; price: number }): Promise<ISharedBookingEntity | null> {
+        console.log("data inside repo",data);
+        
+        const result = await SharedSlotBookingModel.findOneAndUpdate(
+        { date: data.date, time: data.slotId },
+        {
+            $addToSet: { userIds: data.userId },
+            $set: { [`walletContributions.${data.userId}`]: data.price }
+        },
+        { new: true } 
+    );
+    console.log("data in respo ",result);
+    
+    return result as ISharedBookingEntity
+}
+
 }

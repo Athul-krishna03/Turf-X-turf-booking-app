@@ -49,6 +49,12 @@ export const paymentService = async (slotId:string,price:number)=>{
     return response
 }
 
+export const sharedSlotPaymentService = async (price:number) => {
+    const response = await userAxiosInstance.post("/_us/user/payments/create-payment-intent",{price})
+    console.log("shared payment api response",response);
+    return response
+}
+
 export const slotUpdate = async (
     date: string, 
     slotId: string, 
@@ -73,16 +79,13 @@ export const slotUpdate = async (
     return response
 }
 
-// export const bookingRegister = async (slotId:string,price:number,duration:number,paymentIntentId:string)=>{
-//     const response = await userAxiosInstance.post(`/_us/user/registerSlot`,{
-//         slotId,
-//         price,
-//         duration,
-//         paymentIntentId
-//     })
-
-//     return response
-// }
+export const sharedSlotJoin = async(date:string,slotId:string,price:number)=>{
+    console.log(date,slotId)
+    const response = await userAxiosInstance.post(`/_us/user/joinSlot`,{
+        date,slotId,price
+    })
+    return response
+}
 
 export const getAllBookings = async ()=>{
     const response = await userAxiosInstance.get(`/_us/user/bookings`)
@@ -99,8 +102,8 @@ export const getSlotData = async (slotId:string)=>{
 }
 
 export const fetchHostedGames = async () => {
-  const response = await userAxiosInstance.get("/_us/user/hosted-games")
-  console.log(response);
-  
-  return response.data.games
+    const response = await userAxiosInstance.get("/_us/user/hosted-games")
+    console.log(response);
+    
+    return response.data.games
 }

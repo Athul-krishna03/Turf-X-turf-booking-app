@@ -66,6 +66,8 @@ import { IGetSlotDataUseCase } from "../../entities/useCaseInterfaces/slot/IGetS
 import { GetSlotDataUseCase } from "../../usecase/slot/GetSlotUseCase";
 import { IGetAllHostedGamesUseCase } from "../../entities/useCaseInterfaces/turf/IGetAllHostedGamesUseCase";
 import { GetAllHostedGamesUseCase } from "../../usecase/turf/GetAllHostedGamesUseCase";
+import { IJoinGameUseCase } from "../../entities/useCaseInterfaces/booking/IJoinGameUseCase";
+import { JoinGameUseCase } from "../../usecase/booking/JoinGameUseCase";
 
 
 export class UseCaseRegistery {
@@ -182,6 +184,10 @@ export class UseCaseRegistery {
     
     container.register<IGetAllHostedGamesUseCase>("IGetAllHostedGamesUseCase",{
       useClass:GetAllHostedGamesUseCase
+    })
+
+    container.register<IJoinGameUseCase>("IJoinGameUseCase",{
+      useClass:JoinGameUseCase
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {

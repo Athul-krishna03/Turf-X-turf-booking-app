@@ -159,7 +159,7 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
     </div>
     {isModalOpen && (
             <PaymentModal
-              date={new Date(slot.date)}
+              date={slot.date}
               slot={slot}
               duration={slot?.duration/60}
               currency={"₹"}
@@ -172,7 +172,7 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
     {
       sharedModal &&  (
         <PaymentModal
-        date={new Date(slot.date)}
+        date={slot.date}
         slot={slot}
         duration={slot?.duration/60}
         currency={"₹"}

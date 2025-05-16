@@ -115,6 +115,15 @@ export class ClientRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 turfController.getAllHostedGames(req,res)
             }
+        ),
+        this.router.post(
+            "/user/joinSlot",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                bookingController.joinGame(req,res)
+            }
         )
         
     }

@@ -13,7 +13,10 @@ export class PaymentService implements IPaymentService{
         return paymentIntent.status === "succeeded";
     }
 
-    async createPaymentIntent(slotId: string, price: number): Promise<{ clientSecret: string}> {
-        return await this.paymentGateway.createPyamentIntent(slotId,price)
+    async createPaymentIntent( price: number,slotId: string,): Promise<{ clientSecret: string}> {
+        if(!slotId){
+            return await this.paymentGateway.createPyamentIntent(price)
+        }
+        return await this.paymentGateway.createPyamentIntent(price,slotId)
     }
 }
