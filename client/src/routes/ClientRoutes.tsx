@@ -6,6 +6,9 @@ import TurfDetailsPage from "../pages/user/turfDetialsPage";
 import BookingsPage from "../pages/user/bookingPage";
 import HostGamePage from "../pages/user/hostGame";
 import HostedGamesPage from "../pages/user/hosted-game";
+import JoinedGameDetails from "../pages/user/JoinedGameDetails";
+
+
 
 
 export function UserRoutes(){
@@ -34,6 +37,9 @@ export function UserRoutes(){
             <Route
             path="/user/hostedGames"
             element={<ProtectedRoutes allowedRoles={['user']} element={<HostedGamesPage/>}/>}/>
+            <Route
+            path="/user/joinedGameDetails/:joinedGameId"
+            element={<ProtectedRoutes allowedRoles={['user']} element={<JoinedGameDetails/>}/>}/>
 
 
         </Routes>

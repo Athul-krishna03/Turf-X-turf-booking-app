@@ -59,7 +59,7 @@ import { DeleteExpiredSlotsUseCase } from "../../usecase/slot/DeleteExpiredSlots
 import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
 import { BookingSlotUseCase } from "../../usecase/slot/BookingSlotUseCase";
 import { IGetUserBookingDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetUserBookingDetialsUseCase";
-import { GetUserBookingDetialsUseCase } from "../../usecase/getBookingDetialsUseCase";
+import { GetUserBookingDetialsUseCase } from "../../usecase/user/getBookingDetialsUseCase";
 import { IUpdateSlotStatusUseCase } from "../../entities/useCaseInterfaces/IUpdateSlotStatusUseCase";
 import { UpdateSlotStatusUseCase } from "../../usecase/slot/UpdateSlotStatusUseCase";
 import { IGetSlotDataUseCase } from "../../entities/useCaseInterfaces/slot/IGetSlotDataUseCase";
@@ -68,7 +68,10 @@ import { IGetAllHostedGamesUseCase } from "../../entities/useCaseInterfaces/turf
 import { GetAllHostedGamesUseCase } from "../../usecase/turf/GetAllHostedGamesUseCase";
 import { IJoinGameUseCase } from "../../entities/useCaseInterfaces/booking/IJoinGameUseCase";
 import { JoinGameUseCase } from "../../usecase/booking/JoinGameUseCase";
-
+import { IGetAllBookingDataUseCase } from "../../entities/useCaseInterfaces/turf/IGetAllBookingDataUseCase";
+import { GetAllBookingDataUseCase } from "../../usecase/turf/GetAllBookingDataUseCase";
+import { IGetJoinedGameDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetJoinedGameDetialsUseCase";
+import { GetJoinedGameDetials } from "../../usecase/user/GetJoinedGameDetialUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -137,57 +140,76 @@ export class UseCaseRegistery {
       useClass: UpdateProfileUseCase,
     });
 
-    container.register<IGenerateSlotUseCase>("IGenerateSlotUseCase",{
-      useClass:GenerateSlotUseCase
-    })
+    container.register<IGenerateSlotUseCase>("IGenerateSlotUseCase", {
+      useClass: GenerateSlotUseCase,
+    });
 
-    container.register<IUpdateUserPassWordUseCase>("IUpdateUserPassWordUseCase",{
-      useClass:UpdateUserPassWordUseCase
-    })
-    
-    container.register<IUpdateTurfPassWordUseCase>("IUpdateTurfPassWordUseCase",{
-      useClass:UpdateTurfPassWordUseCase
-    })
-
-    container.register<IUpdateTurfProfileUseCase>("IUpdateTurfProfileUseCase",{
-      useClass:UpdateTurfProfileUseCase
-    })
-    container.register<IRevokeRefreshTokenUseCase>(
-      "IRevokeRefreshTokenUseCase",
+    container.register<IUpdateUserPassWordUseCase>(
+      "IUpdateUserPassWordUseCase",
       {
-        useClass:RevokeRefreshTokenUseCase,
+        useClass: UpdateUserPassWordUseCase,
       }
     );
 
-    container.register<IGetSlotUseCase>("IGetSlotsUseCase",{
-      useClass:GetSlotUseCase
-    })
-    container.register<IDeleteExpiredSlotsUseCase>("IDeleteExpiredSlotsUseCase",{
-      useClass:DeleteExpiredSlotsUseCase
-    })
+    container.register<IUpdateTurfPassWordUseCase>(
+      "IUpdateTurfPassWordUseCase",
+      {
+        useClass: UpdateTurfPassWordUseCase,
+      }
+    );
 
-    container.register<IBookingSlotUseCase>("IBookingSlotUseCase",{
-      useClass:BookingSlotUseCase
-    })
+    container.register<IUpdateTurfProfileUseCase>("IUpdateTurfProfileUseCase", {
+      useClass: UpdateTurfProfileUseCase,
+    });
+    container.register<IRevokeRefreshTokenUseCase>(
+      "IRevokeRefreshTokenUseCase",
+      {
+        useClass: RevokeRefreshTokenUseCase,
+      }
+    );
 
-    container.register<IGetUserBookingDetialsUseCase>("IGetUserBookingDetialsUseCase",{
-      useClass:GetUserBookingDetialsUseCase
-    })
+    container.register<IGetSlotUseCase>("IGetSlotsUseCase", {
+      useClass: GetSlotUseCase,
+    });
+    container.register<IDeleteExpiredSlotsUseCase>(
+      "IDeleteExpiredSlotsUseCase",
+      {
+        useClass: DeleteExpiredSlotsUseCase,
+      }
+    );
 
-    container.register<IUpdateSlotStatusUseCase>("IUpdateSlotStatusUseCase",{
-      useClass:UpdateSlotStatusUseCase
-    })
+    container.register<IBookingSlotUseCase>("IBookingSlotUseCase", {
+      useClass: BookingSlotUseCase,
+    });
 
-    container.register<IGetSlotDataUseCase>("IGetSlotDataUseCase",{
-      useClass:GetSlotDataUseCase
-    })
-    
-    container.register<IGetAllHostedGamesUseCase>("IGetAllHostedGamesUseCase",{
-      useClass:GetAllHostedGamesUseCase
-    })
+    container.register<IGetUserBookingDetialsUseCase>(
+      "IGetUserBookingDetialsUseCase",
+      {
+        useClass: GetUserBookingDetialsUseCase,
+      }
+    );
 
-    container.register<IJoinGameUseCase>("IJoinGameUseCase",{
-      useClass:JoinGameUseCase
+    container.register<IUpdateSlotStatusUseCase>("IUpdateSlotStatusUseCase", {
+      useClass: UpdateSlotStatusUseCase,
+    });
+
+    container.register<IGetSlotDataUseCase>("IGetSlotDataUseCase", {
+      useClass: GetSlotDataUseCase,
+    });
+
+    container.register<IGetAllHostedGamesUseCase>("IGetAllHostedGamesUseCase", {
+      useClass: GetAllHostedGamesUseCase,
+    });
+
+    container.register<IJoinGameUseCase>("IJoinGameUseCase", {
+      useClass: JoinGameUseCase,
+    });
+    container.register<IGetAllBookingDataUseCase>("IGetAllBookingDataUseCase", {
+      useClass: GetAllBookingDataUseCase,
+    });
+
+    container.register<IGetJoinedGameDetialsUseCase>("IGetJoinedGameDetialsUseCase",{
+      useClass:GetJoinedGameDetials
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {

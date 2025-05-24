@@ -413,7 +413,7 @@ export default function TurfRequestManagement() {
                               key={index}
                               className="aspect-square bg-gray-100 rounded-md flex items-center justify-center"
                             >
-                              <img src={image} alt="" />
+                              <img src={image as string} alt="" />
                             </div>
                           ))
                         ) : (

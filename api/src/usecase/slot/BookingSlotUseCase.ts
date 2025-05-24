@@ -47,7 +47,7 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
             price,
             date,
             paymentType,
-            walletContributions: Object.fromEntries(walletContributions),
+            walletContributions,
             status: "Pending",
             playerCount
           }

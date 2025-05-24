@@ -124,6 +124,24 @@ export class ClientRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 bookingController.joinGame(req,res)
             }
+        ),
+        this.router.get(
+            "/user/joinedGameDetials",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                bookingController.getJoinedGameDetials(req,res)
+            }
+        ),
+        this.router.patch(
+            "/user/cancelSingleSlot",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                bookingController.getJoinedGameDetials(req,res)
+            }
         )
         
     }

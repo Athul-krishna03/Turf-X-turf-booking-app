@@ -11,7 +11,7 @@ export const BookingSchema = new Schema<IBookingModel>(
     price: { type: Number, required: true },
     status: {
         type: String,
-        enum: ["Booked", "cancelled"],
+        enum: ["Booked", "Cancelled","Completed"],
         default: "Booked",
     },
 },

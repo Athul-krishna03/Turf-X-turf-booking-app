@@ -1,5 +1,7 @@
 import { userAxiosInstance } from "../../api/client.axios";
 import { ChangePasswordData } from "../../hooks/user/userDashboard";
+import { BookingType } from "../../types/Booking";
+import { JoinedGameBooking } from "../../types/joinedGame";
 
 export const logoutUser = async () => {
     const response = await userAxiosInstance.post("/_us/user/logout");
@@ -84,6 +86,8 @@ export const sharedSlotJoin = async(date:string,slotId:string,price:number)=>{
     const response = await userAxiosInstance.post(`/_us/user/joinSlot`,{
         date,slotId,price
     })
+    console.log("shared slot data",response);
+    
     return response
 }
 
@@ -106,4 +110,18 @@ export const fetchHostedGames = async () => {
     console.log(response);
     
     return response.data.games
+}
+
+export const getJoinedGameDetials = async (bookingId:string | undefined)=>{
+    const response = await userAxiosInstance.get(`/_us/user/joinedGameDetials?bookingId=${bookingId}`)
+    console.log("joinedGameDetials",response);
+
+    return response.data.joinedGameDetials 
+    
+}
+
+export const cancelBooking = async (bookingId:string | null ,bookingType:string) => {
+    
+    const response = await userAxiosInstance.patch(`/_us/user/cancelSingleSlot`,{bookingId,bookingType})
+    return response
 }

@@ -112,5 +112,16 @@ export interface Turf{
     status: string;
     [key: string]: any;
   }
+
+ export  interface SharedBooking{
+    maxPlayers: number;
+    participants: any;
+    hostName:string,
+    endTime:string,
+    startTime:string,
+    date:string,
+    turfName:string
+}
+
   
   

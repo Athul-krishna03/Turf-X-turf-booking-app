@@ -84,6 +84,8 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string,slotLockId
             slotId,
             price
           )
+          setProcessing(false);
+          onSuccess();
         }
     }
     } catch (error:any) {

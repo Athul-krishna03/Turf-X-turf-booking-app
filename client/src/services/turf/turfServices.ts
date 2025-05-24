@@ -1,4 +1,5 @@
 import { turfAxiosInstance } from "../../api/turf.axios"
+import { TurfBookingResponse } from "../../components/turf/bookingManagement";
 import { ChangePasswordData } from "../../hooks/user/userDashboard";
 
 
@@ -60,4 +61,11 @@ export const fetchSlots = async (turfId: string, date: string) => {
 export const updateSlotStatus = async(id:string)=>{
     const response = await turfAxiosInstance.patch(`/_ts/turf/updateSlot?id=${id}`)
     return response
+}
+
+export const getTurfBookings = async ():Promise<TurfBookingResponse>=>{
+    const response = await turfAxiosInstance.get(`/_ts/turf/getBookingDetials`)
+    console.log("respomse of the bppl",response);
+    
+    return response.data.data
 }

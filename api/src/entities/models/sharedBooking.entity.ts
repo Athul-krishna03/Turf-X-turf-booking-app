@@ -1,10 +1,10 @@
-import { UserDTO } from "../../shared/dtos/user.dto";
-import { ISlotEntity } from "./slot.entity";
+
 
 export interface ISharedBookingEntity {
     id: string;
     userIds: any[];
-    wallet:number;
+    walletContributions: Map<string, number>;
+    walletSum?:number
     turfId: string;
     time:string;
     duration: number;
@@ -14,3 +14,5 @@ export interface ISharedBookingEntity {
     playerCount:number;
     createdAt: Date;
 }
+
+

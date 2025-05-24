@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { PaymentModal } from "../booking/payment-modal";
+import { useSelector } from "react-redux";
 
 interface HostedGameDialogProps {
     game: HostedGame | null;
@@ -31,6 +32,9 @@ const HostedGameDialog = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const price = game.amountPerPlayer
     const navigate = useNavigate()
+    const user= useSelector((state: any) => state.user.user)
+    console.log("user data ", user);
+    
     const onJoin = ()=>{
         setIsModalOpen(true)
     }
@@ -43,6 +47,7 @@ const HostedGameDialog = ({
             {format(game.date!, "PPP")} at {game.time} for {game.duration} hour(s)
             </span>
         </div>);
+        onClose()
         navigate("/user/hostedGames")
 
     console.log("game data",game);
@@ -137,22 +142,21 @@ const HostedGameDialog = ({
 
                     <div className="mt-6 flex justify-end gap-3">
                         <Button
-                            
-                            className="border-green-500 text-green-300 hover:bg-green-900"
-                            onClick={onClose}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
                             className="bg-green-600 hover:bg-green-700 text-black"
                             onClick={() => onJoin()}
                             disabled={
                                 game.status !== "Pending" ||
-                                game.playersJoined >= game.playerCount
+                                game.playersJoined >= game.playerCount ||
+                                game.userIds.some((val: any) => val.name === user.name)
                             }
-                        >
-                            {game.status === "Pending" ? "Join Game" : "Game Unavailable"}
+                            >
+                            {game.userIds.some((val: any) => val.name === user.name)
+                                ? "Already Joined"
+                                : game.status === "Pending"
+                                ? "Join Game"
+                                : "Game Unavailable"}
                         </Button>
+
                     </div>
                 </div>
             </DialogContent>
@@ -161,7 +165,7 @@ const HostedGameDialog = ({
                     slot={game.time}
                     date={game.date}
                     duration={game.duration}
-                    currency={""}
+                    currency={"₹"}
                     totalPrice={price}
                     onClose={() => setIsModalOpen(false)}
                     onPaymentSuccess={handlePaymentSuccess}

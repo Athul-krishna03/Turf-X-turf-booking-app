@@ -48,6 +48,7 @@ export const ERROR_MESSAGES = {
 } as const;
 
 export const SUCCESS_MESSAGES = {
+   FAILED_DATA_FETCH:"Failed to fetch data",
    SLOT_STATUS_UPDATED: "Slot status updated",
    SLOT_BOOKED: "Slot booked successfully",
    SLOT_FETCHED: "Slot data fetched",

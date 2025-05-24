@@ -1,22 +1,10 @@
-
-import {
-    BarChart,
-    CalendarDays,
-    LayoutDashboard,
-    LogOut,
-    MessageSquare,
-    Settings,
-    Users,
-    Wallet,
-  } from "lucide-react"
-  import { Button } from "../../components/ui/button"
+import { BookIcon, CalendarDays,LayoutDashboard,LogOut,MessageSquare,Settings,Users,Wallet,} from "lucide-react"
+import { Button } from "../../components/ui/button"
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { turfLogout } from "../../store/slices/turf.slice";
 import { toast } from "../../hooks/useToast";
 import { useTurfLogout } from "../../hooks/auth/useAuth";
-
-
 
 
 const TurfSideBar = () => {
@@ -50,9 +38,9 @@ const TurfSideBar = () => {
         <CalendarDays size={18} />
         Slot Management
       </Button>
-      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
-        <Users size={18} />
-        Customers
+      <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600" onClick={()=>navigate("/turf/bookingManagement")}>
+        <BookIcon size={18} />
+        Booking Management
       </Button>
       <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600">
         <Wallet size={18} />

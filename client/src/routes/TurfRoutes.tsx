@@ -3,6 +3,7 @@ import { ProtectedRoutes } from "../routes/protected/AuthRoutes";
 import TurfDashboard from "../pages/Turf/TurfDashboard";
 import SlotManager from "../components/turf/SlotMangement/SlotManagement";
 import TurfDetails from "../components/turf/turfDetials";
+import BookingManagement from "../components/turf/bookingManagement";
 
 export function TurfRoutes() {
   console.log("inside turf route");
@@ -19,6 +20,12 @@ export function TurfRoutes() {
         path="/slotManagement"
         element={
           <ProtectedRoutes allowedRoles={["turf"]} element={<SlotManager />} />
+        }
+      />
+      <Route
+        path="/bookingManagement"
+        element={
+          <ProtectedRoutes allowedRoles={["turf"]} element={<BookingManagement />} />
         }
       />
       <Route
