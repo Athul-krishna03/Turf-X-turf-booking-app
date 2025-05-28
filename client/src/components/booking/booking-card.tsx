@@ -37,7 +37,7 @@ export default function BookingCard({ booking, onCancel, showActions, type }: Bo
   
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
-      case "Booked":
+      case "booked":
         return (
           <Badge className="bg-emerald-600 hover:bg-emerald-700 font-medium flex items-center gap-1">
             <Check size={14} className="opacity-90" />
@@ -128,8 +128,6 @@ export default function BookingCard({ booking, onCancel, showActions, type }: Bo
                   )}
                 </div>
               </div>
-
-              {type !== "joined" && (
                 <div>
                   <div className="md:text-right md:pl-4 md:min-w-[150px]">
                     <div className="text-2xl font-bold text-white">
@@ -140,7 +138,7 @@ export default function BookingCard({ booking, onCancel, showActions, type }: Bo
                     </div>
                   </div>
 
-                  {showActions && booking.status.toLowerCase() !== "cancelled" && (
+                  {showActions && booking.status.toLowerCase() !== "cancelled" && type == "normal" && (
                     <div className="flex flex-col gap-2 mt-5">
                       <Button
                         variant="outline"
@@ -153,7 +151,6 @@ export default function BookingCard({ booking, onCancel, showActions, type }: Bo
                       </Button>
                     </div>
                   )}
-
                   {!showActions && booking.status.toLowerCase() === "completed" && (
                     <Button
                       variant="outline"
@@ -165,9 +162,9 @@ export default function BookingCard({ booking, onCancel, showActions, type }: Bo
                     </Button>
                   )}
                 </div>
-              )}
+              
             </div>
-            {showActions && booking.status.toLowerCase() === "pending" && (
+            {showActions && type  != "normal" && (
               <div className="mt-6 pt-4 border-t border-gray-800">
                 <Button
                   variant="default"
@@ -181,6 +178,8 @@ export default function BookingCard({ booking, onCancel, showActions, type }: Bo
                 </Button>
               </div>
             )}
+            
+            
           </div>
         </div>
       </CardContent>

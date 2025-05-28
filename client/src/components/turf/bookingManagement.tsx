@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
 import { CalendarCheck2, Users2 } from "lucide-react";
 import TurfSideBar from "./turfSideBar";
-import { getTurfBookings } from "../../services/turf/turfServices";
+import { cancelTurfBooking, getTurfBookings } from "../../services/turf/turfServices";
 import NormalBookingCard from "../../components/turf/normalBookingCard";
 import HostedGameCard from "./hostedGame";
 import { Booking, SharedBooking } from "../../types/Type";
+import { toast } from "sonner";
 
 export type TurfBookingResponse = {
   normal: Booking[];
@@ -38,6 +39,49 @@ const BookingManagement = () => {
     fetchBookings();
   }, []);
 
+  const handleCancelBooking = async (bookingId: string,bookingType:string) => {
+    if(bookingType =="single"){
+      try {
+          console.log('Cancelling booking:', bookingId);
+          const response = await cancelTurfBooking(bookingId, "single");
+          if (response.success) {
+            console.log('Booking cancelled successfully:', bookingId);
+            setBookingData((prevData) => ({
+              ...prevData,
+              normal: prevData.normal.map((booking) =>
+                booking._doc._id === bookingId
+                  ? { ...booking, _doc: { ...booking._doc, status: 'Cancelled' } }
+                  : booking
+              ),
+            }));
+            toast.success('Booking cancelled successfully');
+          }
+      } catch (error) {
+        console.error('Failed to cancel booking:', error);
+        toast.error('Failed to cancel booking');
+      }
+    }else{
+      try {
+        console.log('Cancelling hosted game:', bookingId);
+        const response = await cancelTurfBooking(bookingId, "joined");
+        if(response.success) {
+          setBookingData((prevData) => ({
+          ...prevData,
+          hosted: prevData.hosted.map((game) =>
+            game.id === bookingId
+              ? { ...game, status: 'Cancelled' }
+              : game
+          ),
+          }));
+          toast.success('Hosted game cancelled successfully');
+        }
+        
+      } catch (error) {
+        
+      }
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
@@ -58,13 +102,13 @@ const BookingManagement = () => {
               <CalendarCheck2 className="w-4 h-4 mr-2" />
               Normal Bookings
             </TabsTrigger>
-            {/* <TabsTrigger
+            <TabsTrigger
               value="hosted"
               className="data-[state=active]:bg-green-500 data-[state=active]:text-white px-4 py-2"
             >
               <Users2 className="w-4 h-4 mr-2" />
               Hosted Games
-            </TabsTrigger> */}
+            </TabsTrigger>
           </TabsList>
 
           {/* Normal Bookings */}
@@ -76,14 +120,14 @@ const BookingManagement = () => {
             ) : (
               <div className="space-y-4">
                 {bookingData.normal.map((booking) => (
-                  <NormalBookingCard key={booking.id} booking={booking} />
+                  <NormalBookingCard key={booking.id} booking={booking} onCancel={handleCancelBooking}/>
                 ))}
               </div>
             )}
           </TabsContent>
 
           {/* Hosted Games */}
-          {/* <TabsContent value="hosted">
+          <TabsContent value="hosted">
             {isLoading ? (
               <p>Loading hosted games...</p>
             ) : bookingData.hosted.length === 0 ? (
@@ -91,11 +135,15 @@ const BookingManagement = () => {
             ) : (
               <div className="space-y-4">
                 {bookingData.hosted.map((game) => (
-                  <HostedGameCard key={game._id} game={game} />
+                  <HostedGameCard 
+                  key={game.id} 
+                  game={game}
+                  onCancel={handleCancelBooking}
+                  />
                 ))}
               </div>
             )}
-          </TabsContent> */}
+          </TabsContent>
         </Tabs>
       </div>
     </div>

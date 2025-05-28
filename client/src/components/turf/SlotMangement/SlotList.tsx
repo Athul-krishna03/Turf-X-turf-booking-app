@@ -1,6 +1,5 @@
 // SlotList.tsx
 import React, { useState } from 'react';
-import axios from 'axios';
 import { updateSlotStatus } from '../../../services/turf/turfServices';
 
 export interface Slot {

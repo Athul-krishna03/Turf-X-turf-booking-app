@@ -22,7 +22,7 @@ export default function UserManagement() {
   const {mutate:updateUserStatus} = useUpdateUserStatus(currentPage,limit,debouncedSearch)
 
   useEffect(()=>{
-    const handler = debounce(()=>setdebouncedSearch(searchQuery),300);
+    const handler = debounce(()=>setdebouncedSearch(searchQuery),500);
     handler();
     return ()=>handler.cancel();
   },[searchQuery]);

@@ -7,6 +7,7 @@ import BookingsPage from "../pages/user/bookingPage";
 import HostGamePage from "../pages/user/hostGame";
 import HostedGamesPage from "../pages/user/hosted-game";
 import JoinedGameDetails from "../pages/user/JoinedGameDetails";
+import WalletPage from "../pages/user/WalletPage";
 
 
 
@@ -29,6 +30,10 @@ export function UserRoutes(){
             <Route
             path="/user/bookings"
             element={<ProtectedRoutes allowedRoles={['user']} element={<BookingsPage/>}/>}
+            />
+            <Route
+            path="/user/wallet"
+            element={<ProtectedRoutes allowedRoles={['user']} element={<WalletPage/>}/>}
             />
             <Route
             path="/user/hostGame/:slotId"

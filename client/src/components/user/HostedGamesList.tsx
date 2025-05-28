@@ -4,13 +4,15 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { fetchHostedGames } from "../../services/user/userServices"
 import {
-  Calendar, Clock, MapPin, Users, DollarSign, ChevronRight, Search
+  Calendar, Clock, MapPin, Users, DollarSign, ChevronRight, Search,
+  ArrowLeft
 } from "lucide-react"
 import { Badge } from "../../components/ui/badge"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
 import HostedGameDialog from "./HostGameDialog"
+import { useNavigate } from "react-router-dom"
 
 export interface HostedGame {
   userIds: []
@@ -36,6 +38,7 @@ const HostedGamesList = () => {
   const [sportFilter, setSportFilter] = useState<string>("all")
   const [selectedGame, setSelectedGame] = useState<HostedGame | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const navigate = useNavigate()
 
   const { data: hostedGames, isLoading } = useQuery({
     queryKey: ["hostedGames"],
@@ -61,6 +64,15 @@ const HostedGamesList = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-black min-h-screen text-green-100">
+      <div className="flex items-center justify-between mb-8">
+          <button 
+            onClick={() => navigate("/")} 
+            className="flex items-center text-gray-400 hover:text-white transition-colors duration-200 group"
+          >
+          <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
+            Back to Dashboard
+          </button>
+      </div>
       <h1 className="text-2xl font-bold text-green-400 mb-6">Hosted Games</h1>
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -122,8 +134,8 @@ const HostedGamesList = () => {
                 className="w-full h-full object-cover"
               />
               <Badge className={`absolute top-3 right-3 ${
-                game.status === "open" ? "bg-green-500" :
-                game.status === "full" ? "bg-orange-500" :
+                game.status === "Booked" ? "bg-green-500" :
+                game.status === "Pending" ? "bg-orange-500" :
                 "bg-gray-500"
               }`}>
                 {game.status.charAt(0).toUpperCase() + game.status.slice(1)}

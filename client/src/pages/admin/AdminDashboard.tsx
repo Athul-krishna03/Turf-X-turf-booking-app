@@ -153,7 +153,7 @@ const AdminDashboard = () => {
           {activeMenu === "dashboard" && (
             <>
               {/* Stats Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div className="bg-white rounded-lg shadow p-5">
                   <div className="flex justify-between">
                     <div>
@@ -205,10 +205,10 @@ const AdminDashboard = () => {
                   </div>
                   <p className="text-orange-600 text-sm mt-2">+1 from last month</p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Revenue Chart */}
-              <div className="bg-white rounded-lg shadow mb-6">
+              {/* <div className="bg-white rounded-lg shadow mb-6">
                 <div className="px-5 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-800">Monthly Revenue</h3>
                 </div>
@@ -227,48 +227,7 @@ const AdminDashboard = () => {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </div>
-
-              {/* Two Charts Side by Side */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Turf Popularity */}
-                <div className="bg-white rounded-lg shadow">
-                  <div className="px-5 py-4 border-b border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-800">Turf Popularity</h3>
-                  </div>
-                  <div className="p-5 h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={turfBookingsData} layout="vertical">
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis dataKey="name" type="category" />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="bookings" fill="#8884d8" name="Number of Bookings" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Customer Growth */}
-                <div className="bg-white rounded-lg shadow">
-                  <div className="px-5 py-4 border-b border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-800">Customer Growth</h3>
-                  </div>
-                  <div className="p-5 h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={customerData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="customers" stroke="#10b981" activeDot={{ r: 8 }} name="New Customers" />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
+              </div> */}
             </>
           )}
 

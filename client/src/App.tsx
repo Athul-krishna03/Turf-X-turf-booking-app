@@ -8,6 +8,7 @@ import { AdminRoutes } from "./routes/AdminRoutes";
 import TurfRegistrationForm from "./pages/Turf/TurfRegistration";
 import TurfLoginPage from "./pages/Turf/TurfLogin";
 import { TurfRoutes } from "./routes/TurfRoutes";
+import UnauthorizedPage from "./pages/common/unauthorizedPage";
 
 export default function App() {
   return (
@@ -39,6 +40,8 @@ export default function App() {
             element={<GuestRoutes element={<AdminLogin />} />}
           />
           <Route path="/admin/*" element={<AdminRoutes />} />
+
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
         </Routes>
       </BrowserRouter>
     </>

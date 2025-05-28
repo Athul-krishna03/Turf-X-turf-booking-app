@@ -1,12 +1,19 @@
 import { Search, Bell, User, Menu } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   onMenuClick: () => void;
+  setSearchVal: (value: string) => void;
 }
 
-export const Header = ({ onMenuClick }: HeaderProps) => {
+export const Header = ({ onMenuClick ,setSearchVal}: HeaderProps) => {
     const navigate = useNavigate()
+    const  [search,setSearch] = useState("");
+    const handleValChange = (value: string) => {
+        setSearch(value);
+        setSearchVal(value);
+    }
   return (
     <header className="bg-gray-900 p-4 flex items-center justify-between">
       <div className="flex items-center w-1/2">
@@ -19,6 +26,8 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         <div className="relative w-full max-w-md">
           <input
             type="text"
+            value={search}
+            onChange={(e) => handleValChange(e.target.value)}
             placeholder="Search venues..."
             className="w-full bg-gray-800 text-white rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-1 focus:ring-green-500"
           />

@@ -120,8 +120,19 @@ export const getJoinedGameDetials = async (bookingId:string | undefined)=>{
     
 }
 
-export const cancelBooking = async (bookingId:string | null ,bookingType:string) => {
+export const cancelBooking = async (bookingId:string | null ,bookingType:string,isHost?:boolean) => {
+    if(bookingType== "joined"){
+        const response = await userAxiosInstance.patch(`/_us/user/cancelJoinedGame`,{bookingId,bookingType,isHost})
+        return response
+    }else{
+        const response = await userAxiosInstance.patch(`/_us/user/cancelSingleSlot`,{bookingId,bookingType})
+        return response
+    }
     
-    const response = await userAxiosInstance.patch(`/_us/user/cancelSingleSlot`,{bookingId,bookingType})
-    return response
+}
+
+export const getWalletData = async () => {
+    const response = await userAxiosInstance.get("/_us/user/wallet");
+    console.log("wallet data", response);
+    return response.data;
 }

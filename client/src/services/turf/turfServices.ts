@@ -69,3 +69,11 @@ export const getTurfBookings = async ():Promise<TurfBookingResponse>=>{
     
     return response.data.data
 }
+
+export const cancelTurfBooking = async (bookingId: string,bookingType:string) => {
+    const response = await turfAxiosInstance.patch(`/_ts/turf/cancelBooking`,{
+        bookingId,
+        bookingType
+    });
+    return response.data;
+}

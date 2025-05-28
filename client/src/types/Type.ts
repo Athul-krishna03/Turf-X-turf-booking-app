@@ -114,6 +114,7 @@ export interface Turf{
   }
 
  export  interface SharedBooking{
+    id: string;
     maxPlayers: number;
     participants: any;
     hostName:string,
