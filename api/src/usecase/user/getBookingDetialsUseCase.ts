@@ -40,9 +40,17 @@ export class GetUserBookingDetialsUseCase implements IGetUserBookingDetialsUseCa
     };
     // Regular bookings
     for (let booking of data) {
-      const bookingDate = new Date(booking.date);
-      bookingDate.setHours(0, 0, 0, 0);
-
+      const utcDate = new Date(booking.date); 
+      const IST_OFFSET = 5.5 * 60 * 60 * 1000;
+      const istTime = new Date(utcDate.getTime() + IST_OFFSET);
+      const istDatePart = istTime.toISOString().split('T')[0];
+      const [hours, minutes = '00'] = booking.time.split(':'); 
+      const bookingDateTime = new Date(`${istDatePart}T${hours.padStart(2, '0')}:${minutes.padEnd(2, '0')}:00+05:30`);
+      console.log("istTime:", istTime);
+      console.log("BookingDateTime IST:", bookingDateTime);
+      console.log("Current time (UTC):", today);
+      console.log("Current time (IST):", new Date(today.getTime() + IST_OFFSET));
+      
       const turf = await this.turfRepo.getTurfByTurfId(booking.turfId);
       const bookingWithTurf = {
         id: booking.id.toString(),
@@ -58,7 +66,7 @@ export class GetUserBookingDetialsUseCase implements IGetUserBookingDetialsUseCa
         status: booking.status,
         sport: "Football"
       };
-      if (new Date(booking.date) > today) {
+      if (bookingDateTime > today) {
         upcoming.push(bookingWithTurf);
       } else {
         past.push(bookingWithTurf);
@@ -75,9 +83,7 @@ export class GetUserBookingDetialsUseCase implements IGetUserBookingDetialsUseCa
     const pastJoined: any[] = [];
     console.log("inside cond",joinedGamesData);
     for (let game of userJoinedGames) {
-        const gameDate = new Date(game.date);
-        gameDate.setHours(0, 0, 0, 0);
-
+  
         const turf = await this.turfRepo.getTurfByTurfId(game.turfId);
         const walletBalance = game.walletSum
 

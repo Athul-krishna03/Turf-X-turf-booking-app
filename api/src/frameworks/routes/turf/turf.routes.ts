@@ -82,6 +82,15 @@ export class TurfRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 bookingController.getAllBookingData(req,res)
             }
+        ),
+        this.router.patch(
+            "/turf/cancelBooking",
+            verifyAuth,
+            authorizeRole(["turf"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                bookingController.cancelBookingTurfOWner(req,res)
+            }
         )
     }
 

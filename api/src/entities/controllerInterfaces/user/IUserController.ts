@@ -5,4 +5,5 @@ export interface IUserController{
     updateUserStatus(req:Request,res:Response):Promise<void>
     editUser(req:Request,res:Response):Promise<void>
     updateUserPassword(req:Request,res:Response):Promise<void>
+    getWalletDetails(req: Request,res: Response): Promise<void>
 }

@@ -3,6 +3,7 @@ import { IBookingEntity } from "../../entities/models/booking.entity";
 import { IBookingRepository } from "../../entities/repositoryInterface/booking/IBookingRepository";
 import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
 import { ISlotEntity } from "../../entities/models/slot.entity";
+import { generateBookingId } from "../../frameworks/security/uniqueuid.bcrypt";
 
 @injectable()
 export class BookingSlotUseCase implements IBookingSlotUseCase {
@@ -20,9 +21,12 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
     playerCount:number
   ): Promise<IBookingEntity> {
     try {
+
+      const bookingId = generateBookingId()
       const data = {
         userId,
         turfId,
+        bookingId,
         time,
         duration,
         price,
@@ -32,6 +36,7 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
       };
       console.log("data inside usecase", data);
       if(paymentType == "single"){
+        
         const saveData = await this.bookingRepo.save(data);
         return saveData as IBookingEntity;
       }else if(paymentType == "shared"){
@@ -43,6 +48,7 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
             turfId,
             time,
             userIds,
+            bookingId,
             duration,
             price,
             date,

@@ -140,7 +140,25 @@ export class ClientRoutes extends BaseRoute{
             authorizeRole(["user"]),
             blockStatusMiddleware.checkStatus as RequestHandler,
             (req:Request,res:Response)=>{
-                bookingController.getJoinedGameDetials(req,res)
+                bookingController.normalGameCancel(req,res)
+            }
+        ),
+        this.router.patch(
+            "/user/cancelJoinedGame",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                bookingController.cancelJoinedGame(req,res)
+            }
+        ),
+        this.router.get(
+            "/user/wallet",
+            verifyAuth,
+            authorizeRole(["user"]),
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req:Request,res:Response)=>{
+                userController.getWalletDetails(req,res)
             }
         )
         

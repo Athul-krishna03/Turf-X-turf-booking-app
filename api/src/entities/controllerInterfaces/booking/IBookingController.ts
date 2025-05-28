@@ -7,5 +7,6 @@ export interface IBookingController{
     getAllBookingData(req:Request, res:Response):Promise<void>
     getJoinedGameDetials(req:Request,res:Response):Promise<void>
     normalGameCancel(req:Request,res:Response):Promise<void>
-    
+    cancelJoinedGame(req:Request,res:Response):Promise<void>
+    cancelBookingTurfOWner(req:Request,res:Response):Promise<void>
 }

@@ -9,18 +9,21 @@ import { CustomRequest } from "../../middlewares/authMiddleware";
 import { IClientEntity } from "../../../entities/models/client.entity";
 import { IUpdateProfileUseCase } from "../../../entities/useCaseInterfaces/user/IUpdateProfileUseCase";
 import { IUpdateUserPassWordUseCase } from "../../../entities/useCaseInterfaces/user/IUpdateUserPassWordUseCase";
+import { IGetUserWalletDetailsUseCase } from "../../../entities/useCaseInterfaces/user/IGetUserWalletDetailsUseCase";
 
 @injectable()
 export class UserController implements IUserController {
   constructor(
     @inject("IGetAllUsersUseCase")
-    private getAllUsersUseCase: IGetAllUsersUseCase,
+    private _getAllUsersUseCase: IGetAllUsersUseCase,
     @inject("IUpdateUserStatusUseCase")
-    private updateUser: IUpdateUserStatusUseCase,
+    private _updateUser: IUpdateUserStatusUseCase,
     @inject("IUpdateProfileUsecase")
-    private updateUserProfile: IUpdateProfileUseCase,
+    private _updateUserProfile: IUpdateProfileUseCase,
     @inject("IUpdateUserPassWordUseCase")
-    private updateUserPassWordUseCase:IUpdateUserPassWordUseCase
+    private _updateUserPassWordUseCase:IUpdateUserPassWordUseCase,
+    @inject("IGetUserWalletDetailsUseCase")
+    private _getUserWalletDetailsUseCase: IGetUserWalletDetailsUseCase
   ) {}
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -30,7 +33,7 @@ export class UserController implements IUserController {
       const pageSize = Number(limit);
       const searchTermString = typeof search === "string" ? search : "";
 
-      const { users, total } = await this.getAllUsersUseCase.execute(
+      const { users, total } = await this._getAllUsersUseCase.execute(
         pageNumber,
         pageSize,
         searchTermString
@@ -51,7 +54,7 @@ export class UserController implements IUserController {
     try {
       const { userId } = req.params;
 
-      await this.updateUser.execute(userId);
+      await this._updateUser.execute(userId);
       res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
@@ -71,6 +74,7 @@ export class UserController implements IUserController {
         "phone",
         "email",
         "profileImage",
+        "walletBalance",
         "position",
       ];
       allowedField.forEach((field) => {
@@ -79,7 +83,7 @@ export class UserController implements IUserController {
         }
       });
       console.log("data in controller",req.body)
-      const updateUser = await this.updateUserProfile.execute(
+      const updateUser = await this._updateUserProfile.execute(
         userId,
         updateData
       );
@@ -105,12 +109,35 @@ export class UserController implements IUserController {
       console.log("change pass body data",req.body);
       
       console.log("curr",currPass,"new",newPass);
-      await this.updateUserPassWordUseCase.execute(userId,currPass,newPass)
+      await this._updateUserPassWordUseCase.execute(userId,currPass,newPass)
       
       res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.UPDATE_SUCCESS
       })
+    } catch (error) {
+      handleErrorResponse(res, error);
+    }
+  }
+
+  async getWalletDetails(req: Request,res: Response): Promise<void> {
+    try {
+      const userId = (req as CustomRequest).user.id;
+      const walletDetails = await this._getUserWalletDetailsUseCase.execute(userId);
+      if (!walletDetails) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({
+          success: false,
+          message: "Wallet details not found",
+        });
+        return;
+      }else{
+        res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: walletDetails,
+        });
+        return
+      }
+      
     } catch (error) {
       handleErrorResponse(res, error);
     }

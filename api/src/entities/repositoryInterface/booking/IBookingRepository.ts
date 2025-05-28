@@ -11,5 +11,6 @@ export interface IBookingRepository{
     saveSharedBooking(data:Partial<ISharedBookingEntity>):Promise<ISharedBookingEntity | IBookingEntity>;
     joinGame(data:object):Promise<ISharedBookingEntity | null>
     cancelNormalGame(bookingId: string): Promise<IBookingEntity | null>
-    // cancelGame(data:{bookingId:string,userId:string,isHost:boolean}):Promise<ISharedBookingEntity | null>
+    cancelGame(data:{bookingId:string,userId:string,isHost:boolean}):Promise<ISharedBookingEntity | null>
+    updateJoinedGameBookingStatus(bookingId: string, data: Partial<ISharedBookingEntity>): Promise<ISharedBookingEntity | null>;
 }    

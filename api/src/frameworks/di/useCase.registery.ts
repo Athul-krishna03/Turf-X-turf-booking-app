@@ -59,7 +59,7 @@ import { DeleteExpiredSlotsUseCase } from "../../usecase/slot/DeleteExpiredSlots
 import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
 import { BookingSlotUseCase } from "../../usecase/slot/BookingSlotUseCase";
 import { IGetUserBookingDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetUserBookingDetialsUseCase";
-import { GetUserBookingDetialsUseCase } from "../../usecase/user/getBookingDetialsUseCase";
+import { GetUserBookingDetialsUseCase } from "../../usecase/user/GetBookingDetialsUseCase";
 import { IUpdateSlotStatusUseCase } from "../../entities/useCaseInterfaces/IUpdateSlotStatusUseCase";
 import { UpdateSlotStatusUseCase } from "../../usecase/slot/UpdateSlotStatusUseCase";
 import { IGetSlotDataUseCase } from "../../entities/useCaseInterfaces/slot/IGetSlotDataUseCase";
@@ -72,6 +72,18 @@ import { IGetAllBookingDataUseCase } from "../../entities/useCaseInterfaces/turf
 import { GetAllBookingDataUseCase } from "../../usecase/turf/GetAllBookingDataUseCase";
 import { IGetJoinedGameDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetJoinedGameDetialsUseCase";
 import { GetJoinedGameDetials } from "../../usecase/user/GetJoinedGameDetialUseCase";
+import { INormalGameCancelUseCase } from "../../entities/useCaseInterfaces/booking/INormalGameCancelUseCase";
+import { NormalGameCancelUseCase } from "../../usecase/booking/NormalGameCancelUseCase";
+import { ICancelGameUseCase } from "../../entities/useCaseInterfaces/booking/ICancelGameUseCase";
+import { CancelGameUseCase } from "../../usecase/booking/CancelGameUseCase";
+import { IDeleteUnfilledGamesUseCase } from "../../entities/useCaseInterfaces/IDeleteUnfilledGamesUseCase";
+import { DeleteUnfilledGamesUseCase } from "../../usecase/slot/DeleteUnfilledGamesUseCase";
+import { ICancelGameTurfSideUseCase } from "../../entities/useCaseInterfaces/booking/ICancelGameTurfSideUseCase";
+import { CancelGameTurfSideUseCase } from "../../usecase/booking/CancelGameTurfSideUseCase";
+import { IWalletSercvices } from "../../entities/services/IWalletServices";
+import { WalletServices } from "../../interface/services/WalletServices";
+import { IGetUserWalletDetailsUseCase } from "../../entities/useCaseInterfaces/user/IGetUserWalletDetailsUseCase";
+import { GetUserWalletDetailsUseCase } from "../../usecase/user/GetUserWalletDetailsUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -211,6 +223,30 @@ export class UseCaseRegistery {
     container.register<IGetJoinedGameDetialsUseCase>("IGetJoinedGameDetialsUseCase",{
       useClass:GetJoinedGameDetials
     })
+
+    container.register<INormalGameCancelUseCase>("INormalGameCancelUseCase", {
+      useClass:NormalGameCancelUseCase
+    })
+
+    container.register<ICancelGameUseCase>("ICancelGameUseCase", {
+      useClass: CancelGameUseCase
+    })
+
+    container.register<IDeleteUnfilledGamesUseCase>("IDeleteUnfilledGamesUseCase", {
+      useClass: DeleteUnfilledGamesUseCase,
+    });
+
+    container.register<ICancelGameTurfSideUseCase>("ICancelGameTurfSideUseCase", {
+      useClass: CancelGameTurfSideUseCase,
+    });
+
+    container.register<IWalletSercvices>("IWalletSercvices", {
+      useClass: WalletServices 
+    });
+
+    container.register<IGetUserWalletDetailsUseCase>("IGetUserWalletDetailsUseCase", {
+      useClass: GetUserWalletDetailsUseCase,
+    });
     //Register Strategy
     container.register("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,

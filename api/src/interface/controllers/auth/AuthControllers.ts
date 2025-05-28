@@ -135,6 +135,7 @@ export class AuthController implements IAuthController {
             phone: userEntity.phone,
             position: userEntity.position,
             profileImage: userEntity.profileImage,
+            walletBalance:userEntity.walletBalance,
             bio: userEntity.bio,
             joinedAt: userEntity.joinedAt
           }

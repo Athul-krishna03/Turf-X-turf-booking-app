@@ -2,6 +2,7 @@
 
 export interface IBookingEntity {
     id: string;
+    bookingId?: string;
     userId: string;
     turfId: string;
     time:string;

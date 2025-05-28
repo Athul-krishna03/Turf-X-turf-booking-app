@@ -57,7 +57,7 @@ export class ClientRepository implements IClientRepository{
             {
                 new:true
             }
-        ).select('name phone profileImage position email joinedAt role')
+        ).select('name phone profileImage position email walletBalance joinedAt role')
         .exec()
 
         if(!updateProfile){
@@ -74,5 +74,16 @@ export class ClientRepository implements IClientRepository{
         }
 
         return 
+    }
+
+    async findByIdAndUpdateWallet(id: string, amount: number): Promise<IClientEntity | null> {
+        const user = await ClientModel.findByIdAndUpdate(id,
+            {$inc:{walletBalance:amount}},)
+            .select('name phone profileImage position email walletBalance joinedAt role')
+            .exec();
+        if(!user){
+            throw new Error("User not found to update wallet");
+        }
+        return user as IClientEntity;
     }
 }

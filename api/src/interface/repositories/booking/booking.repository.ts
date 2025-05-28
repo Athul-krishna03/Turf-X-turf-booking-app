@@ -50,6 +50,7 @@ export class BookingRepository implements IBookingRepository {
             price: doc.price,
             date: doc.date,
             status: doc.status,
+            isSlotLocked: doc.isSlotLocked,
             playerCount: doc.playerCount,
             createdAt: doc.createdAt,
         };
@@ -108,84 +109,87 @@ export class BookingRepository implements IBookingRepository {
     );
     }
 
-// async cancelGame(data: {bookingId: string;userId: string;isHost: boolean;}): Promise<ISharedBookingEntity | null> {
-//     try {
-//     const booking = await SharedSlotBookingModel.findOne({
-//         _id: data.bookingId,
-//         status: "Pending",
-//         isSlotLocked: false,
-//     });
+async cancelGame(data: {bookingId: string;userId: string;isHost: boolean;}): Promise<ISharedBookingEntity | null> {
+    try {
+    const booking = await SharedSlotBookingModel.findOne({_id: data.bookingId});
 
-//     if (!booking) {
-//         throw new Error("Booking not found or already locked/canceled");
-//     }
-//     const gameTime = new Date(`${booking.date}T${booking.time}:00`);
-//     const cancellationWindow = new Date(gameTime.getTime() - 12 * 60 * 60 * 1000); // 12 hours before
-//     const now = new Date();
+    if (!booking) {
+        throw new Error("Booking not found or already locked/canceled");
+    }
+    const gameTime = new Date(`${booking.date}T${booking.time}:00`);
+    const cancellationWindow = new Date(gameTime.getTime() - 12 * 60 * 60 * 1000); // 12 hours before
+    const now = new Date();
     
-//     if (data.isHost) {
-//         const result = await SharedSlotBookingModel.findOneAndUpdate(
-//         { _id: data.bookingId },
-//         {
-//             $set: {
-//                 status: "Cancelled",
-//                 cancelledUsers: booking.userIds,
-//                 refundsIssued: Object.fromEntries(
-//                     Object.entries(booking.walletContributions).map(
-//                     ([uid, amt]) => [uid, amt]
-//                     )
-//                 ),
-//                 updatedAt: new Date(),
-//             },
-//           },
-//           { new: true }
-//         );
+    if (booking.userIds[0] == data.userId || data.isHost) {
+        const result = await SharedSlotBookingModel.findOneAndUpdate(
+        { _id: data.bookingId },
+        {
+            $set: {
+                status: "Cancelled",
+                cancelledUsers: booking.userIds,
+                refundsIssued: booking.walletContributions,
+                updatedAt: new Date(),
+            },
+            },
+            { new: true }
+        );
 
-    //     for (const userId of booking.userIds) {
-    //       await processRefund(userId, booking.walletContributions[userId]);
-    //       notifyPlayer(userId, "Booking canceled by host. Full refund issued.");
-    //     }
-    //     notifyHost(
-    //       booking.hostId || booking.userIds[0],
-    //       "You canceled the booking. Penalty may apply."
-    //     );
+        // for (const userId of booking.userIds) {
+        //     await processRefund(userId, booking.walletContributions[userId]);
+        //     notifyPlayer(userId, "Booking canceled by host. Full refund issued.");
+        // }
+        // notifyHost(
+        //     booking.hostId || booking.userIds[0],
+        //     "You canceled the booking. Penalty may apply."
+        // );
 
-    //     return result as ISharedBookingEntity | null;
-    //   } else {
-    //     // Player cancels
-    //     if (!booking.walletContributions[data.userId]) {
-    //       throw new Error("User not in booking");
-    //     }
-    //     const amount = booking.walletContributions[data.userId];
-    //     const refundAmount = now < cancellationWindow ? amount : amount * 0.5; // 50% refund if late
+        return result as ISharedBookingEntity | null;
+    } else {
+        // Player cancels
+        if (!booking.walletContributions.get(data.userId)){
+            throw new Error("User not in booking");
+        }
+        const amount = booking.walletContributions.get(data.userId);
+        const refundAmount = now < cancellationWindow ? amount : amount || 0 * 0.5; // 50% refund if late
 
-    //     const result = await SharedSlotBookingModel.findOneAndUpdate(
-    //       { _id: data.bookingId },
-    //       {
-    //         $pull: { userIds: data.userId },
-    //         $unset: { [`walletContributions.${data.userId}`]: "" },
-    //         $inc: { playerCount: -1 },
-    //         $addToSet: { cancelledUsers: data.userId },
-    //         $set: {
-    //           [`refundsIssued.${data.userId}`]: refundAmount,
-    //           updatedAt: new Date(),
-    //         },
-    //       },
-    //       { new: true }
-    //     );
+        const result = await SharedSlotBookingModel.findOneAndUpdate(
+            { _id: data.bookingId },
+            {
+                $pull: { userIds: data.userId },
+                $unset: { [`walletContributions.${data.userId}`]: "" },
+                $addToSet: { cancelledUsers: data.userId },
+                $set: {
+                [`refundsIssued.${data.userId}`]: refundAmount,
+                updatedAt: new Date(),
+                },
+            },
+            { new: true }
+        );
 
-    //     await processRefund(data.userId, refundAmount);
-    //     notifyPlayer(data.userId, `Slot canceled. Refund: $${refundAmount}`);
-    //     notifyHost(
-    //       booking.hostId || booking.userIds[0],
-    //       `Player ${data.userId} canceled. Slot reopened.`
-    //     );
+        // await processRefund(data.userId, refundAmount);
+        // notifyPlayer(data.userId, `Slot canceled. Refund: $${refundAmount}`);
+        // notifyHost(
+        //   booking.hostId || booking.userIds[0],
+        //   `Player ${data.userId} canceled. Slot reopened.`
+        // );
 
-//         return booking as ISharedBookingEntity | null;
-//       }
-//     } catch (error) {
-//         console.error('BookingRepository cancelGame error:', error);
-//         throw new Error('Failed to cancel game');
-//     }
-// }
+        return booking as ISharedBookingEntity | null;
+    }
+    } catch (error) {
+        console.error('BookingRepository cancelGame error:', error);
+        throw new Error('Failed to cancel game');
+    }
+}
+    async updateJoinedGameBookingStatus(bookingId: string, data: Partial<ISharedBookingEntity>): Promise<ISharedBookingEntity | null> {
+        try {
+            const updatedBooking = await SharedSlotBookingModel.findByIdAndUpdate(
+            bookingId,
+            { $set: data },
+            { new: true }
+            );
+            return updatedBooking as ISharedBookingEntity | null;
+        } catch (error) {
+            throw new Error('Failed to update booking status');
+        }
+    }
 }

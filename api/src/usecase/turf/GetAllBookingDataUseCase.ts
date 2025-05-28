@@ -22,6 +22,7 @@ export class GetAllBookingDataUseCase implements IGetAllBookingDataUseCase{
         const hostedGame = await this.bookingRepo.find();
 
         const enrichedNormal = [];
+        const enrichedHosted = [];
 
     for (const booking of normalGame) {
         const turfDetails = await this.turfRepo.getTurfByTurfId(booking.turfId); // Your existing method
@@ -31,7 +32,15 @@ export class GetAllBookingDataUseCase implements IGetAllBookingDataUseCase{
         });
     }
 
-        return {normal:enrichedNormal,hosted:hostedGame}
+    for(const game of hostedGame){
+        const turfDetails = await this.turfRepo.getTurfByTurfId(game.turfId);
+        enrichedHosted.push({
+            ...game,
+            turf: turfDetails,
+        });
+    }
+
+        return {normal:enrichedNormal,hosted:enrichedHosted}
 
     }
 }

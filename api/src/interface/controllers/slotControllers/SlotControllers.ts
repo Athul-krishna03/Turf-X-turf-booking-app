@@ -7,7 +7,7 @@ import { IGetSlotDataUseCase } from "../../../entities/useCaseInterfaces/slot/IG
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { handleErrorResponse } from "../../../shared/utils/errorHandler";
 import { BookingRequestSchema } from "../../../shared/dtos/booking.dto";
-import { SlotBookingService } from "../../services/bookingServices";
+import { SlotBookingService } from "../../services/BookingServices";
 
 
 
@@ -34,6 +34,7 @@ export class SlotController implements ISlotController {
       }
 
       const bookingData = parseResult.data;
+      console.log("Booking dataSingle:", bookingData);
       const { bookedSlots } = await this.slotBookingService.bookSlot({ ...bookingData, userId });
 
       res.status(HTTP_STATUS.OK).json({ success: true, bookedSlots });

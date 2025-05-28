@@ -31,6 +31,8 @@ import { IPaymentService } from "../../entities/services/IPaymentService";
 import { PaymentService } from "../../interface/services/PaymentService";
 import { IPaymentGateway } from "../../entities/services/IPaymentGateway";
 import { StripePaymentGateway } from "../../interface/services/StripePaymentService";
+import { IWalletRepository } from "../../entities/repositoryInterface/wallet/IWalletRepository";
+import { WalletRepository } from "../../interface/repositories/wallet/wallet.repository";
 
 
 export class RepositoryRegistry{
@@ -80,7 +82,9 @@ export class RepositoryRegistry{
         container.register<IBookingRepository>("IBookingRepository",{
             useClass:BookingRepository
         })
-
+        container.register<IWalletRepository>('IWalletRepository', {
+            useClass: WalletRepository,
+        });
 
         container.register<Server>('Server', {
             useClass: Server,
