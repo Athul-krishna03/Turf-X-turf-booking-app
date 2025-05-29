@@ -37,23 +37,23 @@ import { ITurfEntity } from "../../../entities/models/turf.entity";
 export class AuthController implements IAuthController {
   constructor(
     @inject("IRegisterUserUseCase")
-    private registerUserUseCase: IRegisterUserUseCase,
+    private _registerUserUseCase: IRegisterUserUseCase,
     @inject("ILoginUserUseCase")
-    private LoginUserUseCase:ILoginUserUseCase,
+    private _LoginUserUseCase:ILoginUserUseCase,
     @inject("IGenerateTokenUseCase")
-    private GenerateTokenUseCase:IGenerateTokenUseCase,
+    private _GenerateTokenUseCase:IGenerateTokenUseCase,
     @inject("IUserExistenceService")
-    private userExistenceService:IUserExistenceService,
+    private _userExistenceService:IUserExistenceService,
     @inject('IGenerateOtpUseCase')
-    private generateOtpUseCase:IGenerateOtpUseCase,
+    private _generateOtpUseCase:IGenerateOtpUseCase,
     @inject('IVerifyOtpUseCase')
-    private verifyOtpUseCase:IVerifyOtpUseCase,
+    private _verifyOtpUseCase:IVerifyOtpUseCase,
     @inject('IGoogleAuthUseCase')
-    private googleAuthUseCase:IGoogleAuthUseCase,
+    private _googleAuthUseCase:IGoogleAuthUseCase,
     @inject("IBlackListTokenUseCase")
-    private blacklistTokenUseCase:IBlackListTokenUseCase,
+    private _blacklistTokenUseCase:IBlackListTokenUseCase,
     @inject("IRefreshTokenUseCase")
-    private refreshTokenUseCase:IRefreshTokenUseCase
+    private _refreshTokenUseCase:IRefreshTokenUseCase
   ) {}
 
   //register use
@@ -80,7 +80,7 @@ export class AuthController implements IAuthController {
         return;
       }
       const validateData = schema.parse(req.body);
-      await this.registerUserUseCase.execute(validateData);
+      await this._registerUserUseCase.execute(validateData);
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
         message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS,
@@ -99,13 +99,13 @@ export class AuthController implements IAuthController {
     try {
       const data = req.body as LoginUserDTO;
       const validateData = loginSchema.parse(data);
-      const user =  await this.LoginUserUseCase.execute(validateData)
+      const user =  await this._LoginUserUseCase.execute(validateData)
       console.log("user data",user)
       if(!user.id || !user.email || !user.role){
         throw new Error("User ID,Email,or Role is missing")
       }
 
-      const tokens = await this.GenerateTokenUseCase.execute(
+      const tokens = await this._GenerateTokenUseCase.execute(
         user.id,
         user.email,
         user.role
@@ -174,7 +174,7 @@ export class AuthController implements IAuthController {
     
     const {email} = req.body;
     try {
-      const existingEmail =  await this.userExistenceService.emailExists(email);
+      const existingEmail =  await this._userExistenceService.emailExists(email);
       if(existingEmail){
         res
         .status(HTTP_STATUS.UNAUTHORIZED)
@@ -182,7 +182,7 @@ export class AuthController implements IAuthController {
       return;
       }
 
-      await this.generateOtpUseCase.execute(email);
+      await this._generateOtpUseCase.execute(email);
 
       res
       .status(HTTP_STATUS.CREATED)
@@ -200,7 +200,7 @@ export class AuthController implements IAuthController {
     try {
       const {email,otp} = req.body;
       const validateData = otpMailValidationSchema.parse({email,otp})
-      await this.verifyOtpUseCase.execute(validateData);
+      await this._verifyOtpUseCase.execute(validateData);
       res.status(HTTP_STATUS.OK).json({
         success:true,
         message:SUCCESS_MESSAGES.VERIFICATION_SUCCESS
@@ -217,14 +217,14 @@ export class AuthController implements IAuthController {
       const {credential,client_id,role}=req.body;
 
       console.log("heloo google",req.body)
-      const user = await this.googleAuthUseCase.execute(credential,client_id,role);
+      const user = await this._googleAuthUseCase.execute(credential,client_id,role);
       console.log("user data",user)
 
       if(!user.id || !user.email || !user.role){
         throw new Error("User ID,email,or role is missing");
       }
 
-      const tokens = await this.GenerateTokenUseCase.execute(
+      const tokens = await this._GenerateTokenUseCase.execute(
         user.id,
         user.email,
         user.role
@@ -263,7 +263,7 @@ export class AuthController implements IAuthController {
   async logout(req:Request,res:Response):Promise<void>{
     try {
       const user = (req as CustomRequest).user;
-      await this.blacklistTokenUseCase.execute(
+      await this._blacklistTokenUseCase.execute(
         (req as CustomRequest).user.access_token
       );
 
@@ -282,7 +282,7 @@ export class AuthController implements IAuthController {
    refreshToken(req:Request,res:Response):void{
     try {
       const refreshToken = (req as CustomRequest).user.refresh_token;
-      const newTokens = this.refreshTokenUseCase.execute(refreshToken);
+      const newTokens = this._refreshTokenUseCase.execute(refreshToken);
       console.log("newtoken",newTokens);
       
       const accessTokenName = `${newTokens.role}_access_token`;

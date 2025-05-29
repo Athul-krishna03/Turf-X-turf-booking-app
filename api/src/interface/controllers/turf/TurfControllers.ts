@@ -19,23 +19,23 @@ import { IGetAllHostedGamesUseCase } from "../../../entities/useCaseInterfaces/t
 export class TurfControllers implements ITurfControllers{
     constructor(
         @inject("IGetAllTurfUseCase")
-        private getAllTurfsUseCase:IGetAllTurfUseCase,
+        private _getAllTurfsUseCase:IGetAllTurfUseCase,
         @inject("IGetAllTurfRequestsUseCase")
-        private getAllTurfRequestsUseCase:IGetAllTurfRequestsUseCase,
+        private _getAllTurfRequestsUseCase:IGetAllTurfRequestsUseCase,
         @inject("IUpdateTurfStatusUseCase")
-        private updateTurf:IUpdateTurfStatusUseCase,
+        private _updateTurf:IUpdateTurfStatusUseCase,
         @inject("IUpdateTurfRequestUseCase")
-        private updateTurfRequest:IUpdateTurfRequestUseCase,
+        private _updateTurfRequest:IUpdateTurfRequestUseCase,
         @inject("IGenerateSlotUseCase")
-        private generateSlot:IGenerateSlotUseCase,
+        private _generateSlot:IGenerateSlotUseCase,
         @inject("IUpdateTurfProfileUseCase")
-        private updateUserProfile:IUpdateTurfProfileUseCase,
+        private _updateUserProfile:IUpdateTurfProfileUseCase,
         @inject("IUpdateTurfPassWordUseCase")
-        private updateTurfPassWordUseCase:IUpdateTurfPassWordUseCase,
+        private _updateTurfPassWordUseCase:IUpdateTurfPassWordUseCase,
         @inject("IGetSlotsUseCase")
-        private fetchSlots:IGetSlotUseCase,
+        private _fetchSlots:IGetSlotUseCase,
         @inject("IGetAllHostedGamesUseCase")
-        private getAllHostedGamesUseCase:IGetAllHostedGamesUseCase
+        private _getAllHostedGamesUseCase:IGetAllHostedGamesUseCase
     ){}
     async getAllTurfs(req: Request, res: Response): Promise<void> {
         try {
@@ -44,7 +44,7 @@ export class TurfControllers implements ITurfControllers{
             const pageSize = Number(limit);
             const searchTermString = typeof search==="string"?search:"";
 
-            const {turfs,total} = await this.getAllTurfsUseCase.execute(
+            const {turfs,total} = await this._getAllTurfsUseCase.execute(
                 pageNumber,
                 pageSize,
                 searchTermString
@@ -67,7 +67,7 @@ export class TurfControllers implements ITurfControllers{
                 const {turfId} = req.params;
                 console.log("turf id",turfId);
                 
-                await this.updateTurf.execute(turfId);
+                await this._updateTurf.execute(turfId);
                 res.status(HTTP_STATUS.OK).json({
                     success:true,
                     message:SUCCESS_MESSAGES.UPDATE_SUCCESS
@@ -84,7 +84,7 @@ export class TurfControllers implements ITurfControllers{
                 const pageSize = Number(limit);
                 const searchTermString = typeof search==="string"?search:"";
     
-                const {turfs,total} = await this.getAllTurfRequestsUseCase.execute(
+                const {turfs,total} = await this._getAllTurfRequestsUseCase.execute(
                     pageNumber,
                     pageSize,
                     searchTermString
@@ -109,7 +109,7 @@ export class TurfControllers implements ITurfControllers{
                 console.log("status",status)
                 console.log("turf id",turfId);
                 
-                await this.updateTurfRequest.execute(turfId,status,reason);
+                await this._updateTurfRequest.execute(turfId,status,reason);
                 res.status(HTTP_STATUS.OK).json({
                     success:true,
                     message:SUCCESS_MESSAGES.UPDATE_SUCCESS
@@ -128,7 +128,7 @@ export class TurfControllers implements ITurfControllers{
                 
                 const {turfId,date,startTime,endTime,slotDuration,price,selectedDate,endDate}=req.body;
                 
-                const slots = await this.generateSlot.execute(
+                const slots = await this._generateSlot.execute(
                     turfId,
                     date,
                     selectedDate,
@@ -172,7 +172,7 @@ export class TurfControllers implements ITurfControllers{
                     }
                 });
                 console.log("data in edit turf",req.body);
-                const updateTurf = await this.updateUserProfile.execute(
+                const updateTurf = await this._updateUserProfile.execute(
                     turfId,
                     updateData
                 )
@@ -198,7 +198,7 @@ export class TurfControllers implements ITurfControllers{
             }
             console.log("change pass body data",req.body);
             console.log("curr",currPass,"new",newPass);
-            await this.updateTurfPassWordUseCase.execute(userId,currPass,newPass)
+            await this._updateTurfPassWordUseCase.execute(userId,currPass,newPass)
             
             res.status(HTTP_STATUS.OK).json({
                 success: true,
@@ -218,7 +218,7 @@ export class TurfControllers implements ITurfControllers{
                 const { turfId, date } = req.query as { turfId: string; date: string };
                 console.log(turfId,date);
                 
-                const slots = await this.fetchSlots.execute(turfId, date);
+                const slots = await this._fetchSlots.execute(turfId, date);
                 console.log("slots",slots);
                 
                 res.status(200).json({
@@ -234,7 +234,7 @@ export class TurfControllers implements ITurfControllers{
 
         async getAllHostedGames(req: Request, res: Response): Promise<void> {
             const userId = (req as CustomRequest).user.id
-            const games=await this.getAllHostedGamesUseCase.execute(userId);
+            const games=await this._getAllHostedGamesUseCase.execute(userId);
             if(!games){
                 res.status(HTTP_STATUS.NOT_FOUND).json({
                     success:false,

@@ -25,6 +25,7 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase{
         const limit = vaildPageSize;
 
         const {users,total}=await this.clientRepository.find(filter,skip,limit);
+        console.log("total in admin",total)
 
         const reponse : PagenateCustomers={
             users,

@@ -1,9 +1,9 @@
 import { ITurfEntity } from "../../models/turf.entity";
+import { IBaseRepository } from "../IBase-repository-interface";
 
-export interface ITurfRepository{
+export interface ITurfRepository extends IBaseRepository<ITurfEntity>{
     updateProfileById(turfId: string, data: Partial<ITurfEntity>): unknown;
     getTurfByTurfId(turfId: string): Promise<ITurfEntity | null>
-    save(data:Partial<ITurfEntity>):Promise<ITurfEntity>;
     findById(id:string):Promise<ITurfEntity | null>;
     findByEmail(email: string): Promise<ITurfEntity | null>;
     find(

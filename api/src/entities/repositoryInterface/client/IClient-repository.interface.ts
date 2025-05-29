@@ -1,10 +1,11 @@
-import { ObjectExpression } from "mongoose";
+
 
 import { IClientEntity } from "../../models/client.entity";
 import { ClientProfileResponse } from "../../../shared/responseTypes/clientProfileResponse";
+import { IBaseRepository } from "../IBase-repository-interface";
 
-export interface IClientRepository{
-    save(data:Partial<IClientEntity>):Promise<IClientEntity>;
+export interface IClientRepository extends IBaseRepository<IClientEntity>{
+    // save(data:Partial<IClientEntity>):Promise<IClientEntity>;
     findByEmail(email:string):Promise<IClientEntity | null>;
     find(
         filter:any,

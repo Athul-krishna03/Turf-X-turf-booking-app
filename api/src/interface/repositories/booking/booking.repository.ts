@@ -3,9 +3,6 @@ import { ISharedBookingEntity } from "../../../entities/models/sharedBooking.ent
 import { IBookingRepository } from "../../../entities/repositoryInterface/booking/IBookingRepository";
 import { BookingModel } from "../../../frameworks/database/models/booking.model";
 import {SharedSlotBookingModel} from "../../../frameworks/database/models/sharedSlotBooking.model";
-import { TurfModel } from "../../../frameworks/database/models/turf.model";
-import { ITurfEntity } from "../../../entities/models/turf.entity";
-import { IHostedGame } from "../../../shared/dtos/hostGame.dto";
 
 export class BookingRepository implements IBookingRepository {
     async save(data: Partial<IBookingEntity>): Promise<IBookingEntity> {

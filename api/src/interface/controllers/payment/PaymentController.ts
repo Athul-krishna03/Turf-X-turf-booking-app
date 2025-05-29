@@ -14,9 +14,9 @@ import { IPaymentService } from "../../../entities/services/IPaymentService";
 export  class PaymentController implements IPaymentControllers{
     private stripe:Stripe;
     constructor(
-        @inject("ISlotRepository") private slotRepo:ISlotRepository,
-        @inject("IRedisClient") private redis:IRedisClient,
-        @inject("IPaymentService") private paymentService:IPaymentService
+        @inject("ISlotRepository") private _slotRepo:ISlotRepository,
+        @inject("IRedisClient") private _redis:IRedisClient,
+        @inject("IPaymentService") private _paymentService:IPaymentService
     ){
         this.stripe = new Stripe(config.stripe,{
             apiVersion:"2025-04-30.basil"
@@ -26,7 +26,7 @@ export  class PaymentController implements IPaymentControllers{
         try {
             const {slotId,price} = req.body as {slotId:string,price:number};
             if(!slotId){
-                const paymentIntent = await this.paymentService.createPaymentIntent(
+                const paymentIntent = await this._paymentService.createPaymentIntent(
                     price
                 )
 
@@ -35,14 +35,14 @@ export  class PaymentController implements IPaymentControllers{
             }
             const lockKey = `slot_lock:${slotId}`;
 
-            const slot  = await this.slotRepo.findById(slotId);
+            const slot  = await this._slotRepo.findById(slotId);
 
             if(!slot){
                 res.status(404).json({error:"Slot not found"});
                 return;
             }
 
-            const lockId = await this.redis.acquireLock(lockKey,30000);
+            const lockId = await this._redis.acquireLock(lockKey,30000);
             console.log("lockid ",lockId);
 
             if(!lockId){
@@ -51,12 +51,12 @@ export  class PaymentController implements IPaymentControllers{
             }
             
             if(slot.isBooked){
-                await this.redis.releaseLock(lockKey,lockId);
+                await this._redis.releaseLock(lockKey,lockId);
                 res.status(400).json({error:"Slot already booked"});
                 return ;
             }
             try {
-                const paymentIntent = await this.paymentService.createPaymentIntent(
+                const paymentIntent = await this._paymentService.createPaymentIntent(
                     price,slotId,
                 )
 
@@ -64,7 +64,7 @@ export  class PaymentController implements IPaymentControllers{
                 return 
             } catch (err) {
                 if (lockId) {
-                    await this.redis.releaseLock(lockKey,lockId);
+                    await this._redis.releaseLock(lockKey,lockId);
                 }
                 console.error("PaymentIntent creation failed:", err);
                 res.status(500).json({ error: "Failed to create payment" });

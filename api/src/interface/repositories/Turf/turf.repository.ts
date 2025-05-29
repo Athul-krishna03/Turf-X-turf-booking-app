@@ -1,14 +1,15 @@
 import { injectable } from "tsyringe";
 import { ITurfRepository } from "../../../entities/repositoryInterface/turf/ITurfRepository";
 import { ITurfEntity } from "../../../entities/models/turf.entity";
-import { TurfModel } from "../../../frameworks/database/models/turf.model";
+import { ITurfModel, TurfModel } from "../../../frameworks/database/models/turf.model";
 import { TurfProfileResponse } from "../../../shared/responseTypes/turfProfileResponse";
+import { BaseRepository } from "../base.repository";
 
 
 @injectable()
-export class TurfRepository implements ITurfRepository{
-    async save(data: Partial<ITurfEntity>): Promise<ITurfEntity> {
-        return await TurfModel.create(data)
+export class TurfRepository extends BaseRepository<ITurfModel> implements  ITurfRepository{
+    constructor(){
+        super(TurfModel)
     }
     async getTurfByTurfId(turfId: string): Promise<ITurfEntity | null> {
         return await TurfModel.findOne({ turfId });
@@ -27,7 +28,8 @@ export class TurfRepository implements ITurfRepository{
 
     async find(filter: any, skip: number, limit: number): Promise<{ turfs: ITurfEntity[] | []; total: number; }> {
         const turfs = await TurfModel.find({...filter}).skip(skip).limit(limit);
-        return {turfs,total:turfs.length}
+        const totalTurfs = await TurfModel.countDocuments({...filter})
+        return {turfs,total:totalTurfs}
     }
 
     async findByIdAndUpdateStatus(id: string): Promise<void> {

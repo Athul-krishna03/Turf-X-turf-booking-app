@@ -14,9 +14,9 @@ import { SlotBookingService } from "../../services/BookingServices";
 @injectable()
 export class SlotController implements ISlotController {
   constructor(
-    @inject("IUpdateSlotStatusUseCase") private updateSlotStatusUseCase: IUpdateSlotStatusUseCase,
-    @inject("IGetSlotDataUseCase") private getSlotDetails: IGetSlotDataUseCase,
-    @inject(SlotBookingService) private slotBookingService: SlotBookingService // <== Injected service
+    @inject("IUpdateSlotStatusUseCase") private _updateSlotStatusUseCase: IUpdateSlotStatusUseCase,
+    @inject("IGetSlotDataUseCase") private _getSlotDetails: IGetSlotDataUseCase,
+    @inject(SlotBookingService) private _slotBookingService: SlotBookingService // <== Injected service
   ) {}
 
   async updateSlot(req: Request, res: Response): Promise<void> {
@@ -35,7 +35,7 @@ export class SlotController implements ISlotController {
 
       const bookingData = parseResult.data;
       console.log("Booking dataSingle:", bookingData);
-      const { bookedSlots } = await this.slotBookingService.bookSlot({ ...bookingData, userId });
+      const { bookedSlots } = await this._slotBookingService.bookSlot({ ...bookingData, userId });
 
       res.status(HTTP_STATUS.OK).json({ success: true, bookedSlots });
     } catch (error: any) {
@@ -47,7 +47,7 @@ export class SlotController implements ISlotController {
   async updateSlotStatus(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.query as { id: string };
-      await this.updateSlotStatusUseCase.execute(id);
+      await this._updateSlotStatusUseCase.execute(id);
       res.status(HTTP_STATUS.OK).json({ success: true, message: SUCCESS_MESSAGES.SLOT_STATUS_UPDATED });
     } catch (error) {
       console.error("Error updating slot status:", error);
@@ -58,7 +58,7 @@ export class SlotController implements ISlotController {
   async getSlot(req: Request, res: Response): Promise<void> {
     try {
       const { slotId } = req.query as { slotId: string };
-      const slotData = await this.getSlotDetails.execute(slotId);
+      const slotData = await this._getSlotDetails.execute(slotId);
       if (!slotData) {
         res.status(HTTP_STATUS.NOT_FOUND).json({ success: false, message: "Data not found" });
       } else {

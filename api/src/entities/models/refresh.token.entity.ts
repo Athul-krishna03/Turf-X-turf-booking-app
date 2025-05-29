@@ -1,7 +1,7 @@
 import { TRole } from "../../shared/constants";
 
 export interface IRefreshTokenEntity{
-    id?:string;
+    id:string;
     token:string;
     user:string;
     userType:TRole;

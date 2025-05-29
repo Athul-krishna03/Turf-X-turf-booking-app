@@ -8,7 +8,7 @@ export class GetAllTurfRequestsUseCase implements IGetAllTurfRequestsUseCase{
 
     constructor(
         @inject("ITurfRepository")
-        private turfRepository:ITurfRepository
+        private _turfRepository:ITurfRepository
     ){}
     async execute(pageNumber: number, pageSize: number, searchTerm: string): Promise<PagenateTurfs> {
         let filter:any={status:{$ne:"approved"}};
@@ -23,7 +23,7 @@ export class GetAllTurfRequestsUseCase implements IGetAllTurfRequestsUseCase{
         const skip = (validPageNumber-1)*vaildPageSize;
         const limit = vaildPageSize;
 
-        const {turfs,total} = await this.turfRepository.find(filter,skip,limit);
+        const {turfs,total} = await this._turfRepository.find(filter,skip,limit);
 
         const response:PagenateTurfs={
             turfs,

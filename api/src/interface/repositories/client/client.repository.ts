@@ -1,16 +1,17 @@
 import { inject, injectable } from "tsyringe";
 import { IClientEntity } from "../../../entities/models/client.entity";
-import { ClientModel } from "../../../frameworks/database/models/client.model";
+import { ClientModel, IClientModel } from "../../../frameworks/database/models/client.model";
 import { IClientRepository } from "../../../entities/repositoryInterface/client/IClient-repository.interface";
 import { userSignupSchemas } from "../../controllers/validations/user-signup.validation.schema";
 import { ClientProfileResponse } from "../../../shared/responseTypes/clientProfileResponse";
+import { BaseRepository } from "../base.repository";
 
 
 
 @injectable()
-export class ClientRepository implements IClientRepository{
-    async save(data: Partial<IClientEntity>): Promise<IClientEntity> {
-        return await ClientModel.create(data)
+export class ClientRepository extends BaseRepository<IClientModel> implements IClientRepository{
+    constructor(){
+        super(ClientModel)
     }
     async findByEmail(email: string): Promise<IClientEntity | null> {
         const client = await ClientModel.findOne({email}).lean();
@@ -28,7 +29,8 @@ export class ClientRepository implements IClientRepository{
         limit:number
     ): Promise<{users:IClientEntity[] | [];total:number}> {
         const users = await ClientModel.find({role:"user",...filter}).skip(skip).limit(limit);
-        return {users,total:users.length};
+        const totalUsers = await ClientModel.countDocuments({role:"user",...filter})
+        return {users,total:totalUsers};
     }
 
     async findByIdAndUpdateStatus(id: string): Promise<void> {

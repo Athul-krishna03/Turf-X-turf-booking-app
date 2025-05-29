@@ -5,7 +5,6 @@ import { IWalletEntity } from "../../entities/models/wallet.entity";
 
 @injectable()
 export class WalletServices  implements IWalletSercvices {
-   
 
     constructor(
         @inject("IWalletRepository") private _walletRepo: IWalletRepository
@@ -14,7 +13,7 @@ export class WalletServices  implements IWalletSercvices {
     async addFundsToWallet(userId: string, amount: number,data:object): Promise<IWalletEntity> {
         const wallet = await this._walletRepo.findByUserId(userId);
         if (!wallet) {
-            const newWallet = await this._walletRepo.create({
+            const newWallet = await this._walletRepo.save({
                 userId,
                 userType:"client",
                 balance: amount,
